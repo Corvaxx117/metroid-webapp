@@ -1,0 +1,15 @@
+# Rôle : Déclare toutes les routes disponibles dans l'application.
+# Fonctionnement :
+# Liste les chemins (URI) associés à des méthodes HTTP (GET, POST, etc.).
+# Associe chaque route à une "action" dans un contrôleur (ex. : App\Controller\IndexAction).
+
+routes:
+  "/":
+    method: GET
+    callable: App\Controller\HomeController
+  "/news/:id":
+    method: GET
+    callable: App\Controller\NewsController
+  # '/news/:id':
+  #     method: GET
+  #     callable: App\Controller\NewsItemAction

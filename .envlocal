@@ -1,0 +1,7 @@
+# Rôle : Stockent des informations sensibles ou spécifiques à l'environnement, comme la configuration de la base de données ou le mode de débogage.
+# Fonctionnement :
+# .envlocal (non commité) surcharge les valeurs de .env pour les environnements locaux ou de développement.
+
+APP_ENV=production
+APP_DEBUG=false
+DB_PASSWORD=
