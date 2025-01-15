@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-class NewsController
+class NewsController extends BaseController
 {
     public function __invoke(int $id)
     {

@@ -22,19 +22,22 @@ class Router
     public function match(string $uri, string $method)
     {
         foreach ($this->routes as $route => $config) {
+            // '/:\w+/' : Une regex qui trouve les paramètres dynamiques (comme :id).
+            // '(\w+)' : La chaîne de remplacement. Ici, on utilise une parenthèse capturante
+            // $route : La chaîne sur laquelle effectuer le remplacement.
+            // '/' est un délimiteur en regexp, on échappe donc '/' par '\/' grace a str_replace
             $pattern = preg_replace('/:\w+/', '(\w+)', str_replace('/', '\/', $route));
-            // $matches contient tous les paramètres extrait de l'URI
-            // arguments de pregmatch optionnel passé par référence (il est alimenté directement par cette fonction )
-            // Voir parentheses capturantes
 
-            // le preg_match permet de tester si l'url de la requête correspond bien à la route
+            // $matches contient tous les paramètres extrait de l'URI
+            // arguments de pregmatch optionnel passé par référence (alimenté directement par cette fonction )
+            // le preg_match permet de tester si l'url de la requête correspond bien à une route
             // il alimente $matches avec toutes les valeurs variable de la route par rapport à l'url
             if (preg_match('/^' . $pattern . '$/', $uri, $matches) && $method === $config['method']) {
-                // Supprime le 1erelement du tableau matches
                 // $matches[0] contiendra toujours ce que l'expression reguliere valide dans sa totalité, 
                 // la ou les index suivant contiendront seulement ce qui est capturé 
                 // (par capture j'entends les parenthèse de la regexp)
-                array_shift($matches); // Remove the full match
+                array_shift($matches); // Retire le 1er élément
+                // dd($route, $uri, $config, $pattern, $matches);
                 // si une route est matchée on retourne donc un array structuré qui va nous être utile pour appeler le bon controller avec les bons arguments
                 return ['callable' => $config['callable'], 'params' => $matches];
             }
