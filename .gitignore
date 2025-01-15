@@ -1,0 +1,20 @@
+# Ignorer les fichiers d'environnement
+# .env
+.envlocal
+
+# Ignorer les dépendances de Composer
+/vendor/
+composer.json
+composer.lock
+
+# Ignorer les caches PHP
+*.log
+*.cache
+
+# Ignorer les fichiers spécifiques à l'éditeur
+.idea/
+.vscode/
+
+# Ignorer les fichiers système
+.DS_Store
+Thumbs.db
