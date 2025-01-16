@@ -1,0 +1,70 @@
+
+
+/************* CSS DE BASE ***************/
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-size: 1.6rem;
+}
+
+img {
+    max-width: 100%;
+}
+
+a {
+    transition: all .4s ease;
+}
+
+.clearfix::after {
+    content: "";
+    display: block;
+}
+
+.container {
+    max-width: 1100px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/************* CSS - NEW SESSION *************/
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.error-container {
+    max-width: 600px;
+    margin: auto;
+}
+
+.error-code {
+    font-size: 72px;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.error-message {
+    font-size: 18px;
+    margin: 20px 0;
+}
+
+.error-description {
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+a {
+    color: #3498db;
+    text-decoration: none;
+}

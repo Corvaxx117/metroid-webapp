@@ -9,6 +9,7 @@
 namespace App\Core;
 
 use Symfony\Component\Yaml\Yaml;
+use App\Exceptions\NotFoundException;
 
 class Router
 {
@@ -42,6 +43,6 @@ class Router
                 return ['callable' => $config['callable'], 'params' => $matches];
             }
         }
-        throw new \Exception("Aucune route concordante pour l'URI: $uri");
+        throw new NotFoundException("Aucune route correspondante pour l'URI: $uri");
     }
 }
