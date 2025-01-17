@@ -3,6 +3,7 @@
 namespace App\Core;
 
 use Throwable;
+use App\Services\ViewRenderer;
 
 class ErrorHandler
 {
@@ -17,12 +18,23 @@ class ErrorHandler
         'App\Exceptions\UnsupportedMediaTypeException' => 415,
     ];
 
+
+
+    public function __construct(private ViewRenderer $viewRenderer) {}
+
     public function handle(Throwable $exception): void
     {
         $statusCode = $this->getStatusCodeForException($exception);
         $message = $exception->getMessage() ?: "Une erreur inattendue est survenue.";
-
-        $this->renderErrorView($statusCode, $message);
+        try {
+            $this->viewRenderer->render('system-errors.phtml', [
+                'statusCode' => $statusCode,
+                'message' => $message,
+                'description' => $exception->getTraceAsString(),
+            ], $statusCode);
+        } catch (\Throwable $e) {
+            $this->renderFallbackError($statusCode, $message);
+        }
     }
 
     /**
@@ -38,30 +50,12 @@ class ErrorHandler
 
         return $exception->getCode() ?: 500; // Code par défaut
     }
-
-    /**
-     * Rend la vue d'erreur.
-     */
-    protected function renderErrorView(int $statusCode, string $message): void
+    private function renderFallbackError(int $statusCode, string $message): void
     {
         http_response_code($statusCode);
 
-        // Définir la base URL dynamiquement
-        $baseUrl = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
-        // Variables à transmettre à la vue
-        $data = [
-            'statusCode' => $statusCode,
-            'message' => $message,
-            'baseUrl' => $baseUrl,
-        ];
-
-        // Inclut la vue avec les variables
-        $this->loadView('system-errors.phtml', $data);
-    }
-
-    protected function loadView(string $view, array $data): void
-    {
-        extract($data); // Rend les clés du tableau accessibles comme variables
-        require_once __DIR__ . "/../../views/{$view}";
+        // Rendre les variables disponibles dans la vue
+        $description = "Une erreur critique est survenue.";
+        include __DIR__ . "/../../views/system-errors.phtml";
     }
 }
