@@ -2,8 +2,13 @@
 
 namespace App\Exceptions;
 
-class BadRequestException extends \Exception
+class BadRequestException extends \Exception implements HttpExceptionInterface
 {
-    protected $code = 400;
-    protected $message = "Requête invalide.";
+    protected int $statusCode = 400;
+    protected string $message = "Requête invalide.";
+
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
 }

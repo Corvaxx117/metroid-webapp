@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Core\ErrorHandler;
-
 class ViewRenderer
 {
     public function render(string $view, array $data = [], int $statusCode = 200): void
@@ -23,7 +21,6 @@ class ViewRenderer
         }
         // Extrait les données à inclure dans la vue
         extract($data);
-
 
         // Définir $template pour inclure la vue dans le layout
         $template = $viewPath;

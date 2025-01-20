@@ -4,52 +4,49 @@ namespace App\Core;
 
 use Throwable;
 use App\Services\ViewRenderer;
+use App\Exceptions\HttpExceptionInterface;
 
 class ErrorHandler
 {
-    private const EXCEPTION_TO_STATUS = [
-        'App\Exceptions\NotFoundException' => 404,
-        'App\Exceptions\ForbiddenException' => 403,
-        'App\Exceptions\InternalServerErrorException' => 500,
-        'App\Exceptions\UnauthorizedException' => 401,
-        'App\Exceptions\BadRequestException' => 400,
-        'App\Exceptions\ConflictException' => 409,
-        'App\Exceptions\ServiceUnavailableException' => 503,
-        'App\Exceptions\UnsupportedMediaTypeException' => 415,
-    ];
+    private ViewRenderer $viewRenderer;
 
-
-
-    public function __construct(private ViewRenderer $viewRenderer) {}
+    public function __construct()
+    {
+        $this->viewRenderer = new ViewRenderer();
+    }
 
     public function handle(Throwable $exception): void
     {
-        $statusCode = $this->getStatusCodeForException($exception);
+        // Si l'exception est de type HttpExceptionInterface
+        // Alors on recupere le code HTTP
+        // sinon on renvoie 500
+        // if ($exception instanceof HttpExceptionInterface) {
+        //     $statusCode = $exception->getStatusCode();
+        // } else {
+        //     $statusCode = 500;
+        // }
+        // ?? retourne le 1er membre non null
+
+        // Voir les httpExceptions de Symfony pour rendre ça plus generique 
+        // Revoir les interfaces et les traits 
+        // comment instancier PDO et le faire transiter dans le projet 
+        // -> Voir pattern singleton
+        // Apres ça si  j'ai le temps integrer le projet ocr
+        // Faire une copie sur un depot git différent
+
+        $statusCode = $exception?->getStatusCode() ?? 500;
         $message = $exception->getMessage() ?: "Une erreur inattendue est survenue.";
         try {
             $this->viewRenderer->render('system-errors.phtml', [
                 'statusCode' => $statusCode,
                 'message' => $message,
-                'description' => $exception->getTraceAsString(),
+                // 'description' => $exception->getTraceAsString(),
             ], $statusCode);
         } catch (\Throwable $e) {
             $this->renderFallbackError($statusCode, $message);
         }
     }
 
-    /**
-     * Retourne le code HTTP pour une exception donnée.
-     */
-    private function getStatusCodeForException(Throwable $exception): int
-    {
-        foreach (self::EXCEPTION_TO_STATUS as $class => $code) {
-            if ($exception instanceof $class) {
-                return $code;
-            }
-        }
-
-        return $exception->getCode() ?: 500; // Code par défaut
-    }
     private function renderFallbackError(int $statusCode, string $message): void
     {
         http_response_code($statusCode);

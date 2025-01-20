@@ -14,10 +14,14 @@ use App\Exceptions\NotFoundException;
 class Router
 {
     private array $routes;
+    // private ErrorHandler $errorHandler;
 
     public function __construct(string $routesFile)
     {
         $this->routes = Yaml::parseFile($routesFile)['routes'];
+        // $this->errorHandler = new ErrorHandler();
+        // // Configurer un gestionnaire global pour les exceptions non capturées
+        // set_exception_handler([$this->errorHandler, 'handle']);
     }
 
     public function match(string $uri, string $method)
@@ -42,7 +46,8 @@ class Router
                 // si une route est matchée on retourne donc un array structuré qui va nous être utile pour appeler le bon controller avec les bons arguments
                 return ['callable' => $config['callable'], 'params' => $matches];
             }
+            // Lancer une exception si aucune route ne correspond
+            throw new NotFoundException("Aucune route correspondante pour l'URI: $uri");
         }
-        throw new NotFoundException("Aucune route correspondante pour l'URI: $uri");
     }
 }

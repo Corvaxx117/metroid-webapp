@@ -10,6 +10,6 @@ class HomeController extends BaseController
             'title' => 'Page d\'accueil',
             'content' => 'Bienvenue sur la page d\'accueil ma poule !'
         ];
-        $this->render('home.phtml', $data);
+        $this->viewRenderer->render('home.phtml', $data);
     }
 }
