@@ -15,6 +15,9 @@ class ErrorHandler
         $this->viewRenderer = new ViewRenderer();
     }
 
+    /**
+     * @param HttpExceptionInterface|Throwable $exception
+     */
     public function handle(Throwable $exception): void
     {
         // Si l'exception est de type HttpExceptionInterface
@@ -33,7 +36,7 @@ class ErrorHandler
         // -> Voir pattern singleton
         // Apres ça si  j'ai le temps integrer le projet ocr
         // Faire une copie sur un depot git différent
-
+        // dd($exception);
         $statusCode = $exception?->getStatusCode() ?? 500;
         $message = $exception->getMessage() ?: "Une erreur inattendue est survenue.";
         try {

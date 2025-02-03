@@ -8,7 +8,6 @@ class ViewRenderer
     {
         // Défini le code HTTP
         http_response_code($statusCode);
-
         // Vérifie si le fichier de vue existe
         $viewPath = __DIR__ . "/../../views/{$view}";
         if (!file_exists($viewPath)) {

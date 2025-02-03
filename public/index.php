@@ -1,9 +1,9 @@
 <?php
 
-
 // Charge les dépendances via l’autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use App\Core\Database;
 use App\Core\Launcher;
 
 // Créer une instance de la classe Launcher

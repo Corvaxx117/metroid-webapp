@@ -7,9 +7,15 @@ routes:
   "/":
     method: GET
     callable: App\Controller\HomeController
-  "/news/:id":
+  "/users":
     method: GET
-    callable: App\Controller\NewsController
-  # '/news/:id':
-  #     method: GET
-  #     callable: App\Controller\NewsItemAction
+    callable: App\Controller\UserController::list
+  "/users/show/:id":
+    method: GET
+    callable: App\Controller\UserController::show
+  "/users/add":
+    method: POST
+    callable: App\Controller\UserController::add
+  "/users/delete/:id":
+    method: POST
+    callable: App\Controller\UserController::delete

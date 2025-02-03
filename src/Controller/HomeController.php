@@ -8,7 +8,7 @@ class HomeController extends BaseController
     {
         $data = [
             'title' => 'Page d\'accueil',
-            'content' => 'Bienvenue sur la page d\'accueil ma poule !'
+            'content' => 'Bienvenue sur la page d\'accueil !'
         ];
         $this->viewRenderer->render('home.phtml', $data);
     }

@@ -1,0 +1,16 @@
+<h2><?= htmlspecialchars($title ?? 'Liste des utilisateurs') ?></h2>
+
+<?php if (!empty($users)): ?>
+    <ul>
+        <?php foreach ($users as $user): ?>
+            <li>
+                <strong><?= htmlspecialchars($user['username']) ?></strong> -
+                <?= htmlspecialchars($user['email']) ?>
+                <a href="/users/show/<?= $user['id'] ?>">Voir</a> |
+                <a href="/users/delete/<?= $user['id'] ?>" onclick="return confirm('Confirmer la suppression ?')">Supprimer</a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <p>Aucun utilisateur trouvé.</p>
+<?php endif; ?>

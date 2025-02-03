@@ -55,12 +55,8 @@ class Launcher
 
         // Résoudre la route
         $route = $this->router->match($uri, $method);
-        // dd($route);
-        // Instancier le contrôleur et appeler l'action
-        $controllerInstance = new $route['callable'](new ViewRenderer());
-        // dd($basePath, $requestUri, $uri, $route, $controllerInstance);
-        // retire le 1er élément du tableau 
-        call_user_func_array($controllerInstance, $route['params']);
+
+        call_user_func_array($route['callable'], $route['params']);
         // } catch (\Throwable $e) {
         //     $this->errorHandler->handle($e);
         // }

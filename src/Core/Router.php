@@ -8,8 +8,10 @@
 
 namespace App\Core;
 
+use App\Services\ViewRenderer;
 use Symfony\Component\Yaml\Yaml;
 use App\Exceptions\NotFoundException;
+use App\Exceptions\InternalServerErrorException;
 
 class Router
 {
@@ -42,12 +44,22 @@ class Router
                 // la ou les index suivant contiendront seulement ce qui est capturé 
                 // (par capture j'entends les parenthèse de la regexp)
                 array_shift($matches); // Retire le 1er élément
+                // Instancier le contrôleur et appeler l'action
+                $classDefinition = explode('::', $config['callable']);
+                if (count($classDefinition) === 2) {
+                    // !!!! Voir closure en php
+                    $callable = [new $classDefinition[0](new ViewRenderer()), $classDefinition[1]];
+                } else if (count($classDefinition) === 1) {
+                    $callable = new $classDefinition[0](new ViewRenderer());
+                } else {
+                    throw new InternalServerErrorException("Le controller {$route['callable']} n'existe pas");
+                }
                 // dd($route, $uri, $config, $pattern, $matches);
                 // si une route est matchée on retourne donc un array structuré qui va nous être utile pour appeler le bon controller avec les bons arguments
-                return ['callable' => $config['callable'], 'params' => $matches];
+                return ['callable' => $callable, 'params' => $matches];
             }
-            // Lancer une exception si aucune route ne correspond
-            throw new NotFoundException("Aucune route correspondante pour l'URI: $uri");
         }
+        // Lancer une exception si aucune route ne correspond
+        throw new NotFoundException("Aucune route correspondante pour l'URI: $uri");
     }
 }
