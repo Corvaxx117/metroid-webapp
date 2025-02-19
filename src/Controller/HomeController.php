@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
-class HomeController extends BaseController
+use App\Services\ViewRenderer;
+
+class HomeController
 {
+    public function __construct(private ViewRenderer $viewRenderer) {}
     public function __invoke()
     {
         $data = [

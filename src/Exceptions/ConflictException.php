@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-class ConflictException extends \Exception
+class ConflictException extends HttpExceptionAbstract
 {
-    protected $code = 409;
-    protected $message = "Conflit avec une ressource existante.";
+    protected int $code = 409;
+    protected const string MESSAGE = "Conflit avec une ressource existante.";
 }

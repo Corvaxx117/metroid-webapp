@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-class ForbiddenException extends \Exception
+class ForbiddenException extends HttpExceptionAbstract
 {
-    protected $code = 403;
-    protected $message = "Accès interdit.";
+    protected int $code = 403;
+    protected const string MESSAGE = "Accès interdit.";
 }

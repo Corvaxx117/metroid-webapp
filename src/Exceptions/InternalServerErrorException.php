@@ -2,15 +2,8 @@
 
 namespace App\Exceptions;
 
-use App\Exceptions\HttpExceptionInterface;
-
-class InternalServerErrorException extends \Exception implements HttpExceptionInterface
+class InternalServerErrorException implements HttpExceptionAbstract
 {
-    private int $statusCode = 500;
-    private string $message = "Une erreur interne est survenue.";
-
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
-    }
+    protected int $statusCode = 500;
+    protected const string MESSAGE = "Une erreur interne est survenue.";
 }

@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-class UnauthorizedException extends \Exception
+class UnauthorizedException extends HttpExceptionAbstract
 {
-    protected $code = 401;
-    protected $message = "Authentification requise.";
+    protected int $code = 401;
+    protected const string MESSAGE = "Authentification requise.";
 }

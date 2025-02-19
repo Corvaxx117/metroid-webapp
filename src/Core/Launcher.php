@@ -4,7 +4,6 @@ namespace App\Core;
 
 use App\Core\Router;
 use App\Core\ErrorHandler;
-use App\Services\ViewRenderer;
 use Symfony\Component\Dotenv\Dotenv;
 
 class Launcher

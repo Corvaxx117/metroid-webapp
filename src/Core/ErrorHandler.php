@@ -20,24 +20,11 @@ class ErrorHandler
      */
     public function handle(Throwable $exception): void
     {
-        // Si l'exception est de type HttpExceptionInterface
-        // Alors on recupere le code HTTP
-        // sinon on renvoie 500
-        // if ($exception instanceof HttpExceptionInterface) {
-        //     $statusCode = $exception->getStatusCode();
-        // } else {
-        //     $statusCode = 500;
-        // }
-        // ?? retourne le 1er membre non null
-
-        // Voir les httpExceptions de Symfony pour rendre ça plus generique 
-        // Revoir les interfaces et les traits 
-        // comment instancier PDO et le faire transiter dans le projet 
-        // -> Voir pattern singleton
-        // Apres ça si  j'ai le temps integrer le projet ocr
-        // Faire une copie sur un depot git différent
-        // dd($exception);
-        $statusCode = $exception?->getStatusCode() ?? 500;
+        if ($exception instanceof HttpExceptionInterface) {
+            $statusCode = $exception->getStatusCode();
+        } else {
+            $statusCode = 500;
+        }
         $message = $exception->getMessage() ?: "Une erreur inattendue est survenue.";
         try {
             $this->viewRenderer->render('system-errors.phtml', [

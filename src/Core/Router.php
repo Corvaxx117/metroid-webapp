@@ -47,7 +47,6 @@ class Router
                 // Instancier le contrôleur et appeler l'action
                 $classDefinition = explode('::', $config['callable']);
                 if (count($classDefinition) === 2) {
-                    // !!!! Voir closure en php
                     $callable = [new $classDefinition[0](new ViewRenderer()), $classDefinition[1]];
                 } else if (count($classDefinition) === 1) {
                     $callable = new $classDefinition[0](new ViewRenderer());

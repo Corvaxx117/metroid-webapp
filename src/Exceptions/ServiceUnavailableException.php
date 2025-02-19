@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
-class ServiceUnavailableException extends \Exception
+class ServiceUnavailableException extends HttpExceptionAbstract
 {
-    protected $code = 503;
-    protected $message = "Service temporairement indisponible.";
+    protected int $code = 503;
+    protected const string MESSAGE = "Service temporairement indisponible.";
 }
