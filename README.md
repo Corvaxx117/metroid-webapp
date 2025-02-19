@@ -1,6 +1,6 @@
 # Mini Framework PHP MVC
 
-Ce projet est une application PHP développée dans le cadre de la formation OCR. Il s'agit d'un mini-framework MVC (Model-View-Controller) inspiré de Symfony, conçu pour mieux comprendre la programmation orientée objet (POO) et les principes d'architecture MVC.
+Ce projet est une application PHP développée dans le cadre de la formation OpenClassRoom. Il s'agit d'un mini-framework MVC (Model-View-Controller) inspiré de Symfony, conçu pour mieux comprendre la programmation orientée objet (POO) et les principes d'architecture MVC, ainsi que Symfony.
 
 ---
 
