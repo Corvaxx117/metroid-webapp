@@ -1,0 +1,55 @@
+<!-- 
+Ce template affiche un article et ses commentaires.
+Il affiche également un formulaire pour ajouter un commentaire. -->
+
+<article class="mainArticle">
+    <h2> <?= clean($title ?? 'Détails de l\'article') ?> </h2>
+    <span class="quotation">«</span>
+    <p><?= clean($article['content']) ?></p>
+
+    <div class="footer">
+        <span class="info"> Publié le <?= formatDate($article['date_creation']) ?></span>
+        <?php if ($article['date_update'] != null): ?>
+            <span class="info"> Modifié le <?= formatDate($article['date_update']) ?></span>
+        <?php endif ?>
+    </div>
+</article>
+
+<div class="comments">
+    <h2 class="commentsTitle">Vos Commentaires</h2>
+    <?php if (empty($comments)): ?>
+        <p class="info">Aucun commentaire pour cet article.</p>
+    <?php else: ?>
+        <ul>
+            <?php foreach ($comments as $comment): ?>
+                <li>
+                    <div class="smiley">☻</div>
+                    <div class="detailComment">
+                        <h3 class="info">
+                            Le <?= formatDate($article['date_creation'], 'long'); ?>,
+                            <?= clean($comment['pseudo'], false) ?> a écrit :
+                        </h3>
+                        <p class="content"><?= clean($comment['content']) ?></p>
+                    </div>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    <?php endif ?>
+
+    <form action="<?= url('/addComment') ?>" method="post" class="foldedCorner">
+        <h2>Commenter</h2>
+
+        <div class="formComment formGrid">
+            <label for="pseudo">Pseudonyme</label>
+            <input type="text" name="pseudo" id="pseudo" required>
+
+            <label for="content">Commentaire</label>
+            <textarea name="content" id="content" required></textarea>
+
+            <input type="hidden" name="action" value="addComment">
+            <input type="hidden" name="idArticle" value="<?= $article['id'] ?>">
+
+            <button class="submit">Ajouter un commentaire</button>
+        </div>
+    </form>
+</div>

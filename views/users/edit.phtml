@@ -1,0 +1,36 @@
+<?php
+
+use App\Services\UrlGenerator; ?>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary">Modifier l'utilisateur</h2>
+
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <form action="<?= UrlGenerator::getUrlFromPath('/users/update') ?>" method="POST">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($user['id']) ?>">
+
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nom d'utilisateur :</label>
+                    <input type="text" id="username" name="username" class="form-control"
+                        value="<?= htmlspecialchars($user['username']) ?>" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email :</label>
+                    <input type="email" id="email" name="email" class="form-control"
+                        value="<?= htmlspecialchars($user['email']) ?>" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Mettre à jour
+                </button>
+
+                <a href="<?= UrlGenerator::getUrlFromPath('/users') ?>" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Annuler
+                </a>
+            </form>
+
+        </div>
+    </div>
+</div>

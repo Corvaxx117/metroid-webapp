@@ -1,16 +1,50 @@
-<h2><?= htmlspecialchars($title ?? 'Liste des utilisateurs') ?></h2>
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary"><?= clean($title ?? 'Liste des utilisateurs') ?></h2>
 
-<?php if (!empty($users)): ?>
-    <ul>
-        <?php foreach ($users as $user): ?>
-            <li>
-                <strong><?= htmlspecialchars($user['username']) ?></strong> -
-                <?= htmlspecialchars($user['email']) ?>
-                <a href="/users/show/<?= $user['id'] ?>">Voir</a> |
-                <a href="/users/delete/<?= $user['id'] ?>" onclick="return confirm('Confirmer la suppression ?')">Supprimer</a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-<?php else: ?>
-    <p>Aucun utilisateur trouvé.</p>
-<?php endif; ?>
+    <a href="<?= url('/users/addUser') ?>" class="btn btn-success mb-3">
+        <i class="bi bi-person-plus"></i> Ajouter un utilisateur
+    </a>
+
+    <?php if (!empty($users)): ?>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nom d'utilisateur</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td><strong><?= clean($user['nickname']) ?></strong></td>
+                            <td><?= clean($user['email']) ?></td>
+                            <td>
+                                <a href="<?= url('/users/show/:id', ['id' => $user['id']]) ?>"
+                                    class="btn btn-info btn-sm">
+                                    <i class="bi bi-eye"></i> Voir
+                                </a>
+
+                                <a href="<?= url('/users/edit/:id', ['id' => $user['id']]) ?>"
+                                    class="btn btn-warning btn-sm">
+                                    <i class="bi bi-pencil"></i> Modifier
+                                </a>
+
+                                <form action="<?= url('/users/delete/:id', ['id' => $user['id']]) ?>"
+                                    method="POST" class="d-inline">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Confirmer la suppression ?')">
+                                        <i class="bi bi-trash"></i> Supprimer l'utilisateur
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    <?php else: ?>
+        <div class="alert alert-warning">Aucun utilisateur trouvé.</div>
+    <?php endif; ?>
+</div>

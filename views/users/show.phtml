@@ -1,11 +1,8 @@
-<h2><?= htmlspecialchars($title ?? 'Détails de l\'utilisateur') ?></h2>
+<h2><?= clean($title ?? 'Détails de l\'utilisateur') ?></h2>
 
-<?php if ($user): ?>
-    <p><strong>Nom d'utilisateur :</strong> <?= htmlspecialchars($user['username']) ?></p>
-    <p><strong>Email :</strong> <?= htmlspecialchars($user['email']) ?></p>
-    <p><strong>ID :</strong> <?= htmlspecialchars($user['id']) ?></p>
-<?php else: ?>
-    <p>Utilisateur non trouvé.</p>
-<?php endif; ?>
+<p><strong>Nom d'utilisateur :</strong> <?= clean($user['nickname']) ?></p>
+<p><strong>Email :</strong> <?= clean($user['email']) ?></p>
+<p><strong>ID :</strong> <?= clean($user['id']) ?></p>
 
-<a href="/users">Retour à la liste des utilisateurs</a>
+
+<a href="<?= url('/users') ?>">Retour à la liste des utilisateurs</a>

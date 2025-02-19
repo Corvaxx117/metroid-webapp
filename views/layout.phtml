@@ -5,23 +5,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Le Projet MVC OpenClassrooms">
-    <link rel="stylesheet" href="../assets/style/app.css">
-
-    <title><?= $title ?? 'Bienvenue' ?></title>
+    <!-- Bootstrap 4 CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Blog | <?= isset($title) ?  clean($title) : 'Bienvenue' ?></title>
+    <link rel="stylesheet" href="<?= url('../assets/CSS/style.css') ?>">
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="navbar__logo">
-            <h1>Mon Super Site MVC</h1>
-        </div>
-        <ul class="navbar__menu">
-            <li class="navbar__item"><a href="/" class="navbar__link">Accueil</a></li>
-            <li class="navbar__item"><a href="/shop" class="navbar__link">Shop</a></li>
-            <li class="navbar__item"><a href="/contact" class="navbar__link">Contact</a></li>
-        </ul>
-    </nav>
+
+    <header>
+        <!-- Navbar -->
+        <nav>
+            <nav>
+                <a href="<?= url('/articles') ?>">Articles</a>
+                <a href="<?= url('/aPropos') ?>">À propos</a>
+
+                <!-- Si on est connecté, on affiche le bouton de déconnexion, sinon, on affiche le bouton de connexion : -->
+                <?php if (isset($_SESSION['user'])): ?>
+                    <a href="<?= url('/disconnectUser') ?>">Déconnexion</a>
+                <?php endif ?>
+            </nav>
+            <h1>Emilie Forteroche</h1>
+        </nav>
+    </header>
+
+    <?php renderFlashMessages(); ?>
 
     <main class="main-content">
         <?php include $template; ?>
@@ -31,6 +39,12 @@
     <footer class="footer">
         <p>&copy; <?= date('Y') ?> Mon Super Site MVC. Tous droits réservés.</p>
     </footer>
+
+    <!-- Bootstrap JS, jQuery, Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>
