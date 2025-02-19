@@ -7,15 +7,57 @@ routes:
   "/":
     method: GET
     callable: App\Controller\HomeController
+
+  # Route pour la gestion des utilisateurs
   "/users":
     method: GET
     callable: App\Controller\UserController::list
   "/users/show/:id":
     method: GET
     callable: App\Controller\UserController::show
+  "/users/addUser":
+    method: GET
+    callable: App\Controller\UserController::add
   "/users/add":
     method: POST
     callable: App\Controller\UserController::add
   "/users/delete/:id":
     method: POST
     callable: App\Controller\UserController::delete
+  "/users/edit/:id":
+    method: GET
+    callable: App\Controller\UserController::editUser
+  "/users/update":
+    method: POST
+    callable: App\Controller\UserController::updateUser
+
+  # Route pour la gestion des posts
+  "/articles":
+    method: GET
+    callable: App\Controller\ArticleController::list
+  "/articles/show/:id":
+    method: GET
+    callable: App\Controller\ArticleController::show
+  "/articles/addArticle":
+    method: GET
+    callable: App\Controller\ArticleController::addArticle
+  "/articles/add":
+    method: POST
+    callable: App\Controller\ArticleController::add
+  "/articles/delete/:id":
+    method: POST
+    callable: App\Controller\ArticleController::delete
+  "/articles/edit/:id":
+    method: GET
+    callable: App\Controller\ArticleController::editArticle
+  "/articles/update":
+    method: POST
+    callable: App\Controller\ArticleController::update
+  "/aPropos":
+    method: GET
+    callable: App\Controller\ArticleController::showApropos
+
+  # Route pour la gestion des commentaires
+  "/addComment":
+    method: POST
+    callable: App\Controller\CommentController::addComment
