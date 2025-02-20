@@ -1,15 +1,21 @@
-<!-- Ce template affiche la liste des articles. -->
+<?php
+
+/** 
+ * Affichage de Liste des articles. 
+ */
+
+use App\Services\ToolBox; ?>
 
 <div class="articleList">
     <?php foreach ($articles as $article): ?>
         <article class="article">
-            <h2><?= clean($article['title']) ?></h2>
+            <h2><?= ToolBox::clean($article['title']) ?></h2>
             <span class="quotation">«</span>
-            <p><?= clean($article['content']) ?></p>
+            <p><?= ToolBox::clean($article['content']) ?></p>
 
             <div class="footer">
-                <span class="info"> <?= clean(formatDate($article['date_creation'])) ?></span>
-                <a class="info" href="<?= url('/articles/show/:id', ['id' => $article['id']]) ?>">Lire +</a>
+                <span class="info"> <?= ToolBox::clean(ToolBox::formatDate($article['date_creation'])) ?></span>
+                <a class="info" href="<?= ToolBox::url('/articles/show/:id', ['id' => $article['id']]) ?>">Lire +</a>
             </div>
         </article>
     <?php endforeach; ?>

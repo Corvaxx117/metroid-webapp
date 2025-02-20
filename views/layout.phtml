@@ -1,3 +1,11 @@
+<?php
+
+/**
+ * Template principal de l'application
+ */
+
+use App\Services\ToolBox; ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -6,30 +14,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Le Projet MVC OpenClassrooms">
     <!-- Bootstrap 4 CDN -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Blog | <?= isset($title) ?  clean($title) : 'Bienvenue' ?></title>
-    <link rel="stylesheet" href="<?= url('../assets/CSS/style.css') ?>">
+    <title>Blog | <?= isset($title) ?  ToolBox::clean($title, false) : 'Bienvenue' ?></title>
+    <link rel="stylesheet" href="<?= ToolBox::url('../assets/CSS/style.css') ?>">
 </head>
 
 <body>
-
     <header>
-        <!-- Navbar -->
         <nav>
-            <nav>
-                <a href="<?= url('/articles') ?>">Articles</a>
-                <a href="<?= url('/aPropos') ?>">À propos</a>
-
-                <!-- Si on est connecté, on affiche le bouton de déconnexion, sinon, on affiche le bouton de connexion : -->
-                <?php if (isset($_SESSION['user'])): ?>
-                    <a href="<?= url('/disconnectUser') ?>">Déconnexion</a>
-                <?php endif ?>
-            </nav>
-            <h1>Emilie Forteroche</h1>
+            <a href="<?= ToolBox::url('/articles') ?>">Articles</a>
+            <a href="<?= ToolBox::url('/aPropos') ?>">À propos</a>
+            <!-- Si on est connecté, on affiche le bouton de déconnexion, sinon, on affiche le bouton de connexion : -->
+            <?php if (isset($_SESSION['user'])): ?>
+                <a href="<?= ToolBox::url('/disconnectUser') ?>">Déconnexion</a>
+            <?php endif ?>
         </nav>
+        <h1>Emilie Forteroche</h1>
+
     </header>
 
-    <?php renderFlashMessages(); ?>
+    <?php ToolBox::renderFlash(); ?>
 
     <main class="main-content">
         <?php include $template; ?>
@@ -41,9 +44,9 @@
     </footer>
 
     <!-- Bootstrap JS, jQuery, Popper.js -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> -->
 
 </body>
 

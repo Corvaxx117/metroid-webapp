@@ -1,8 +1,12 @@
-<h2><?= clean($title ?? 'Détails de l\'utilisateur') ?></h2>
+<?php
 
-<p><strong>Nom d'utilisateur :</strong> <?= clean($user['nickname']) ?></p>
-<p><strong>Email :</strong> <?= clean($user['email']) ?></p>
-<p><strong>ID :</strong> <?= clean($user['id']) ?></p>
+use App\Services\ToolBox; ?>
+
+<h2><?= ToolBox::clean($title, false ?? 'Détails de l\'utilisateur') ?></h2>
+
+<p><strong>Nom d'utilisateur :</strong> <?= ToolBox::clean($user['nickname']) ?></p>
+<p><strong>Email :</strong> <?= ToolBox::clean($user['email']) ?></p>
+<p><strong>ID :</strong> <?= ToolBox::clean($user['id']) ?></p>
 
 
-<a href="<?= url('/users') ?>">Retour à la liste des utilisateurs</a>
+<a href="<?= ToolBox::url('/users') ?>">Retour à la liste des utilisateurs</a>
