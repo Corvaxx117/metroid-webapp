@@ -350,3 +350,108 @@ footer {
     color: white;
     background-color: var(--headerColor);
 }
+
+
+/**
+ * Design des alertes Flash
+ */
+
+/* Styles généraux des alertes */
+.custom-alert {
+    display: flex;
+    position: relative;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #fff;
+    transition: opacity 0.4s ease-in-out;
+}
+
+/* Bouton de fermeture */
+.close-btn {
+    margin-left: 15px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #ccc;
+}
+
+/* Animation de disparition */
+.custom-alert.show {
+    opacity: 1;
+}
+
+.custom-alert.hide {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+    display: none;
+}
+
+/* Couleurs selon le type d'alerte */
+.custom-alert.danger {
+    background-color: #ea4e5d;
+}
+
+.custom-alert.warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.custom-alert.success {
+    background-color: #56c570;
+}
+
+.custom-alert.danger:hover,
+.custom-alert.success:hover,
+.custom-alert.warning:hover {
+    background-color: var(--headerPaleColor);
+    color: #3f56a4;
+}
+
+.container-over-links {
+    display: flex;
+    justify-content: space-between; /* Écarte les éléments */
+    align-items: center;
+    width: 100%;
+}
+
+.linkBack {
+    background-color: var(--headerColor);
+    color: white;
+    padding: 8px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    width: 150px; /* Largeur uniforme pour tous les boutons */
+    font-size: 14px; /* Réduction de la taille de la police */
+}
+
+.linkBack:hover {
+    background-color: var(--headerPaleColor);
+    color: #3f56a4;
+}
+
+/* Place le lien de retour tout à gauche */
+.link-left {
+    margin-left: 0;
+}
+
+/* Groupe des liens à droite */
+.link-group {
+    display: flex;
+    gap: 10px; /* Espacement entre les boutons */
+}
+
+/* Style spécifique pour le bouton Supprimer */
+.link-delete {
+    background-color: #d9534f;
+}
+
