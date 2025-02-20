@@ -31,7 +31,7 @@ routes:
     method: POST
     callable: App\Controller\UserController::updateUser
 
-  # Route pour la gestion des posts
+  # Route pour la gestion des articles
   "/articles":
     method: GET
     callable: App\Controller\ArticleController::list
