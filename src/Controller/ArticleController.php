@@ -5,9 +5,7 @@ namespace App\Controller;
 use App\Model\ArticleModel;
 use App\Model\CommentModel;
 use App\Services\ViewRenderer;
-use App\Services\FlashMessage;
-use App\Services\UrlGenerator;
-use App\Services\Utils;
+use App\Services\ToolBox;
 
 /**
  * Contrôleur de la partie article
@@ -29,6 +27,11 @@ class ArticleController
     public function list(): void
     {
         $articles = $this->articleModel->getAllArticles();
+
+        // On limite l'affichage du contenu à 40 mots
+        foreach ($articles as &$article) {
+            $article['content'] = ToolBox::truncate($article['content'], 40);
+        }
         $data = [
             'title' => 'Liste des articles',
             'articles' => $articles
@@ -45,8 +48,8 @@ class ArticleController
         // Récupération de l'id de l'article demandé.
         $article = $this->articleModel->getArticleById($id);
         if (!$article) {
-            FlashMessage::add(FlashMessage::ERROR, "L'article demandé n'existe pas.");
-            header('Location: ' . UrlGenerator::getUrlFromPath('/articles'));
+            ToolBox::addFlash(ToolBox::ERROR, "L'article demandé n'existe pas.");
+            header('Location: ' . ToolBox::url('/articles'));
             exit;
         }
 
