@@ -358,6 +358,8 @@ footer {
 
 /* Styles généraux des alertes */
 .custom-alert {
+    align-items: center;
+    justify-content: center;
     display: flex;
     position: relative;
     padding: 15px;
@@ -414,9 +416,51 @@ footer {
     color: #3f56a4;
 }
 
+/* ----------------------  ERREURS SYSTEME ------------------- */
+
+
+.error-container {
+    max-width: 600px;
+    margin: 10% auto;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+  
+.error-code {
+    font-size: 80px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 0;
+}
+
+.error-message {
+    font-size: 18px;
+    margin: 20px 0;
+    color: #7f8c8d;
+}
+
+.error-description {
+    font-size: 14px;
+    color: #7f8c8d;
+    margin: 10px 0 20px 0;
+}
+
+.error-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
 .container-over-links {
     display: flex;
-    justify-content: space-between; /* Écarte les éléments */
+    justify-content: space-between; 
     align-items: center;
     width: 100%;
 }
