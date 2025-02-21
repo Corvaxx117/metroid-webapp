@@ -17,7 +17,7 @@ routes:
     callable: App\Controller\UserController::show
   "/users/addUser":
     method: GET
-    callable: App\Controller\UserController::add
+    callable: App\Controller\UserController::displayAddUserForm
   "/users/add":
     method: POST
     callable: App\Controller\UserController::add
@@ -30,6 +30,17 @@ routes:
   "/users/update":
     method: POST
     callable: App\Controller\UserController::updateUser
+
+  # Routes Administration
+  "/admin/connectionForm":
+    method: GET
+    callable: App\Controller\AdminController::displayConnectionForm
+  "/admin/connection":
+    method: POST
+    callable: App\Controller\AdminController::connect
+  "/admin/disconnect":
+    method: GET
+    callable: App\Controller\AdminController::disconnect
 
   # Route pour la gestion des articles
   "/articles":
