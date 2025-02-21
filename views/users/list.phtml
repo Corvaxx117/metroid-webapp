@@ -1,10 +1,10 @@
 <?php
 
-use App\Services\ToolBox; ?>
+?>
 <div class="container mt-5">
-    <h2 class="mb-4 text-primary"><?= ToolBox::clean($title ?? 'Liste des utilisateurs') ?></h2>
+    <h2 class="mb-4 text-primary"><?= $this->clean($title ?? 'Liste des utilisateurs') ?></h2>
 
-    <a href="<?= ToolBox::url('/users/addUser') ?>" class="btn btn-success mb-3">
+    <a href="<?= $this->url('/users/addUser') ?>" class="btn btn-success mb-3">
         <i class="bi bi-person-plus"></i> Ajouter un utilisateur
     </a>
 
@@ -21,20 +21,20 @@ use App\Services\ToolBox; ?>
                 <tbody>
                     <?php foreach ($users as $user): ?>
                         <tr>
-                            <td><strong><?= ToolBox::clean($user['nickname']) ?></strong></td>
-                            <td><?= ToolBox::clean($user['email']) ?></td>
+                            <td><strong><?= $this->clean($user['nickname']) ?></strong></td>
+                            <td><?= $this->clean($user['email']) ?></td>
                             <td>
-                                <a href="<?= ToolBox::url('/users/show/:id', ['id' => $user['id']]) ?>"
+                                <a href="<?= $this->url('/users/show/:id', ['id' => $user['id']]) ?>"
                                     class="btn btn-info btn-sm">
                                     <i class="bi bi-eye"></i> Voir
                                 </a>
 
-                                <a href="<?= ToolBox::url('/users/edit/:id', ['id' => $user['id']]) ?>"
+                                <a href="<?= $this->url('/users/edit/:id', ['id' => $user['id']]) ?>"
                                     class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil"></i> Modifier
                                 </a>
 
-                                <form action="<?= ToolBox::url('/users/delete/:id', ['id' => $user['id']]) ?>"
+                                <form action="<?= $this->url('/users/delete/:id', ['id' => $user['id']]) ?>"
                                     method="POST" class="d-inline">
                                     <button type="submit" class="btn btn-danger btn-sm"
                                         onclick="return confirm('Confirmer la suppression ?')">

@@ -1,11 +1,14 @@
 <?php
 
-use App\Services\ToolBox; ?>
+/**
+ * Fichier contenant la vue de des messages flash
+ */
+?>
 
 <div class="custom-alert <?= $cssClass ?>">
     <ul>
-        <?php foreach (ToolBox::getFlash($type) as $message) : ?>
-            <li><?= ToolBox::clean($message) ?></li>
+        <?php foreach ($this->getFlash($type) as $message) : ?>
+            <li><?= htmlspecialchars($message) ?></li>
         <?php endforeach; ?>
     </ul>
     <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>

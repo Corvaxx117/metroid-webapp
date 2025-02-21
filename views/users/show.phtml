@@ -1,12 +1,12 @@
 <?php
 
-use App\Services\ToolBox; ?>
+?>
 
-<h2><?= ToolBox::clean($title, false ?? 'Détails de l\'utilisateur') ?></h2>
+<h2><?= $this->clean($title, false ?? 'Détails de l\'utilisateur') ?></h2>
 
-<p><strong>Nom d'utilisateur :</strong> <?= ToolBox::clean($user['nickname']) ?></p>
-<p><strong>Email :</strong> <?= ToolBox::clean($user['email']) ?></p>
-<p><strong>ID :</strong> <?= ToolBox::clean($user['id']) ?></p>
+<p><strong>Nom d'utilisateur :</strong> <?= $this->clean($user['nickname']) ?></p>
+<p><strong>Email :</strong> <?= $this->clean($user['email']) ?></p>
+<p><strong>ID :</strong> <?= $this->clean($user['id']) ?></p>
 
 
-<a href="<?= ToolBox::url('/users') ?>">Retour à la liste des utilisateurs</a>
+<a href="<?= $this->url('/users') ?>">Retour à la liste des utilisateurs</a>

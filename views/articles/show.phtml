@@ -4,26 +4,25 @@
  * Ce template affiche un article et ses commentaires.
  * Il affiche également un formulaire pour ajouter un commentaire. -->
  */
-
-use App\Services\ToolBox; ?>
+?>
 <div class="container-over-links">
-    <a href="<?= ToolBox::url('/articles') ?>" class="linkBack link-left">&#9756; Retour aux articles</a>
+    <a href="<?= $this->url('/articles') ?>" class="linkBack link-left">&#9756; Retour aux articles</a>
 
     <div class="link-group">
-        <a href="<?= ToolBox::url('/articles/edit/' . $article['id']) ?>" class="linkBack">&#9998; Éditer l'article</a>
-        <a href="<?= ToolBox::url('/articles/delete/' . $article['id']) ?>" class="linkBack link-delete" onclick="return confirm('Confirmer la suppression ?')">&#10060; Supprimer</a>
+        <a href="<?= $this->url('/articles/edit/' . $article['id']) ?>" class="linkBack">&#9998; Éditer l'article</a>
+        <a href="<?= $this->url('/articles/delete/' . $article['id']) ?>" class="linkBack link-delete" onclick="return confirm('Confirmer la suppression ?')">&#10060; Supprimer</a>
     </div>
 </div>
 
 <article class="mainArticle">
-    <h2> <?= ToolBox::clean($title ?? 'Détails de l\'article') ?> </h2>
+    <h2> <?= $this->clean($title ?? 'Détails de l\'article') ?> </h2>
     <span class="quotation">«</span>
-    <p><?= ToolBox::clean($article['content']) ?></p>
+    <p><?= $this->clean($article['content']) ?></p>
 
     <div class="footer">
-        <span class="info"> Publié le <?= ToolBox::formatDate($article['date_creation']) ?></span>
+        <span class="info"> Publié le <?= $this->formatDate($article['date_creation'], 'full') ?></span>
         <?php if ($article['date_update'] != null): ?>
-            <span class="info"> Modifié le <?= ToolBox::formatDate($article['date_update']) ?></span>
+            <span class="info"> Modifié le <?= $this->formatDate($article['date_update'], 'full') ?></span>
         <?php endif ?>
     </div>
 </article>
@@ -39,17 +38,17 @@ use App\Services\ToolBox; ?>
                     <div class="smiley">☻</div>
                     <div class="detailComment">
                         <h3 class="info">
-                            Le <?= ToolBox::formatDate($article['date_creation'], 'long'); ?>,
-                            <?= ToolBox::clean($comment['pseudo'], false) ?> a écrit :
+                            Le <?= $this->formatDate($comment['date_creation'], 'long'); ?>,
+                            <?= $this->clean($comment['pseudo'], false) ?> a écrit :
                         </h3>
-                        <p class="content"><?= ToolBox::clean($comment['content']) ?></p>
+                        <p class="content"><?= $this->clean($comment['content']) ?></p>
                     </div>
                 </li>
             <?php endforeach ?>
         </ul>
     <?php endif ?>
 
-    <form action="<?= ToolBox::url('/addComment') ?>" method="post" class="foldedCorner">
+    <form action="<?= $this->url('/addComment') ?>" method="post" class="foldedCorner">
         <h2>Commenter</h2>
 
         <div class="formComment formGrid">

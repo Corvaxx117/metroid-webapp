@@ -1,0 +1,23 @@
+<?php
+
+/** 
+ * Affichage de la partie admin : liste des articles avec un bouton "modifier" pour chacun. 
+ * Et un formulaire pour ajouter un article. 
+ */
+
+?>
+
+<h2>Edition des articles</h2>
+
+<div class="adminArticle">
+    <?php foreach ($articles as $article) { ?>
+        <div class="articleLine">
+            <div class="title"><?= $this->clean($article['title']) ?></div>
+            <div class="content"><?= $this->clean($article['content']) ?></div>
+            <div><a class="submit" href="<?= $this->url('/articles/edit/:id', ['id' => $article['id']]) ?>">Modifier</a></div>
+            <div><a class="submit" href="<?= $this->url('/articles/delete/:id', ['id' => $article['id']]) ?>" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">Supprimer</a></div>
+        </div>
+    <?php } ?>
+</div>
+
+<a class="submit" href="<?= $this->url('/articles/add') ?>">Ajouter un article</a>

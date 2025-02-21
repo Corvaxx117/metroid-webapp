@@ -3,19 +3,18 @@
 /** 
  * Affichage de Liste des articles. 
  */
-
-use App\Services\ToolBox; ?>
+?>
 
 <div class="articleList">
     <?php foreach ($articles as $article): ?>
         <article class="article">
-            <h2><?= ToolBox::clean($article['title']) ?></h2>
+            <h2><?= $this->clean($article['title']) ?></h2>
             <span class="quotation">«</span>
-            <p><?= ToolBox::clean($article['content']) ?></p>
+            <p><?= $this->clean($this->truncate($article['content'], 50)) ?></p>
 
             <div class="footer">
-                <span class="info"> <?= ToolBox::clean(ToolBox::formatDate($article['date_creation'])) ?></span>
-                <a class="info" href="<?= ToolBox::url('/articles/show/:id', ['id' => $article['id']]) ?>">Lire +</a>
+                <span class="info"> <?= $this->clean($this->formatDate($article['date_creation'])) ?></span>
+                <a class="info" href="<?= $this->url('/articles/show/:id', ['id' => $article['id']]) ?>">Lire +</a>
             </div>
         </article>
     <?php endforeach; ?>

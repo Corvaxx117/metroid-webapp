@@ -4,27 +4,16 @@
  * Fichier contenant la vue de des erreurs systeme
  */
 
-use App\Services\ToolBox; ?>
+?>
 
-<!DOCTYPE html>
-<html lang="fr">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Erreur <?= ToolBox::clean($statusCode); ?></title>
-    <link rel="stylesheet" href="../assets/style/app.css">
-</head>
-
-<body>
-    <div class="error-container">
-        <div class="error-code"><?= ToolBox::clean($statusCode); ?></div>
-        <div class="error-message"><?= ToolBox::clean($message); ?></div>
-        <?php if (!empty($description)): ?>
-            <div class="error-description"><?= ToolBox::clean($description); ?></div>
-        <?php endif; ?>
-        <p><a href="<?= ToolBox::url('/articles'); ?>">Retour à l'accueil</a></p>
-    </div>
-</body>
-
-</html>
+<div class="error-container">
+    <div class="error-code"><?= $this->clean($statusCode); ?></div>
+    <div class="error-message"><?= $this->clean($message); ?>&#9785;</div>
+    <?php if (!empty($description)): ?>
+        <div class="error-description"><?= $this->clean($description); ?></div>
+    <?php endif; ?>
+    <p><a class="error-link" href="<?= $this->url('/articles'); ?>">Retour à l'accueil</a></p>
+    <pre>
+        <?php print_r($trace); ?>
+    </pre>
+</div>
