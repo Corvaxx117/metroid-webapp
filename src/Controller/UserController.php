@@ -8,8 +8,6 @@ namespace App\Controller;
 
 use App\Model\UserModel;
 use App\Services\ViewRenderer;
-use App\Services\FlashMessage;
-use App\Services\UrlGenerator;
 
 
 class UserController
@@ -46,8 +44,8 @@ class UserController
         $user = $this->userModel->findUserById($id);
         if (!$user) {
             // Rediriger ou afficher un message d'erreur si l'utilisateur est introuvable
-            FlashMessage::add(FlashMessage::ERROR, "Utilisateur introuvable.");
-            header('Location: ' . UrlGenerator::getUrlFromPath('/users'));
+            $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
+            header('Location: ' . $this->viewRenderer->url('/users'));
             exit;
         }
         $data = [
@@ -68,15 +66,15 @@ class UserController
             $email = trim($_POST['email']);
 
             if (empty($username)) {
-                FlashMessage::add(FlashMessage::ERROR, "Le nom d'utilisateur est requis.");
+                $this->viewRenderer->addFlash('error', "Le nom d'utilisateur est requis.");
             }
 
             if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                FlashMessage::add(FlashMessage::ERROR, "Veuillez saisir un email valide.");
+                $this->viewRenderer->addFlash('error', "Veuillez saisir un email valide.");
             }
 
-            if (FlashMessage::has(FlashMessage::ERROR)) {
-                header('Location: ' . UrlGenerator::getUrlFromPath('/users/edit/' . $id));
+            if ($this->viewRenderer->has('error')) {
+                header('Location: ' . $this->viewRenderer->url('/users/edit/' . $id));
                 exit;
             }
 
@@ -85,9 +83,9 @@ class UserController
                 'email' => $email,
             ]);
 
-            FlashMessage::add(FlashMessage::SUCCESS, "Utilisateur mis à jour avec succès.");
+            $this->viewRenderer->addFlash('success', "Utilisateur mis à jour avec succès.");
 
-            header('Location: ' . UrlGenerator::getUrlFromPath('/users'));
+            header('Location: ' . $this->viewRenderer->url('/users'));
             exit;
         }
     }
@@ -103,8 +101,8 @@ class UserController
 
         if (!$user) {
             // Envoie une erreur si l'utilisateur n'est pas trouvé
-            FlashMessage::add(FlashMessage::ERROR, "Utilisateur introuvable.");
-            header('Location: ' . UrlGenerator::getUrlFromPath('/users'));
+            $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
+            header('Location: ' . $this->viewRenderer->url('/users'));
             exit;
         }
 
@@ -115,6 +113,14 @@ class UserController
         $this->viewRenderer->render('../views/users/show.phtml', $data);
     }
 
+    /**
+     * Affichage du formulaire d'ajout d'un utilisateur'.
+     * @return void
+     */
+    public function displayAddUserForm(): void
+    {
+        $this->viewRenderer->render('../views/users/add.phtml');
+    }
     /**
      * Ajoute un nouvel utilisateur.
      * @return void
@@ -128,23 +134,23 @@ class UserController
             $password = $_POST['password'] ?? '';
 
             if (empty($username)) {
-                FlashMessage::add(FlashMessage::ERROR, "Le nom d'utilisateur est requis.");
+                $this->viewRenderer->addFlash('error', "Le nom d'utilisateur est requis.");
             }
 
             if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                FlashMessage::add(FlashMessage::ERROR, "Veuillez saisir un email valide.");
+                $this->viewRenderer->addFlash('error', "Veuillez saisir un email valide.");
             }
 
             if (empty($password) || strlen($password) < 6) {
-                FlashMessage::add(FlashMessage::ERROR, "Le mot de passe doit contenir au moins 6 caractères.");
+                $this->viewRenderer->addFlash('error', "Le mot de passe doit contenir au moins 6 caractères.");
             }
 
             if ($this->userModel->findUserByEmail($email)) {
-                FlashMessage::add(FlashMessage::ERROR, "Cet email est déjà utilisé.");
+                $this->viewRenderer->addFlash('error', "Cet email est déjà utilisé.");
             }
 
-            if (FlashMessage::has(FlashMessage::ERROR)) {
-                header('Location: ' . UrlGenerator::getUrlFromPath('/users/addUser'));
+            if ($this->viewRenderer->hasFlash('error')) {
+                header('Location: ' . $this->viewRenderer->url('/users/addUser'));
                 exit;
             }
 
@@ -156,10 +162,10 @@ class UserController
                 'password' => $passwordHash
             ]);
 
-            FlashMessage::add(FlashMessage::SUCCESS, "Utilisateur ajouté avec succès.");
+            $this->viewRenderer->addFlash('success', "Utilisateur ajouté avec succès.");
 
             // Redirection vers la liste des utilisateurs
-            header('Location: '  . UrlGenerator::getUrlFromPath('/users'));
+            header('Location: '  . $this->viewRenderer->url('/users'));
             exit;
         }
 
@@ -174,20 +180,20 @@ class UserController
     {
         $user = $this->userModel->findUserById($id);
         if (!$user) {
-            FlashMessage::add(FlashMessage::ERROR, "Utilisateur introuvable.");
+            $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
             return;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($this->userModel->deleteUser($id)) {
-                FlashMessage::add(FlashMessage::SUCCESS, "Utilisateur supprimé avec succès.");
-                header('Location: ' . UrlGenerator::getUrlFromPath('/users'));
+                $this->viewRenderer->addFlash('success', "Utilisateur supprimé avec succès.");
+                header('Location: ' . $this->viewRenderer->url('/users'));
                 exit;
             }
         }
 
-        FlashMessage::add(FlashMessage::ERROR, "Impossible de supprimer cet utilisateur.");
-        header('Location: '  . UrlGenerator::getUrlFromPath('/users'));
+        $this->viewRenderer->addFlash('error', "Impossible de supprimer cet utilisateur.");
+        header('Location: '  . $this->viewRenderer->url('/users'));
         exit;
     }
 }

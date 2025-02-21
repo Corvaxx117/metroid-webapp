@@ -9,8 +9,6 @@ namespace App\Controller;
 use App\Model\ArticleModel;
 use App\Model\CommentModel;
 use App\Services\ViewRenderer;
-use App\Services\FlashMessage;
-use App\Services\UrlGenerator;
 
 class CommentController
 {
@@ -37,13 +35,13 @@ class CommentController
             $idArticle = $_POST['idArticle'];
 
             if (empty($pseudo) || empty($content) || empty($idArticle)) {
-                FlashMessage::add(FlashMessage::ERROR, "Tous les champs sont obligatoires.");
+                $this->viewRenderer->addFlash('error', "Tous les champs sont obligatoires.");
             }
 
             // On vérifie que l'article existe.
             $article = $this->articleModel->getArticleById($idArticle);
             if (!$article) {
-                FlashMessage::add(FlashMessage::ERROR, "L'article demandé n'existe pas.");
+                $this->viewRenderer->addFlash('error', "L'article demandé n'existe pas.");
             }
             // On ajoute le commentaire.
             $result = $this->commentModel->addComment([
@@ -53,17 +51,17 @@ class CommentController
             ]);
             // On vérifie que l'ajout a bien fonctionné.
             if (!$result) {
-                FlashMessage::add(FlashMessage::ERROR, "Une erreur est survenue lors de l'ajout du commentaire.");
+                $this->viewRenderer->addFlash('error', "Une erreur est survenue lors de l'ajout du commentaire.");
             }
             // Si des erreurs sont rencontrées, on redirige vers la page d'ajout d'article.
-            if (FlashMessage::has(FlashMessage::ERROR)) {
-                header('Location: ' . UrlGenerator::getUrlFromPath('/articles/add'));
+            if ($this->viewRenderer->hasFlash('error')) {
+                header('Location: ' . $this->viewRenderer->url('/articles/add'));
                 exit;
             }
             // On redirige vers la page de l'article avec un message de succès.
-            FlashMessage::add(FlashMessage::SUCCESS, "Commentaire publié avec succès !");
+            $this->viewRenderer->addFlash('success', "Commentaire publié avec succès !");
 
-            header('Location: ' . UrlGenerator::getUrlFromPath('/articles/show/:id', ['id' => $article['id']]));
+            header('Location: ' . $this->viewRenderer->url('/articles/show/:id', ['id' => $article['id']]));
             exit;
         }
     }

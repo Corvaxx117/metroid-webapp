@@ -5,7 +5,7 @@ namespace App\Services;
 use DateTime;
 use IntlDateFormatter;
 
-class formatToFrenchDate
+class FormatToFrenchDate
 {
     /**
      * Formatage d'une date en français.
@@ -39,5 +39,9 @@ class formatToFrenchDate
         );
 
         return $formatter->format($date);
+    }
+    public function __invoke(string|DateTime $date, string $format = 'long', string $locale = 'fr_FR'): string
+    {
+        return self::formatDate($date, $format, $locale);
     }
 }

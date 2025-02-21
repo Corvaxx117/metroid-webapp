@@ -23,11 +23,15 @@ class UrlGenerator
                 unset($params[$key]); // Supprimer du tableau pour éviter doublon en query string
             }
         }
-
         // Construit la query string GET
         $queryString = http_build_query($params);
 
         // Génére l'URL finale
         return rtrim($baseUrl, '/') . '/' . ltrim($path, '/') . ($queryString ? '?' . $queryString : '');
+    }
+
+    public function __invoke(string $path, array $params = []): string
+    {
+        return self::getUrlFromPath($path, $params);
     }
 }

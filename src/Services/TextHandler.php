@@ -12,7 +12,7 @@ class TextHandler
      * @param string $encoding Encodage du texte (UTF-8 par défaut).
      * @return string La chaîne protégée et formatée.
      */
-    public function sanitizeText(string|null $string, bool $wrapInParagraphs = true, string $encoding = 'UTF-8'): string
+    public function clean(string|null $string, bool $wrapInParagraphs = true, string $encoding = 'UTF-8'): string
     {
         if ($string === null) {
             return '';
@@ -45,7 +45,7 @@ class TextHandler
      * @param int $wordLimit Le nombre de mots maximum.
      * @return string Le contenu tronqué.
      */
-    public function truncateContent(string $content, int $wordLimit = 30): string
+    public function truncate(string $content, int $wordLimit = 30): string
     {
         $words = explode(' ', $content);
 

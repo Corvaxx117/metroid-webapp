@@ -30,7 +30,7 @@ class ErrorHandler
             $this->viewRenderer->render('system-errors.phtml', [
                 'statusCode' => $statusCode,
                 'message' => $message,
-                // 'description' => $exception->getTraceAsString(),
+                'trace' => $exception->getTrace(),
             ], $statusCode);
         } catch (\Throwable $e) {
             $this->renderFallbackError($statusCode, $message);

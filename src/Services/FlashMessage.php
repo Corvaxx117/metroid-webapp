@@ -13,7 +13,7 @@ class FlashMessage
      * @static 
      * @return void
      */
-    private static function initSession(): void
+    private function initSession(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -26,7 +26,7 @@ class FlashMessage
      * @param string $message Le message à ajouter.
      * @return void
      */
-    public static function add(string $type, string $message): void
+    public function addFlash(string $type, string $message): void
     {
         self::initSession();
         $_SESSION['flash_messages'][$type][] = $message;
@@ -37,7 +37,7 @@ class FlashMessage
      * @param string $type Le type de message (error, success, warning).
      * @return array Les messages flash.
      */
-    public static function get(string $type): array
+    public function getFlash(string $type): array
     {
         self::initSession();
         $messages = $_SESSION['flash_messages'][$type] ?? [];
@@ -50,7 +50,7 @@ class FlashMessage
      * @param string $type Le type de message (error, success, warning).
      * @return bool true si des messages existent, false sinon.
      */
-    public static function has(string $type): bool
+    public function hasFlash(string $type): bool
     {
         self::initSession();
         return !empty($_SESSION['flash_messages'][$type]);
@@ -60,7 +60,7 @@ class FlashMessage
      * Supprime tous les messages flash.
      * @return void
      */
-    public static function clear(): void
+    public function clearFlash(): void
     {
         self::initSession();
         unset($_SESSION['flash_messages']);
@@ -70,7 +70,7 @@ class FlashMessage
      * Affiche les messages flash avec un système dynamique.
      * @return void
      */
-    public static function render(): void
+    public function renderFlash(): void
     {
         self::initSession();
         $flashTypes = [
@@ -80,7 +80,7 @@ class FlashMessage
         ];
 
         foreach ($flashTypes as $type => $cssClass) {
-            if (self::has($type)) {
+            if (self::hasFlash($type)) {
                 include __DIR__ . "/../../views/flashMessages/flashMessage.phtml";
             }
         }

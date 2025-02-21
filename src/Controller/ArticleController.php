@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Model\ArticleModel;
 use App\Model\CommentModel;
 use App\Services\ViewRenderer;
-use App\Services\ToolBox;
+
 
 /**
  * Contrôleur de la partie article
@@ -29,9 +29,9 @@ class ArticleController
         $articles = $this->articleModel->getAllArticles();
 
         // On limite l'affichage du contenu à 40 mots
-        foreach ($articles as &$article) {
-            $article['content'] = ToolBox::truncate($article['content'], 40);
-        }
+        // foreach ($articles as &$article) {
+        //     $article['content'] = ToolBox::truncate($article['content'], 40);
+        // }
         $data = [
             'title' => 'Liste des articles',
             'articles' => $articles
@@ -48,8 +48,8 @@ class ArticleController
         // Récupération de l'id de l'article demandé.
         $article = $this->articleModel->getArticleById($id);
         if (!$article) {
-            ToolBox::addFlash(ToolBox::ERROR, "L'article demandé n'existe pas.");
-            header('Location: ' . ToolBox::url('/articles'));
+            $this->viewRenderer->addFlash('error', "L'article demandé n'existe pas.");
+            header('Location: ' . $this->viewRenderer->url('/articles'));
             exit;
         }
 
