@@ -9,6 +9,7 @@ namespace App\Controller;
 use App\Model\ArticleModel;
 use App\Model\CommentModel;
 use App\Services\ViewRenderer;
+use App\Services\AuthService;
 
 class CommentController
 {
@@ -64,5 +65,35 @@ class CommentController
             header('Location: ' . $this->viewRenderer->url('/articles/show/:id', ['id' => $article['id']]));
             exit;
         }
+    }
+
+    /**
+     * Supprime un commentaire.
+     * @param integer $id l'id du commentaire à supprimer
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        if (!AuthService::isAdmin()) {
+            $this->viewRenderer->addFlash('error', 'Accès refusé : vous devez être administrateur pour gérer un commentaire.');
+            header('Location: ' . $this->viewRenderer->url('/connection_form'));
+            exit;
+        }
+        // Récupérer l'ID de l'article avant suppression
+        $comment = $this->commentModel->getCommentById($id);
+
+        if (!$comment) {
+            $this->viewRenderer->addFlash('error', "Commentaire introuvable.");
+            header('Location: ' . $this->viewRenderer->url('/articles/show/:id', ['id' => $comment['id_article']]));
+            exit;
+        }
+        if ($this->commentModel->deleteComment($id)) {
+            $this->viewRenderer->addFlash('success', "Commentaire supprimé avec succès.");
+        } else {
+            $this->viewRenderer->addFlash('error', "Erreur lors de la suppression de commentaire.");
+        }
+
+        header('Location: ' . $this->viewRenderer->url('/articles/show/:id', ['id' => $comment['id_article']]));
+        exit;
     }
 }

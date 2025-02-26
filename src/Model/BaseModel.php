@@ -119,11 +119,61 @@ abstract class BaseModel
 
     /**
      * Chaque modèle enfant doit définir le nom de la table associée.
-     * 
      * @return string Nom de la table
      */
     protected function getTableName(): string
     {
         return $this->table;
+    }
+
+    /**
+     * Récupérer des enregistrements avec statistiques et tri dynamique.
+     * 
+     * @param string $orderBy Colonne de tri (par défaut: 'date_creation')
+     * @param string $direction Ordre de tri ('ASC' ou 'DESC')
+     * @param array $stats Colonnes de statistiques supplémentaires (ex: ['views' => 'COUNT(views)'])
+     * @return array Résultats triés avec statistiques
+     */
+    public function findAllWithStats(string $orderBy = 'date_creation', string $direction = 'DESC', array $stats = []): array
+    {
+        // Liste des colonnes autorisées pour le tri
+        $allowedColumns = array_merge(['id', 'title', 'date_creation'], array_keys($stats));
+        if (!in_array($orderBy, $allowedColumns)) {
+            $orderBy = 'date_creation';
+        }
+
+        // Sécurisation du tri
+        $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
+
+        // Construction de la requête SQL
+        $statsSql = "";
+        if (!empty($stats)) {
+            $statsParts = [];
+            foreach ($stats as $alias => $formula) {
+                $statsParts[] = "$formula AS $alias";
+            }
+            $statsSql = ", " . implode(", ", $statsParts);
+        }
+
+        $sql = "
+        SELECT a.* {$statsSql}
+        FROM {$this->getTableName()} a
+        ORDER BY {$orderBy} {$direction}
+    ";
+
+        return $this->pdo->query($sql)->fetchAll();
+    }
+
+    /**
+     * Incremente le nombre de vues d'un enregistrement.
+     * 
+     * @param int $id Identifiant de l'enregistrement
+     * @return bool true si la mise à jour a fonctionné, false sinon
+     */
+    public function incrementViews(int $id): bool
+    {
+        $sql = "UPDATE {$this->table} SET views = views + 1 WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute(['id' => $id]);
     }
 }

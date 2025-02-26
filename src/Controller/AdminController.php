@@ -5,10 +5,8 @@ namespace App\Controller;
 use App\Model\ArticleModel;
 use App\Model\UserModel;
 use App\Services\ViewRenderer;
+use App\Services\AuthService;
 
-/**
- * Contrôleur de la partie admin.
- */
 class AdminController
 {
     private ArticleModel $articleModel;
@@ -19,191 +17,200 @@ class AdminController
         $this->articleModel = new ArticleModel();
         $this->userModel = new UserModel();
     }
-    /**
-     * Affiche la page d'administration.
-     * @return void
-     */
-    public function showAdmin(): void
-    {
-        // On vérifie que l'utilisateur est connecté.
-        $this->checkIfUserIsConnected();
-
-        // On récupère les articles.
-        $articles = $this->articleModel->getAllArticles();
-
-        // On affiche la page d'administration.
-        $data = [
-            'articles' => $articles
-        ];
-        $this->viewRenderer->render('../views/admin.phtml', $data);
-    }
 
     /**
-     * Vérifie que l'utilisateur est connecté.
-     * @return void
+     * Vérifie que l'utilisateur est administrateur avant d'accéder à une page admin.
      */
-    private function checkIfUserIsConnected(): void
+    private function ensureAdminAccess(): void
     {
-        // On vérifie que l'utilisateur est connecté.
-        if (!isset($_SESSION['user'])) {
-            $this->viewRenderer->url("/connectionForm");
+        if (!AuthService::isAdmin()) {
+            $this->viewRenderer->addFlash('error', "Accès refusé : vous devez être administrateur.");
+            header('Location: ' . $this->viewRenderer->url('/connection_form'));
+            exit;
         }
     }
 
     /**
-     * Affichage du formulaire de connexion.
-     * @return void
+     * Affiche la page d'administration.
+     */
+    public function showAdmin(): void
+    {
+        $this->ensureAdminAccess();
+
+        $sort = $_GET['sort'] ?? 'date_creation';
+        $direction = $_GET['dir'] ?? 'DESC';
+
+        $articles = $this->articleModel->getArticlesWithStats($sort, $direction);
+
+        $data = [
+            'articles' => $articles,
+            'currentSort' => $sort,
+            'currentDirection' => $direction
+        ];
+
+        $this->viewRenderer->render('admin/admin.phtml', $data);
+    }
+
+
+    public function toggleSort(string $field): string
+    {
+        $currentOrder = $_GET['order'] ?? 'asc';
+        $newOrder = ($currentOrder === 'asc') ? 'desc' : 'asc';
+
+        return $this->viewRenderer->url('/admin', ['sort' => $field, 'order' => $newOrder]);
+    }
+    /**
+     * Affichage du formulaire de connexion administrateur.
      */
     public function displayConnectionForm(): void
     {
-        $this->viewRenderer->render('../views/admin/connectionForm.phtml');
+        $this->viewRenderer->render('admin/connection_form.phtml');
     }
 
     /**
-     * Connexion de l'utilisateur.
-     * @return void
+     * Connexion de l'utilisateur en tant qu'administrateur.
      */
     public function connect(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $email = trim($_POST['email']);
-            $password = trim($_POST['password']);
+            $email = trim($_POST['email'] ?? '');
+            $password = trim($_POST['password'] ?? '');
 
             if (empty($email) || empty($password)) {
                 $this->viewRenderer->addFlash('error', "Tous les champs sont obligatoires.");
-                header('Location: ' . $this->viewRenderer->url('/admin/connectionForm'));
+                header('Location: ' . $this->viewRenderer->url('/admin/connection_form'));
                 exit;
             }
+
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->viewRenderer->addFlash('error', "Veuillez saisir un email valide.");
+                header('Location: ' . $this->viewRenderer->url('/admin/connection_form'));
+                exit;
             }
-            // On vérifie que l'utilisateur existe.
+
+            // Vérification utilisateur
             $user = $this->userModel->findUserByEmail($email);
-            if (!$user) {
-                $this->viewRenderer->addFlash('error', "L'utilisateur demandé n'existe pas.");
-                header('Location: ' . $this->viewRenderer->url('/admin/connectionForm'));
+            if (!$user || !password_verify($password, $user['password'])) {
+                $this->viewRenderer->addFlash('error', "Identifiants incorrects.");
+                header('Location: ' . $this->viewRenderer->url('/admin/connection_form'));
                 exit;
             }
 
-            // On vérifie que le mot de passe est correct.
-            if (!password_verify($password, $user['password'])) {
-                $this->viewRenderer->addFlash('error', "Le mot de passe est incorrect.");
-                header('Location: ' . $this->viewRenderer->url('/admin/connectionForm'));
+            // Vérification des droits administrateurs
+            if (!$user['is_admin']) {
+                $this->viewRenderer->addFlash('error', "Accès refusé : vous devez être administrateur.");
+                header('Location: ' . $this->viewRenderer->url('/'));
                 exit;
             }
 
-            // On connecte l'utilisateur.
-            $_SESSION['user'] = $user;
-            $_SESSION['idUser'] = $user['id'];
+            // Connexion de l'utilisateur
+            AuthService::login($user);
 
-            $users = $this->userModel->findAllUsers();
-            $articles = $this->articleModel->getAllArticles();
-            $data = [
-                'users' => $users,
-                'articles' => $articles
-
-            ];
-            // On redirige vers la page d'administration.
-            $this->viewRenderer->render('../views/admin/admin.phtml', $data);
+            $this->viewRenderer->addFlash('success', "Connexion réussie.");
+            header('Location: ' . $this->viewRenderer->url('/admin'));
+            exit;
         }
     }
 
     /**
      * Déconnexion de l'utilisateur.
-     * @return void
      */
     public function disconnect(): void
     {
-        // On déconnecte l'utilisateur.
-        unset($_SESSION['user']);
-        $articles = $this->articleModel->getAllArticles();
-        $data = [
-            'title' => 'Liste des articles',
-            'articles' => $articles
-        ];
+        AuthService::logout();
         $this->viewRenderer->addFlash('warning', "Vous êtes maintenant déconnecté.");
-        // On redirige vers la page d'accueil.
-        $this->viewRenderer->render('../views/articles/list.phtml', $data);
+        header('Location: ' . $this->viewRenderer->url('/articles'));
+        exit;
     }
 
     /**
-     * Affichage du formulaire d'ajout d'un article.
-     * @return void
+     * Affichage du formulaire d'ajout ou d'édition d'un article.
      */
-    public function showUpdateArticleForm(): void
+    public function displayArticleForm(int $id = null): void
     {
-        $this->checkIfUserIsConnected();
+        $this->ensureAdminAccess();
 
-        // // On récupère l'id de l'article s'il existe.
-        // $id = Utils::request("id", -1);
+        $article = $id ? $this->articleModel->getArticleById($id) : null;
 
-        // // On récupère l'article associé.
-        // $articleManager = new ArticleManager();
-        // $article = $articleManager->getArticleById($id);
-
-        // // Si l'article n'existe pas, on en crée un vide. 
-        // if (!$article) {
-        //     $article = new Article();
-        // }
-
-        // // On affiche la page de modification de l'article.
-        // $view = new View("Edition d'un article");
-        // $view->render("updateArticleForm", [
-        //     'article' => $article
-        // ]);
+        $this->viewRenderer->render('admin/article_form.phtml', [
+            'article' => $article,
+            'title' => $id ? "Modifier l'article" : "Créer un article"
+        ]);
     }
 
     /**
-     * Ajout et modification d'un article. 
-     * On sait si un article est ajouté car l'id vaut -1.
-     * @return void
+     * Ajoute un article.
      */
-    public function updateArticle(): void
+    public function addArticle(): void
     {
-        // $this->checkIfUserIsConnected();
+        $this->ensureAdminAccess();
 
-        // // On récupère les données du formulaire.
-        // $id = Utils::request("id", -1);
-        // $title = Utils::request("title");
-        // $content = Utils::request("content");
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $title = trim($_POST['title'] ?? '');
+            $content = trim($_POST['content'] ?? '');
 
-        // // On vérifie que les données sont valides.
-        // if (empty($title) || empty($content)) {
-        //     throw new Exception("Tous les champs sont obligatoires. 2");
-        // }
+            if (empty($title) || empty($content)) {
+                $this->viewRenderer->addFlash('error', "Tous les champs sont obligatoires.");
+                header('Location: ' . $this->viewRenderer->url('/admin/addArticle'));
+                exit;
+            }
 
-        // // On crée l'objet Article.
-        // $article = new Article([
-        //     'id' => $id, // Si l'id vaut -1, l'article sera ajouté. Sinon, il sera modifié.
-        //     'title' => $title,
-        //     'content' => $content,
-        //     'id_user' => $_SESSION['idUser']
-        // ]);
+            $this->articleModel->addArticle([
+                'title' => $title,
+                'content' => $content,
+                'id_user' => $_SESSION['user']['id'],
+                'date_update' => null
+            ]);
 
-        // // On ajoute l'article.
-        // $articleManager = new ArticleManager();
-        // $articleManager->addOrUpdateArticle($article);
-
-        // // On redirige vers la page d'administration.
-        // Utils::redirect("admin");
+            $this->viewRenderer->addFlash('success', "Article ajouté avec succès.");
+            header('Location: ' . $this->viewRenderer->url('/admin'));
+            exit;
+        }
     }
 
+    /**
+     * Modifie un article existant.
+     */
+    public function editArticle(int $id): void
+    {
+        $this->ensureAdminAccess();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $title = trim($_POST['title'] ?? '');
+            $content = trim($_POST['content'] ?? '');
+
+            if (empty($title) || empty($content)) {
+                $this->viewRenderer->addFlash('error', "Tous les champs sont obligatoires.");
+                header('Location: ' . $this->viewRenderer->url("/admin/edit/$id"));
+                exit;
+            }
+
+            $this->articleModel->updateArticle($id, [
+                'title' => $title,
+                'content' => $content,
+                'date_update' => date('Y-m-d H:i:s')
+            ]);
+
+            $this->viewRenderer->addFlash('success', "Article modifié avec succès.");
+            header('Location: ' . $this->viewRenderer->url('/admin'));
+            exit;
+        }
+    }
 
     /**
-     * Suppression d'un article.
-     * @return void
+     * Supprime un article.
      */
-    public function deleteArticle(): void
+    public function deleteArticle(int $id): void
     {
-        // $this->checkIfUserIsConnected();
+        $this->ensureAdminAccess();
 
-        // $id = Utils::request("id", -1);
+        if ($this->articleModel->deleteArticle($id)) {
+            $this->viewRenderer->addFlash('success', "Article supprimé avec succès.");
+        } else {
+            $this->viewRenderer->addFlash('error', "Erreur lors de la suppression de l'article.");
+        }
 
-        // // On supprime l'article.
-        // $articleManager = new ArticleManager();
-        // $articleManager->deleteArticle($id);
-
-        // // On redirige vers la page d'administration.
-        // Utils::redirect("admin");
+        header('Location: ' . $this->viewRenderer->url('/admin'));
+        exit;
     }
 }

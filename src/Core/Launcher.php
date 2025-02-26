@@ -6,6 +6,11 @@ use App\Core\Router;
 use App\Core\ErrorHandler;
 use Symfony\Component\Dotenv\Dotenv;
 
+/**
+ * Classe Launcher
+ * Classe responsable de lancement de l'application
+ * @package App\Core
+ */
 class Launcher
 {
     private Router $router;

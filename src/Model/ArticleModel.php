@@ -61,23 +61,25 @@ class ArticleModel extends BaseModel
     }
 
     /**
-     * Getter pour le contenu.
-     * Retourne les $length premiers caractères du contenu.
-     * @param int $length : le nombre de caractères à retourner.
-     * Si $length n'est pas défini (ou vaut -1), on retourne tout le contenu.
-     * Si le contenu est plus grand que $length, on retourne les $length premiers caractères avec "..." à la fin.
-     * @return string
+     * Récupère tous les articles avec statistiques et tri dynamique.
+     *
+     * @param string $orderBy Colonne de tri (title, views, comments, date_creation)
+     * @param string $direction Ordre de tri (ASC ou DESC)
+     * @return array
      */
-    public function getContent(int $length = -1): string
+    public function getArticlesWithStats(string $orderBy = 'date_creation', string $direction = 'DESC'): array
     {
-        if ($length > 0) {
-            // Ici, on utilise mb_substr et pas substr pour éviter de couper un caractère en deux (caractère multibyte comme les accents).
-            $content = mb_substr($this->content, 0, $length);
-            if (strlen($this->content) > $length) {
-                $content .= "...";
-            }
-            return $content;
-        }
-        return $this->content;
+        return $this->findAllWithStats($orderBy, $direction, [
+            'views' => 'a.views',
+            'comments' => '(SELECT COUNT(*) FROM comment c WHERE c.id_article = a.id)'
+        ]);
+    }
+
+    /**
+     * Incrémente le nombre de vues d'un article.
+     */
+    public function incrementArticleViews(int $id): bool
+    {
+        return $this->incrementViews('id', $id);
     }
 }

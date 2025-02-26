@@ -24,26 +24,22 @@ class ArticleController
      * Affiche la page d'accueil.
      * @return void
      */
-    public function list(): void
+    public function listAllArticles(): void
     {
         $articles = $this->articleModel->getAllArticles();
 
-        // On limite l'affichage du contenu à 40 mots
-        // foreach ($articles as &$article) {
-        //     $article['content'] = ToolBox::truncate($article['content'], 40);
-        // }
         $data = [
             'title' => 'Liste des articles',
             'articles' => $articles
         ];
-        $this->viewRenderer->render('../views/articles/list.phtml', $data);
+        $this->viewRenderer->render('../views/articles/all_articles.phtml', $data);
     }
 
     /**
      * Affiche le détail d'un article.
      * @return void
      */
-    public function show(int $id): void
+    public function showArticleDetails(int $id): void
     {
         // Récupération de l'id de l'article demandé.
         $article = $this->articleModel->getArticleById($id);
@@ -53,6 +49,9 @@ class ArticleController
             exit;
         }
 
+        // Incrémente le nombre de vues
+        $this->articleModel->incrementViews($id);
+
         $comments = $this->commentModel->getAllCommentsByArticleId($id);
 
         $data = [
@@ -60,14 +59,9 @@ class ArticleController
             'article' => $article,
             'comments' => $comments
         ];
-        $this->viewRenderer->render('../views/articles/show.phtml', $data);
+        $this->viewRenderer->render('../views/articles/show_details.phtml', $data);
     }
 
-    /**
-     * Affiche le formulaire d'ajout d'un article.
-     * @return void
-     */
-    public function addArticle(): void {}
 
     /**
      * Affiche la page "à propos".
@@ -75,6 +69,6 @@ class ArticleController
      */
     public function showApropos(): void
     {
-        $this->viewRenderer->render("../views/a-propos.phtml");
+        $this->viewRenderer->render("../views/a_propos.phtml");
     }
 }

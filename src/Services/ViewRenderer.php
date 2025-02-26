@@ -6,8 +6,14 @@ use App\Services\UrlGenerator;
 use App\Services\TextHandler;
 use App\Services\FormatToFrenchDate;
 use App\Services\FlashMessage;
+use App\Services\AuthService;
 
-
+/**
+ * Class ViewRenderer
+ * Gestionnaire de vue
+ * Charge la plupart des services et permet de passer des données à la vue
+ * @package App\Services
+ */
 class ViewRenderer
 {
 
@@ -15,12 +21,14 @@ class ViewRenderer
     private TextHandler $textHandler;
     private FormatToFrenchDate $formatDate;
     private FlashMessage $flashMessage;
+    private AuthService $auth;
     public function __construct()
     {
         $this->url = new UrlGenerator();
         $this->textHandler = new TextHandler();
         $this->formatDate = new FormatToFrenchDate();
         $this->flashMessage = new FlashMessage();
+        $this->auth = new AuthService();
     }
 
     // methode appelée automatiquement dès lors qu'on appelle une méthode inexistante dans l'objet ou  dans l'instance de la classe
@@ -46,7 +54,6 @@ class ViewRenderer
         // Défini le code HTTP
         http_response_code($statusCode);
 
-        // $data['flashMessage'] = $this->flashMessage;
         // Vérifie si le fichier de vue existe
         $viewPath = __DIR__ . "/../../views/{$view}";
         if (!file_exists($viewPath)) {
@@ -65,5 +72,18 @@ class ViewRenderer
 
         // Inclure le fichier layout
         require $layoutPath;
+    }
+
+    /**
+     * @param string $field Champ sur lequel on veut trier
+     * @return string
+     * Méthode permettant de changer le sens de tri
+     */
+    public function toggleSort(string $field): string
+    {
+        $currentOrder = $_GET['order'] ?? 'asc';
+        $newOrder = ($currentOrder === 'asc') ? 'desc' : 'asc';
+
+        return $this->url('/admin', ['sort' => $field, 'order' => $newOrder]);
     }
 }
