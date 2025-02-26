@@ -11,10 +11,10 @@ routes:
   # Route pour la gestion des utilisateurs
   "/users":
     method: GET
-    callable: App\Controller\UserController::list
+    callable: App\Controller\UserController::listAllArticles
   "/users/show/:id":
     method: GET
-    callable: App\Controller\UserController::show
+    callable: App\Controller\UserController::showDetails
   "/users/addUser":
     method: GET
     callable: App\Controller\UserController::displayAddUserForm
@@ -32,43 +32,62 @@ routes:
     callable: App\Controller\UserController::updateUser
 
   # Routes Administration
+  # Tableau de gestion des articles
+  "/admin":
+    method: GET
+    callable: App\Controller\AdminController::showAdmin
+  # Route vers le formulaire de connexion
   "/admin/connectionForm":
     method: GET
     callable: App\Controller\AdminController::displayConnectionForm
+  # Route vers la connexion
   "/admin/connection":
     method: POST
     callable: App\Controller\AdminController::connect
+  # Route vers la deconnexion
   "/admin/disconnect":
     method: GET
     callable: App\Controller\AdminController::disconnect
+  # Route vers le formulaire d'ajout d'un article
+  "/admin/formArticle":
+    method: GET
+    callable: App\Controller\AdminController::displayArticleForm
+  # Route vers le formulaire de modification d'un article
+  "/admin/formArticle/:id":
+    method: GET
+    callable: App\Controller\AdminController::displayArticleForm
+  # Ajouter un article
+  "/admin/addArticle":
+    method: POST
+    callable: App\Controller\AdminController::addArticle
+  # Modifier un article
+  "/admin/edit/:id":
+    method: POST
+    callable: App\Controller\AdminController::editArticle
+  # Supprimer un article
+  "/admin/delete/:id":
+    method: POST
+    callable: App\Controller\AdminController::deleteArticle
 
-  # Route pour la gestion des articles
+  # Route pour visualiser les articles
+  # Tous
   "/articles":
     method: GET
-    callable: App\Controller\ArticleController::list
+    callable: App\Controller\ArticleController::listAllArticles
+  # Un seul
   "/articles/show/:id":
     method: GET
-    callable: App\Controller\ArticleController::show
-  "/articles/addArticle":
-    method: GET
-    callable: App\Controller\ArticleController::addArticle
-  "/articles/add":
-    method: POST
-    callable: App\Controller\ArticleController::add
-  "/articles/delete/:id":
-    method: POST
-    callable: App\Controller\ArticleController::delete
-  "/articles/edit/:id":
-    method: GET
-    callable: App\Controller\ArticleController::editArticle
-  "/articles/update":
-    method: POST
-    callable: App\Controller\ArticleController::update
+    callable: App\Controller\ArticleController::showArticleDetails
+
+  # Route A propos
   "/aPropos":
     method: GET
     callable: App\Controller\ArticleController::showApropos
 
-  # Route pour la gestion des commentaires
+  # Route pour la gestion des commentaires (admin)
   "/addComment":
     method: POST
     callable: App\Controller\CommentController::addComment
+  "/comment/delete/:id":
+    method: POST
+    callable: App\Controller\CommentController::delete
