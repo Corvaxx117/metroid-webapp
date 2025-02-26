@@ -4,6 +4,8 @@
  * Template principal de l'application
  */
 
+$this->initSession();
+
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Le Projet MVC OpenClassrooms">
     <title>Blog | <?= isset($title) ?  $this->clean($title, false) : 'Bienvenue' ?></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="<?= $this->url('../assets/CSS/style.css') ?>">
 </head>
 
@@ -22,8 +25,12 @@
         <nav>
             <a href="<?= $this->url('/articles') ?>">Articles</a>
             <a href="<?= $this->url('/aPropos') ?>">À propos</a>
+            <!-- Si on est admin, on affiche le bouton d'administration : -->
+            <?php if ($this->isAdmin()): ?>
+                <a href="<?= $this->url('/admin') ?>">Administration</a>
+            <?php endif ?>
             <!-- Si on est connecté, on affiche le bouton de déconnexion, sinon, on affiche le bouton de connexion : -->
-            <?php if (isset($_SESSION['user'])): ?>
+            <?php if ($this->isAuthenticated()): ?>
                 <a href="<?= $this->url('/admin/disconnect') ?>">Déconnexion</a>
             <?php else: ?>
                 <a href="<?= $this->url('/admin/connectionForm') ?>">Connexion</a>
@@ -32,7 +39,7 @@
         <h1>Emilie Forteroche</h1>
 
     </header>
-
+    <!-- Affichage des messages error, success et warning -->
     <?php $this->renderFlash(); ?>
 
     <main class="main-content">
@@ -43,6 +50,7 @@
     <footer class="footer">
         <p>&copy; <?= date('Y') ?> Mon Super Site MVC. Tous droits réservés.</p>
     </footer>
+    <script src="<?= $this->url('../assets/JS/GenericFunctions.js') ?>"></script>
 
 </body>
 

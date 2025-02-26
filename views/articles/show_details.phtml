@@ -1,0 +1,81 @@
+<?php
+
+/**
+ * Ce template affiche un article et ses commentaires.
+ * Il affiche également un formulaire pour ajouter un commentaire. -->
+ */
+?>
+<!-- boutons retour et gestion article -->
+<div class="container-over-links">
+    <a href="<?= $this->url('/articles') ?>" class="linkBack link-left">&#9756; Retour aux articles</a>
+    <div class="link-group">
+        <?php if ($this->isAdmin()): ?>
+            <a href="<?= $this->url('/admin/formArticle/' . $article['id']) ?>" class="linkBack">&#9998; Éditer l'article</a>
+            <a href="<?= $this->url('/admin/delete/' . $article['id']) ?>" class="linkBack link-delete" onclick="return confirm('Confirmer la suppression ?')">&#10060; Supprimer</a>
+        <?php endif; ?>
+    </div>
+</div>
+<!-- Détails de l'article -->
+<article class="mainArticle">
+    <h2> <?= $this->clean($title ?? 'Détails de l\'article') ?> </h2>
+    <span class="quotation">«</span>
+    <p><?= $this->clean($article['content'], false) ?></p>
+    <!-- Bas de page de l'article -->
+    <div class="footer">
+        <span class="info"> Publié le <?= $this->formatDate($article['date_creation'], 'full') ?></span>
+        <?php if ($article['date_update'] != null): ?>
+            <span class="info"> Modifié le <?= $this->formatDate($article['date_update'], 'full') ?></span>
+        <?php endif ?>
+        <span class="info"><i class="fa-regular fa-eye"></i>
+            Nombre de vues : <?= $this->clean($article['views'], false) ?></span>
+    </div>
+</article>
+<!-- Section des commentaires -->
+<div class="comments">
+    <h2 class="commentsTitle">Vos Commentaires</h2>
+    <?php if (empty($comments)): ?>
+        <p class="info">Aucun commentaire pour cet article.</p>
+    <?php else: ?>
+        <ul>
+            <?php foreach ($comments as $comment): ?>
+                <li id="comment-<?= $comment['id'] ?>" class="comment-item">
+                    <div class="comment-content">
+                        <div class="smiley">☻</div>
+                        <div class="detailComment">
+                            <h3 class="info">
+                                Le <?= $this->formatDate($comment['date_creation'], 'long'); ?>,
+                                <?= $this->clean($comment['pseudo'], false) ?> a écrit :
+                            </h3>
+                            <p class="content"><?= $this->clean($comment['content']) ?></p>
+                        </div>
+                    </div>
+                    <!-- Bouton supprimer, visible uniquement si admin -->
+                    <?php if ($this->isAdmin()): ?>
+                        <form class="delete-form" method="POST" action="<?= $this->url('/comment/delete/:id', ['id' => $comment['id']]) ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+                            <button class="delete-comment" type="submit">x</button>
+                        </form>
+                    <?php endif; ?>
+                    <!-- <a class="btn btn-edit" href="<?= $this->url('/comment/formComment/:id', ['id' => $comment['id']]) ?>">
+                        ✏
+                    </a> -->
+                </li>
+            <?php endforeach ?>
+        </ul>
+    <?php endif ?>
+    <!-- Formulaire d'ajout de commentaire -->
+    <form action="<?= $this->url('/addComment') ?>" method="post" class="foldedCorner">
+        <h2>Commenter</h2>
+        <div class="formComment formGrid">
+            <label for="pseudo">Pseudonyme</label>
+            <input type="text" name="pseudo" id="pseudo" required>
+
+            <label for="content">Commentaire</label>
+            <textarea name="content" id="content" required></textarea>
+
+            <input type="hidden" name="action" value="addComment">
+            <input type="hidden" name="idArticle" value="<?= $article['id'] ?>">
+
+            <button class="submit">Ajouter un commentaire</button>
+        </div>
+    </form>
+</div>

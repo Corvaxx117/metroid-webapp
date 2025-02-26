@@ -1,0 +1,27 @@
+<?php
+
+/** 
+ * Template du formulaire de modification ou creation d'un article. 
+ */
+?>
+
+<!-- bouton retour -->
+<div class="container-over-links">
+    <a href="<?= $this->url('/admin') ?>" class="linkBack link-left">&#9756; Quitter sans modifier</a>
+</div>
+<form action="<?= isset($article) && $article ? $this->url('/admin/edit/' . $article['id']) : $this->url('/admin/addArticle') ?>" method="post" class="foldedCorner">
+    <h2><?= isset($article) && $article ? "Modification de l'article" : "Création d'un article" ?></h2>
+
+    <div class="formGrid">
+        <label for="title">Titre</label>
+        <input type="text" name="title" id="title" value="<?= isset($article) && $article ? $article['title'] : '' ?>" required>
+
+        <label for="content">Contenu</label>
+        <textarea name="content" id="content" cols="30" rows="10" required><?= isset($article) && $article ? $article['content'] : '' ?></textarea>
+
+        <input type="hidden" name="action" value="updateArticle">
+        <input type="hidden" name="id" value="<?= isset($article) && $article ? $article['id'] : '' ?>">
+
+        <button class="submit"><?= isset($article) && $article ? "Modifier" : "Ajouter" ?></button>
+    </div>
+</form>
