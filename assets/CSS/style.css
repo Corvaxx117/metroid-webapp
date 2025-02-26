@@ -168,6 +168,39 @@ main {
     margin: 0 50px 100px 50px;
 }
 
+.main-content {
+    max-width: 1100px;
+}
+/**
+ * Info bulle / Popover
+ */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%; /* Place l'infobulle au-dessus */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
 /* Affichage des articles */
 
 .articleList {
@@ -238,7 +271,8 @@ a.info {
 }
 
 
-/* Page de détail d'un article */
+/**
+ Page de détail d'un article */
 
 .mainArticle .footer {
     display: flex;
@@ -246,7 +280,10 @@ a.info {
     align-items: flex-end;
 }
 
-/* Affichage des commentaires */
+/**
+ ********************** Commentaires **********************
+ */ 
+
 .comments {
     width: 100%;
     margin-top: 30px;
@@ -260,9 +297,42 @@ a.info {
     margin-bottom: 30px;
 }
 
+.comment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Aligne le contenu à gauche et le bouton à droite */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    background-color: #f5f5f5; /* Couleur de fond */
+    transition: background 0.3s;
+}
+/* Ajoute un effet au survol */
+.comment-item:hover {
+    background-color: rgb(210, 205, 205);
+}
+
+/* Contenu principal (smiley + texte) */
+.comment-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .comments li {
+    padding: 10px;
     display: flex;
     margin-bottom: 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.comments li:hover {
+    background-color:rgb(234, 230, 230);
+}
+
+.comments li:hover .smiley {
+    color: var(--dateColor);
 }
 
 .comments .smiley {
@@ -271,7 +341,32 @@ a.info {
     line-height: 0.7;
     font-size: 60px;
     color: var(--quoteColor);
+    transition: color 0.3s;
 }
+
+/* Bouton de suppression (caché par défaut) */
+.delete-form {
+    width: auto;
+    margin-top: 0;
+    padding: 0;
+    background: none;
+}
+.delete-comment {
+    background: none;
+    display: inline-block; 
+    color: rgb(0, 0, 0);
+    border: none;
+    font-size: 1.3em;
+    cursor: pointer;
+    margin:0 10px 0 10px;
+    border-radius: 50%;
+    transition: 0.4s ease;
+}
+
+.delete-comment:hover {
+    font-size: 2em;
+}
+
 
 /* On redéfinit certaines parties du "info" pour l'affichage dans les commentaires */
 .detailComment .info {
@@ -304,57 +399,180 @@ a.info {
 }
 
 /**
- * Partie admin
+ ********************** Partie Admin **********************
  */ 
 
-.adminArticle {
-    margin-bottom: 20px;
-    background-color: var(--commentPaleColor);
+.admin-add-article {
+    text-align: left;
+}
+
+.btn-add {
+    padding: 10px;
+    border-radius: 5px;
+    background-color: var(--headerColor);
     color: white;
+    font-size: 18px;
+    font-weight: bold;
 }
 
-.articleLine {
-    display: flex; 
+/* Conteneur du tableau */
+.article-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 18px;
+    background-color: white;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
-.articleLine div {
+/* Style des en-têtes */
+.article-table thead {
+    background-color: var(--headerColor);
+    color: white;
+    font-weight: bold;
+}
+
+.article-table th {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 2px solid var(--backgroundColor);
+}
+
+.article-table th a {
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+    display: inline-block;
+    transition: 0,6s ease;
+}
+
+.article-table th a:hover {
+    color: var(--dateColor);
+    transform: scale(1.2);
+
+}
+
+/* Lignes du tableau */
+.article-table tbody tr {
+    transition: background-color 0.3s;
+}
+
+.article-table tbody tr.even {
+    background-color: var(--backgroundColor);
+}
+
+.article-table tbody tr.odd {
+    background-color: var(--headerPaleColor);
+}
+
+.article-table tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Cellules */
+.article-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Boutons d'action */
+.admin-article-actions {
     display: flex;
+    gap: 5px;
     align-items: center;
 }
 
-.articleLine .title {
-    font-weight: bold;
-    min-width: 200px;
-    width: 200px;
-}
-
-.articleLine .content {
-    flex-grow: 1;
-}
-
-.articleLine > div {
-    padding: 20px;
-    border: 1px solid var(--backgroundColor);
-}
-
-/** 
- * Footer global de la page.
- */
-footer {
-    position: fixed;
-    bottom: 0;
+.form-actions {
+    margin-top: 0;
+    padding: 0;
+    color:rgba(0, 0, 0, 0.1);
+    background-color: var(--backgroundColor);
     display: flex;
-    justify-content: center;
-    width: 100%;;
-    padding: 20px;
-    color: white;
-    background-color: var(--headerColor);
 }
+
+.btn-action {
+    display: inline-block;
+    margin-right: 10px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-action:hover {
+    transform: scale(1.05);
+}
+
+/* Bouton voir */
+.btn-view {
+    color: white;
+    background: #5d8dac;
+}
+
+.btn-view:hover {
+    background-color: rgb(35, 51, 86);
+    color: white;
+}
+
+/* Bouton éditer */
+.btn-edit {
+    background-color: #428a32;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #184021;
+}
+
+/* Bouton supprimer */
+.btn-delete {
+    background-color: #83454b;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #461f23;
+}
+
+/* Effet sur les tooltips */
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: black;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    font-size: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+
 
 
 /**
- * Design des alertes Flash
- */
+ ********************** Alertes Flash **********************
+ */ 
 
 /* Styles généraux des alertes */
 .custom-alert {
@@ -416,8 +634,9 @@ footer {
     color: #3f56a4;
 }
 
-/* ----------------------  ERREURS SYSTEME ------------------- */
-
+/**
+ ********************** Erreur Système **********************
+ */ 
 
 .error-container {
     max-width: 600px;
@@ -463,6 +682,7 @@ footer {
     justify-content: space-between; 
     align-items: center;
     width: 100%;
+    padding: 10px;
 }
 
 .linkBack {
@@ -474,8 +694,7 @@ footer {
     font-weight: bold;
     display: inline-block;
     text-align: center;
-    width: 150px; /* Largeur uniforme pour tous les boutons */
-    font-size: 14px; /* Réduction de la taille de la police */
+    font-size: 14px; 
 }
 
 .linkBack:hover {
@@ -499,3 +718,100 @@ footer {
     background-color: #d9534f;
 }
 
+/**
+ ********************** Espace Admin **********************
+ */ 
+
+/* Conteneur global */
+.admin-article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Un article */
+.admin-article-item {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--backgroundColor);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: #000 1px 1px 2px;
+}
+
+/* Titre de l'article */
+.admin-article-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Contenu de l'article */
+.admin-article-content {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Actions */
+.admin-article-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Boutons */
+.btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-edit {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* .btn-add {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 12px;
+    margin-top: 15px;
+} */
+
+/**
+* Formulaire modification article
+*/
+
+
+
+/** 
+ **************** Footer global de la page. ****************
+ */
+ footer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;;
+    padding: 20px;
+    color: white;
+    background-color: var(--headerColor);
+}
