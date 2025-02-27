@@ -149,13 +149,6 @@ header > nav {
     background-color: var(--headerColor);
 }
 
-header > nav > a {
-    padding: 20px;
-    text-transform: uppercase;
-    font-size: 16px;
-    color: white;
-}
-
 /**
  * Coeur de page.
  */
@@ -171,6 +164,36 @@ main {
 .main-content {
     max-width: 1100px;
 }
+
+/**
+ * Effet Hover (JS) 
+ */
+ .hover-effect {
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), var(--headerColor), rgba(0, 0, 0, 0.2));
+    background-color: var(--headerColor);
+    transition: background 0.2s ease;
+}
+
+.hover-effect:hover {
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(186, 32, 32, 0.421), var(--headerColor));
+}
+
+.hover-link {
+    text-decoration: none;
+    padding: 5px;
+    display: inline-block;
+    transition: 0.4s, transform 0.4s;
+    padding: 20px;
+    text-transform: uppercase;
+    font-size: 16px;
+    color: white;
+}
+
+.hover-link:hover {
+    color: var(--dateColor);
+    transform: scale(1.1);
+}
+
 /**
  * Info bulle / Popover
  */
@@ -190,16 +213,16 @@ main {
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
-    white-space: nowrap;
     font-size: 14px;
     opacity: 0;
-    visibility: hidden;
     transition: opacity 0.3s;
 }
 
 .tooltip:hover::after {
     opacity: 1;
     visibility: visible;
+    z-index: 999;
+
 }
 /* Affichage des articles */
 
@@ -424,7 +447,6 @@ a.info {
     background-color: white;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    overflow: hidden;
 }
 
 /* Style des en-têtes */
@@ -440,19 +462,6 @@ a.info {
     border-bottom: 2px solid var(--backgroundColor);
 }
 
-.article-table th a {
-    color: white;
-    text-decoration: none;
-    padding: 5px;
-    display: inline-block;
-    transition: 0,6s ease;
-}
-
-.article-table th a:hover {
-    color: var(--dateColor);
-    transform: scale(1.2);
-
-}
 
 /* Lignes du tableau */
 .article-table tbody tr {
@@ -473,7 +482,7 @@ a.info {
 
 /* Cellules */
 .article-table td {
-    padding: 12px;
+    padding: 15px;
     border-bottom: 1px solid #ddd;
 }
 
@@ -485,6 +494,8 @@ a.info {
 }
 
 .form-actions {
+    width: auto;
+    border: none;
     margin-top: 0;
     padding: 0;
     color:rgba(0, 0, 0, 0.1);
@@ -538,6 +549,83 @@ a.info {
 .btn-delete:hover {
     background-color: #461f23;
 }
+
+/**
+ ********************** Espace Admin **********************
+ */ 
+
+/* Conteneur global */
+.admin-article-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Un article */
+.admin-article-item {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--backgroundColor);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-shadow: #000 1px 1px 2px;
+}
+
+/* Titre de l'article */
+.admin-article-title {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Contenu de l'article */
+.admin-article-content {
+    color: #555;
+    margin-bottom: 10px;
+}
+
+/* Actions */
+.admin-article-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.article-table th>a {
+    padding: 0px;
+    font-size: 12px;
+}
+
+/* Boutons */
+.btn {
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-edit {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+
 
 /* Effet sur les tooltips */
 .tooltip {
@@ -695,6 +783,7 @@ a.info {
     display: inline-block;
     text-align: center;
     font-size: 14px; 
+    border: none;
 }
 
 .linkBack:hover {
@@ -718,83 +807,6 @@ a.info {
     background-color: #d9534f;
 }
 
-/**
- ********************** Espace Admin **********************
- */ 
-
-/* Conteneur global */
-.admin-article-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Un article */
-.admin-article-item {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--backgroundColor);
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    box-shadow: #000 1px 1px 2px;
-}
-
-/* Titre de l'article */
-.admin-article-title {
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-/* Contenu de l'article */
-.admin-article-content {
-    color: #555;
-    margin-bottom: 10px;
-}
-
-/* Actions */
-.admin-article-actions {
-    display: flex;
-    gap: 10px;
-}
-
-/* Boutons */
-.btn {
-    padding: 5px 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 0.9em;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.btn-edit {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-edit:hover {
-    background-color: #218838;
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-delete:hover {
-    background-color: #c82333;
-}
-
-/* .btn-add {
-    display: inline-block;
-    background-color: #007bff;
-    color: white;
-    padding: 8px 12px;
-    margin-top: 15px;
-} */
 
 /**
 * Formulaire modification article
