@@ -1,8 +1,9 @@
 <?php
 
 /** 
- * Affichage de la partie admin : liste des articles avec un bouton "modifier" pour chacun. 
- * Et un formulaire pour ajouter un article. 
+ * Affichage de la partie admin : liste des articles sous forme de tableau avec un bouton "voir", "modifier" et "supprimer"pour chacun. 
+ * Il est possible de trier les articles par titre, nombre de vues, nombre de commentaires ou date de sortie.
+ * Et un lien vers le formulaire pour ajouter un article. 
  */
 
 ?>
@@ -15,17 +16,18 @@
         <i class="fa-solid fa-plus"></i> Ajouter un article</a>
 </div>
 <table class="article-table">
-    <thead>
+    <thead class="hover-effect">
         <tr>
-            <th><a href="<?= $this->url('/admin?sort=title&dir=' . $this->toggleSort('title')) ?>">Titre</a></th>
-            <th><a href="<?= $this->url('/admin?sort=views&dir=' . $this->toggleSort('views')) ?>">Nombre de vues</a></th>
-            <th><a href="<?= $this->url('/admin?sort=comments&dir=' . $this->toggleSort('comments')) ?>">Total de commentaires</a></th>
-            <th><a href="<?= $this->url('/admin?sort=date_creation&dir=' . $this->toggleSort('date_creation')) ?>">Date de création</a></th>
-            <th>Actions</th>
+            <th><a class="hover-link" href="<?= $this->url('/admin', ['sort' => 'title', 'dir' => $this->toggleSort('title')]) ?>">Titre</a></th>
+            <th><a class="hover-link" href="<?= $this->url('/admin', ['sort' => 'views', 'dir' => $this->toggleSort('views')]) ?>">Nombre de vues</a></th>
+            <th><a class="hover-link" href="<?= $this->url('/admin', ['sort' => 'comments', 'dir' => $this->toggleSort('comments')]) ?>">Total de commentaires</a></th>
+            <th><a class="hover-link" href="<?= $this->url('/admin', ['sort' => 'date_creation', 'dir' => $this->toggleSort('date_creation')]) ?>">Date de création</a></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($articles as $index => $article): ?>
+            <!-- Si l'index est pair, on ajoute la classe "even", sinon on ajoute la classe "odd" -->
             <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
                 <td><?= $this->clean($article['title']) ?></td>
                 <td><?= $article['views'] ?></td>

@@ -11,7 +11,12 @@
     <div class="link-group">
         <?php if ($this->isAdmin()): ?>
             <a href="<?= $this->url('/admin/formArticle/' . $article['id']) ?>" class="linkBack">&#9998; Éditer l'article</a>
-            <a href="<?= $this->url('/admin/delete/' . $article['id']) ?>" class="linkBack link-delete" onclick="return confirm('Confirmer la suppression ?')">&#10060; Supprimer</a>
+            <!-- <a href="<?= $this->url('/admin/delete/' . $article['id']) ?>" class="linkBack link-delete" onclick="return confirm('Confirmer la suppression ?')">&#10060; Supprimer</a> -->
+            <form class="form-actions" method="POST" action="<?= $this->url('/admin/delete/:id', ['id' => $article['id']]) ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
+                <button type="submit" class="linkBack link-delete">&#10060; Supprimer
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </form>
         <?php endif; ?>
     </div>
 </div>
@@ -51,7 +56,7 @@
                     </div>
                     <!-- Bouton supprimer, visible uniquement si admin -->
                     <?php if ($this->isAdmin()): ?>
-                        <form class="delete-form" method="POST" action="<?= $this->url('/comment/delete/:id', ['id' => $comment['id']]) ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
+                        <form class="delete-form tooltip" data-tooltip="Supprimer ce commentaire" method="POST" action="<?= $this->url('/comment/delete/:id', ['id' => $comment['id']]) ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');">
                             <button class="delete-comment" type="submit">x</button>
                         </form>
                     <?php endif; ?>

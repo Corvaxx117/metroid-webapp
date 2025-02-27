@@ -4,6 +4,8 @@
  * Template principal de l'application
  */
 
+use function PHPSTORM_META\type;
+
 $this->initSession();
 
 ?>
@@ -22,18 +24,18 @@ $this->initSession();
 
 <body>
     <header>
-        <nav>
-            <a href="<?= $this->url('/articles') ?>">Articles</a>
-            <a href="<?= $this->url('/aPropos') ?>">À propos</a>
+        <nav class="hover-effect">
+            <a class="hover-link" href="<?= $this->url('/articles') ?>">Articles</a>
+            <a class="hover-link" href="<?= $this->url('/aPropos') ?>">À propos</a>
             <!-- Si on est admin, on affiche le bouton d'administration : -->
             <?php if ($this->isAdmin()): ?>
-                <a href="<?= $this->url('/admin') ?>">Administration</a>
+                <a class="hover-link" href="<?= $this->url('/admin') ?>">Administration</a>
             <?php endif ?>
             <!-- Si on est connecté, on affiche le bouton de déconnexion, sinon, on affiche le bouton de connexion : -->
             <?php if ($this->isAuthenticated()): ?>
-                <a href="<?= $this->url('/admin/disconnect') ?>">Déconnexion</a>
+                <a class="hover-link" href="<?= $this->url('/admin/disconnect') ?>">Déconnexion</a>
             <?php else: ?>
-                <a href="<?= $this->url('/admin/connectionForm') ?>">Connexion</a>
+                <a class="hover-link" href="<?= $this->url('/admin/connectionForm') ?>">Connexion</a>
             <?php endif ?>
         </nav>
         <h1>Emilie Forteroche</h1>
@@ -47,10 +49,10 @@ $this->initSession();
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer hover-effect">
         <p>&copy; <?= date('Y') ?> Mon Super Site MVC. Tous droits réservés.</p>
     </footer>
-    <script src="<?= $this->url('../assets/JS/GenericFunctions.js') ?>"></script>
+    <script src="<?= $this->url('/JS/app.js') ?>" type="module"></script>
 
 </body>
 
