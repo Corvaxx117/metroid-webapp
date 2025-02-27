@@ -81,9 +81,12 @@ class ViewRenderer
      */
     public function toggleSort(string $field): string
     {
-        $currentOrder = $_GET['order'] ?? 'asc';
-        $newOrder = ($currentOrder === 'asc') ? 'desc' : 'asc';
+        $currentSort = $_GET['sort'] ?? 'date_creation';
+        $currentOrder = $_GET['dir'] ?? 'DESC';
 
-        return $this->url('/admin', ['sort' => $field, 'order' => $newOrder]);
+        // Si on trie déjà sur le même champ, on inverse l'ordre
+        $newOrder = ($currentSort === $field && $currentOrder === 'ASC') ? 'DESC' : 'ASC';
+
+        return $newOrder;
     }
 }

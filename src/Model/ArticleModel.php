@@ -70,8 +70,8 @@ class ArticleModel extends BaseModel
     public function getArticlesWithStats(string $orderBy = 'date_creation', string $direction = 'DESC'): array
     {
         return $this->findAllWithStats($orderBy, $direction, [
-            'views' => 'a.views',
-            'comments' => '(SELECT COUNT(*) FROM comment c WHERE c.id_article = a.id)'
+            'views' => ['table' => 'article', 'on' => 'a.id = a.id', 'field' => 'a.views'],
+            'comments' => ['table' => 'comment c', 'on' => 'c.id_article = a.id', 'field' => 'COUNT(c.id)']
         ]);
     }
 

@@ -88,7 +88,7 @@ class CommentController
             exit;
         }
         if ($this->commentModel->deleteComment($id)) {
-            $this->viewRenderer->addFlash('success', "Commentaire supprimé avec succès.");
+            $this->viewRenderer->addFlash('success', "Le commentaire de " . $comment['pseudo'] . " a été supprimé avec succès.");
         } else {
             $this->viewRenderer->addFlash('error', "Erreur lors de la suppression de commentaire.");
         }

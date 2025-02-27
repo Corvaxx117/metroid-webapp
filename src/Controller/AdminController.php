@@ -92,7 +92,7 @@ class AdminController
             $user = $this->userModel->findUserByEmail($email);
             if (!$user || !password_verify($password, $user['password'])) {
                 $this->viewRenderer->addFlash('error', "Identifiants incorrects.");
-                header('Location: ' . $this->viewRenderer->url('/admin/connection_form'));
+                header('Location: ' . $this->viewRenderer->url('/admin/connectionForm'));
                 exit;
             }
 
