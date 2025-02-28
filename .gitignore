@@ -1,7 +1,7 @@
 # Ignorer les fichiers d'environnement
 # .env
 .envlocal
-config.php
+/config/config.php
 
 # Ignorer les dépendances de Composer
 /vendor/
