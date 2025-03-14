@@ -8,6 +8,9 @@ class FlashMessage
     const SUCCESS = 'success';
     const WARNING = 'warning';
 
+    // public static array $message = [];
+    // self::$message[$type][] = $message;
+
     /**
      * Démarre la session si elle n'est pas déjà active.
      * @static 
@@ -30,6 +33,7 @@ class FlashMessage
     {
         self::initSession();
         $_SESSION['flash_messages'][$type][] = $message;
+        // self::$message[$type][] = $message;
     }
 
     /**
@@ -43,6 +47,9 @@ class FlashMessage
         $messages = $_SESSION['flash_messages'][$type] ?? [];
         unset($_SESSION['flash_messages'][$type]);
         return $messages;
+        // $messages = self::$message[$type] ?? [];
+        // unset(self::$message[$type]);
+        // return $messages;
     }
 
     /**
@@ -54,6 +61,7 @@ class FlashMessage
     {
         self::initSession();
         return !empty($_SESSION['flash_messages'][$type]);
+        // return !empty(self::$message[$type]);
     }
 
     /**
@@ -64,6 +72,7 @@ class FlashMessage
     {
         self::initSession();
         unset($_SESSION['flash_messages']);
+        // self::$message = [];
     }
 
     /**

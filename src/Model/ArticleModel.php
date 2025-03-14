@@ -10,7 +10,6 @@ use App\Model\BaseModel;
 class ArticleModel extends BaseModel
 {
     protected string $table = 'article';
-    private string $content = "";
 
     /**
      * Récupère tous les articles.
@@ -28,7 +27,7 @@ class ArticleModel extends BaseModel
      */
     public function getArticleById(int $id): ?array
     {
-        return $this->findOneBy(['id' => $id]);
+        return parent::findOneBy(['id' => $id]);
     }
 
     /**

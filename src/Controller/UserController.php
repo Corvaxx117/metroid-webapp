@@ -8,7 +8,7 @@ namespace App\Controller;
 
 use App\Model\UserModel;
 use App\Services\ViewRenderer;
-
+use App\Services\AuthService;
 
 class UserController
 {
@@ -20,180 +20,139 @@ class UserController
     }
 
     /**
-     * Affiche la liste des utilisateurs.
-     * @return void
+     * Vérifie si un utilisateur est connecté et retourne son ID
+     * @return int|null
      */
-    public function list(): void
+    private function getCurrentUserId(): ?int
     {
-        $users = $this->userModel->findAllUsers();
-        $data = [
-            'title' => 'Liste des utilisateurs',
-            'users' => $users
-        ];
-        $this->viewRenderer->render('../views/users/list.phtml', $data);
+        $user = AuthService::getUser();
+
+        return $user['id'] ?? null;
     }
 
     /**
-     * Affiche le formulaire pour modifier les données d’un utilisateur.
-     * @param int $id L'identifiant de l'utilisateur
-     * @return void
+     * Redirige vers la page de connexion si l'utilisateur n'est pas connecté.
      */
-    public function editUser($id): void
+    private function ensureAuthenticated(): void
     {
-        // Récupérer l'utilisateur depuis la base de données
-        $user = $this->userModel->findUserById($id);
-        if (!$user) {
-            // Rediriger ou afficher un message d'erreur si l'utilisateur est introuvable
-            $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
-            header('Location: ' . $this->viewRenderer->url('/users'));
+        if (!$this->getCurrentUserId()) {
+            $this->viewRenderer->addFlash('error', "Vous devez être connecté pour accéder à cette page.");
+            header('Location: ' . $this->viewRenderer->url('/auth/connectionForm'));
             exit;
         }
+    }
+
+    /**
+     * Affiche les informations de l'utilisateur connecté.
+     * @return void
+     */
+    public function profile(): void
+    {
+        $this->ensureAuthenticated();
+        $userId = $this->getCurrentUserId();
+        $user = $this->userModel->findUserById($userId);
+
+        if (!$user) {
+            $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
+            header('Location: ' . $this->viewRenderer->url('/articles'));
+            exit;
+        }
+
         $data = [
-            'title' => 'Modifier les données de l\'utilisateur',
+            'title' => 'Mon profil',
+            'user' => $user
+        ];
+        $this->viewRenderer->render('../views/users/profile.phtml', $data);
+    }
+
+    /**
+     * Affiche le formulaire pour modifier ses informations.
+     * @return void
+     */
+    public function editProfile(): void
+    {
+        $this->ensureAuthenticated();
+        $userId = $this->getCurrentUserId();
+        $user = $this->userModel->findUserById($userId);
+
+        if (!$user) {
+            $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
+            header('Location: ' . $this->viewRenderer->url('/auth/connectionForm'));
+            exit;
+        }
+
+        $data = [
+            'title' => 'Modifier mon profil',
             'user' => $user
         ];
         $this->viewRenderer->render('../views/users/edit.phtml', $data);
     }
+
     /**
-     * Met à jour un utilisateur.
+     * Met à jour les informations de l'utilisateur connecté.
      * @return void
      */
-    public function updateUser(): void
+    public function updateProfile(): void
     {
+        $this->ensureAuthenticated();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $id = (int)$_POST['id'];
-            $username = trim($_POST['username']);
+            $userId = $this->getCurrentUserId();
+            $nickname = trim($_POST['nickname']);
             $email = trim($_POST['email']);
 
-            if (empty($username)) {
-                $this->viewRenderer->addFlash('error', "Le nom d'utilisateur est requis.");
+            if (empty($nickname)) {
+                $this->viewRenderer->addFlash('error', "Le pseudonyme est requis.");
             }
 
             if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $this->viewRenderer->addFlash('error', "Veuillez saisir un email valide.");
-            }
-
-            if ($this->viewRenderer->has('error')) {
-                header('Location: ' . $this->viewRenderer->url('/users/edit/' . $id));
-                exit;
-            }
-
-            $this->userModel->updateUser($id, [
-                'username' => $username,
-                'email' => $email,
-            ]);
-
-            $this->viewRenderer->addFlash('success', "Utilisateur mis à jour avec succès.");
-
-            header('Location: ' . $this->viewRenderer->url('/users'));
-            exit;
-        }
-    }
-
-    /**
-     * Affiche les détails d’un utilisateur.
-     * @param int $id L'identifiant de l'utilisateur
-     * @return void
-     */
-    public function show(int $id): void
-    {
-        $user = $this->userModel->findUserById($id);
-
-        if (!$user) {
-            // Envoie une erreur si l'utilisateur n'est pas trouvé
-            $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
-            header('Location: ' . $this->viewRenderer->url('/users'));
-            exit;
-        }
-
-        $data = [
-            'title' => 'Détails de l\'utilisateur',
-            'user' => $user
-        ];
-        $this->viewRenderer->render('../views/users/show.phtml', $data);
-    }
-
-    /**
-     * Affichage du formulaire d'ajout d'un utilisateur'.
-     * @return void
-     */
-    public function displayAddUserForm(): void
-    {
-        $this->viewRenderer->render('../views/users/add.phtml');
-    }
-    /**
-     * Ajoute un nouvel utilisateur.
-     * @return void
-     */
-    public function add(): void
-    {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $username = trim($_POST['nickname'] ?? '');
-            $email = trim($_POST['email'] ?? '');
-            $password = $_POST['password'] ?? '';
-
-            if (empty($username)) {
-                $this->viewRenderer->addFlash('error', "Le nom d'utilisateur est requis.");
-            }
-
-            if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $this->viewRenderer->addFlash('error', "Veuillez saisir un email valide.");
-            }
-
-            if (empty($password) || strlen($password) < 6) {
-                $this->viewRenderer->addFlash('error', "Le mot de passe doit contenir au moins 6 caractères.");
-            }
-
-            if ($this->userModel->findUserByEmail($email)) {
-                $this->viewRenderer->addFlash('error', "Cet email est déjà utilisé.");
             }
 
             if ($this->viewRenderer->hasFlash('error')) {
-                header('Location: ' . $this->viewRenderer->url('/users/addUser'));
+                header('Location: ' . $this->viewRenderer->url('/users/editProfile'));
                 exit;
             }
 
-            $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-
-            $this->userModel->createUser([
-                'nickname' => $username,
+            $this->userModel->updateUser($userId, [
+                'nickname' => $nickname,
                 'email' => $email,
-                'password' => $passwordHash
             ]);
 
-            $this->viewRenderer->addFlash('success', "Utilisateur ajouté avec succès.");
-
-            // Redirection vers la liste des utilisateurs
-            header('Location: '  . $this->viewRenderer->url('/users'));
+            $this->viewRenderer->addFlash('success', "Profil mis à jour avec succès.");
+            header('Location: ' . $this->viewRenderer->url('/users/profile'));
             exit;
         }
-
-        $this->viewRenderer->render('../views/users/add.phtml', ['title' => 'Ajouter un utilisateur']);
     }
 
     /**
-     * Supprimer un utilisateur.
-     * @param int $id L'identifiant de l'utilisateur
+     * Supprime le compte de l'utilisateur connecté.
+     * @return void
      */
-    public function delete(int $id): void
+    public function deleteAccount(): void
     {
-        $user = $this->userModel->findUserById($id);
+        $this->ensureAuthenticated();
+        $userId = $this->getCurrentUserId();
+        $user = $this->userModel->findUserById($userId);
+
         if (!$user) {
             $this->viewRenderer->addFlash('error', "Utilisateur introuvable.");
-            return;
+            header('Location: ' . $this->viewRenderer->url('/users/profile'));
+            exit;
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if ($this->userModel->deleteUser($id)) {
-                $this->viewRenderer->addFlash('success', "Utilisateur supprimé avec succès.");
-                header('Location: ' . $this->viewRenderer->url('/users'));
+            if ($this->userModel->deleteUser($userId)) {
+                // Déconnecte l'utilisateur après suppression
+                AuthService::logout();
+                $this->viewRenderer->addFlash('success', "Votre compte a été supprimé.");
+                header('Location: ' . $this->viewRenderer->url('/articles'));
                 exit;
             }
         }
 
-        $this->viewRenderer->addFlash('error', "Impossible de supprimer cet utilisateur.");
-        header('Location: '  . $this->viewRenderer->url('/users'));
+        $this->viewRenderer->addFlash('error', "Impossible de supprimer votre compte.");
+        header('Location: ' . $this->viewRenderer->url('/users/profile'));
         exit;
     }
 }

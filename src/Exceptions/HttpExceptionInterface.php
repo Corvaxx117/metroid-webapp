@@ -2,9 +2,12 @@
 
 namespace App\Exceptions;
 
-// une interface est un contrat
-// N'a pas de code
-// contient des const et des prototypes de méthodes 
+/**
+ * Interface HttpExceptionInterface
+ * 
+ * @package App\Exceptions
+ * @method int getStatusCode()
+ */
 interface HttpExceptionInterface
 {
     public function getStatusCode(): int;
