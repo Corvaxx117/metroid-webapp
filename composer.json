@@ -1,5 +1,5 @@
 {
-    "name": "julien/preset-webapp",
+    "name": "corvaxx/preset-webapp",
     "description": "Une application PHP MVC prête à l'emploi",
     "type": "project",
     "license": "MIT",
