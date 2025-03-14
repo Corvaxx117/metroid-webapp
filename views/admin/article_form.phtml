@@ -7,7 +7,7 @@
 
 <!-- bouton retour -->
 <div class="container-over-links">
-    <a href="<?= $this->url('/admin') ?>" class="linkBack link-left">&#9756; Quitter sans modifier</a>
+    <a href="<?= $this->url('/admin') ?>" class="linkBack link-left"><span style="font-size: 2em;">&#9756;</span> Quitter sans modifier <span style="font-size: 2em;">&#9756;</span></a>
 </div>
 <form action="<?= isset($article) && $article ? $this->url('/admin/edit/' . $article['id']) : $this->url('/admin/addArticle') ?>" method="post" class="foldedCorner">
     <h2><?= isset($article) && $article ? "Modification de l'article" : "Création d'un article" ?></h2>

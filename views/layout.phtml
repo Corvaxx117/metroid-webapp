@@ -4,8 +4,6 @@
  * Template principal de l'application
  */
 
-use function PHPSTORM_META\type;
-
 $this->initSession();
 
 ?>
@@ -33,9 +31,11 @@ $this->initSession();
             <?php endif ?>
             <!-- Si on est connecté, on affiche le bouton de déconnexion, sinon, on affiche le bouton de connexion : -->
             <?php if ($this->isAuthenticated()): ?>
-                <a class="hover-link" href="<?= $this->url('/admin/disconnect') ?>">Déconnexion</a>
+                <a class="hover-link" href="<?= $this->url('/users/profile') ?>">Mon profil</a>
+                <a class="hover-link" href="<?= $this->url('/auth/disconnect') ?>">Déconnexion</a>
             <?php else: ?>
-                <a class="hover-link" href="<?= $this->url('/admin/connectionForm') ?>">Connexion</a>
+                <a class="hover-link" href="<?= $this->url('/auth/connectionForm') ?>">Connexion</a>
+                <a class="hover-link" href="<?= $this->url('/auth/registrationForm') ?>">Inscription</a>
             <?php endif ?>
         </nav>
         <h1>Emilie Forteroche</h1>

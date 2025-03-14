@@ -1,0 +1,27 @@
+<?php
+
+/**
+ * Vue affichant le profil de l'utilisateur connecté.
+ */
+
+?>
+
+<div class="connection-form profile-container foldedCorner">
+    <h2>Mon profil</h2>
+
+    <div class="profile-info">
+        <label>Nom d'utilisateur :</label>
+        <p><?= $this->clean($user['nickname'], false); ?></p>
+
+        <label>Email :</label>
+        <p><?= $this->clean($user['email'], false); ?></p>
+    </div>
+
+    <div class="">
+        <a href="<?= $this->url('/users/editProfile'); ?>" class="submit">✏ Modifier mes informations</a>
+
+        <form method="POST" action="<?= $this->url('/users/deleteAccount'); ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.');">
+            <button type="submit" class="submit btn-delete">🗑 Supprimer mon compte</button>
+        </form>
+    </div>
+</div>

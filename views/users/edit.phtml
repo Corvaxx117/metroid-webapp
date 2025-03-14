@@ -1,40 +1,21 @@
 <?php
 
 /**
- * Ce template affiche un formulaire pour modifier un utilisateur.
+ * Vue affichant le formulaire de modification des informations utilisateur.
  */
-
 ?>
 
-<div class="container mt-5">
-    <h2 class="mb-4 text-primary">Modifier l'utilisateur</h2>
+<div class="edit-profile-container">
+    <h2>Modifier mes informations</h2>
 
-    <div class="card shadow-lg">
-        <div class="card-body">
-            <form action="<?= $this->url('/users/update') ?>" method="POST">
-                <input type="hidden" name="id" value="<?= $this->clean($user['id']) ?>">
+    <form method="POST" action="<?= $this->url('/users/updateProfile'); ?>" class="form-style">
+        <label for="nickname">Pseudonyme</label>
+        <input type="text" name="nickname" id="nickname" value="<?= $this->clean($user['nickname'], false); ?>" required>
 
-                <div class="mb-3">
-                    <label for="username" class="form-label">Nom d'utilisateur :</label>
-                    <input type="text" id="username" name="username" class="form-control"
-                        value="<?= $this->clean($user['username']) ?>" required>
-                </div>
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" value="<?= $this->clean($user['email'], false); ?>" required>
 
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email :</label>
-                    <input type="email" id="email" name="email" class="form-control"
-                        value="<?= $this->clean($user['email']) ?>" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save"></i> Mettre à jour
-                </button>
-
-                <a href="<?= $this->url('/users') ?>" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Annuler
-                </a>
-            </form>
-
-        </div>
-    </div>
+        <button type="submit" class="btn btn-save">💾 Enregistrer</button>
+        <a href="<?= $this->url('/users/profile'); ?>" class="btn btn-cancel">❌ Annuler</a>
+    </form>
 </div>

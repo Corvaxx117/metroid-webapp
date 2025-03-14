@@ -7,13 +7,18 @@
 ?>
 <!-- boutons retour et gestion article -->
 <div class="container-over-links">
-    <a href="<?= $this->url('/articles') ?>" class="linkBack link-left">&#9756; Retour aux articles</a>
+    <?php if ($this->isAdmin()): ?>
+        <a href="<?= $this->url('/admin') ?>" class="linkBack link-left">🔧 Gestion des articles 🔧</a>
+    <?php else: ?>
+        <a href="<?= $this->url('/articles') ?>" class="linkBack link-left"><span style="font-size: 2em;">&#9756;</span>
+            Retour aux articles <span style="font-size: 2em;">&#9756;</span>
+        </a>
+    <?php endif; ?>
     <div class="link-group">
         <?php if ($this->isAdmin()): ?>
-            <a href="<?= $this->url('/admin/formArticle/' . $article['id']) ?>" class="linkBack">&#9998; Éditer l'article</a>
-            <!-- <a href="<?= $this->url('/admin/delete/' . $article['id']) ?>" class="linkBack link-delete" onclick="return confirm('Confirmer la suppression ?')">&#10060; Supprimer</a> -->
+            <a href="<?= $this->url('/admin/formArticle/' . $article['id']) ?>" class="linkBack">&#9998; Éditer &#9998;</a>
             <form class="form-actions" method="POST" action="<?= $this->url('/admin/delete/:id', ['id' => $article['id']]) ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
-                <button type="submit" class="linkBack link-delete">&#10060; Supprimer
+                <button type="submit" class="linkBack link-delete"><i class="fa-solid fa-trash"></i> Supprimer
                     <i class="fa-solid fa-trash"></i>
                 </button>
             </form>
@@ -24,15 +29,17 @@
 <article class="mainArticle">
     <h2> <?= $this->clean($title ?? 'Détails de l\'article') ?> </h2>
     <span class="quotation">«</span>
-    <p><?= $this->clean($article['content'], false) ?></p>
+    <p><?= $this->clean($article['content']) ?></p>
     <!-- Bas de page de l'article -->
     <div class="footer">
         <span class="info"> Publié le <?= $this->formatDate($article['date_creation'], 'full') ?></span>
         <?php if ($article['date_update'] != null): ?>
             <span class="info"> Modifié le <?= $this->formatDate($article['date_update'], 'full') ?></span>
         <?php endif ?>
-        <span class="info"><i class="fa-regular fa-eye"></i>
-            Nombre de vues : <?= $this->clean($article['views'], false) ?></span>
+        <hr>
+        <span class="info info-views"><i class="fa-regular fa-eye"></i>
+            Nombre de vues <i class="fa-regular fa-eye"></i> :
+            <?= $this->clean($article['views'], false) ?></span>
     </div>
 </article>
 <!-- Section des commentaires -->
@@ -60,9 +67,6 @@
                             <button class="delete-comment" type="submit">x</button>
                         </form>
                     <?php endif; ?>
-                    <!-- <a class="btn btn-edit" href="<?= $this->url('/comment/formComment/:id', ['id' => $comment['id']]) ?>">
-                        ✏
-                    </a> -->
                 </li>
             <?php endforeach ?>
         </ul>

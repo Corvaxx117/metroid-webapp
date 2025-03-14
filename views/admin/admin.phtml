@@ -13,7 +13,7 @@
 <!-- Bouton Ajouter un article -->
 <div class="admin-add-article">
     <a class="btn-add" href="<?= $this->url('/admin/formArticle') ?>">
-        <i class="fa-solid fa-plus"></i> Ajouter un article</a>
+        <i class="fa-solid fa-plus" style="font-size: 1em"></i> Ajouter un article <i class="fa-solid fa-plus" style="font-size: 1em"></i></a>
 </div>
 <table class="article-table">
     <thead class="hover-effect">
@@ -30,8 +30,8 @@
             <!-- Si l'index est pair, on ajoute la classe "even", sinon on ajoute la classe "odd" -->
             <tr class="<?= $index % 2 === 0 ? 'even' : 'odd' ?>">
                 <td><?= $this->clean($article['title']) ?></td>
-                <td><?= $article['views'] ?></td>
-                <td><?= $article['comments'] ?></td>
+                <td><?= $this->clean($article['views'], false) ?></td>
+                <td><?= $this->clean($article['comments'], false) ?></td>
                 <td><?= $this->formatDate($article['date_creation']) ?></td>
                 <td>
                     <form class="form-actions" method="POST" action="<?= $this->url('/admin/delete/:id', ['id' => $article['id']]) ?>" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');">
