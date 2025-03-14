@@ -61,6 +61,11 @@ a {
     color: inherit;
 }
 
+hr {
+    width: 100%;
+    margin: 10px 0;
+    border: 1px solid var(--headerColor);
+}
 /**
  * Styles des formulaires.
  */
@@ -175,7 +180,7 @@ main {
 }
 
 .hover-effect:hover {
-    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(186, 32, 32, 0.421), var(--headerColor));
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(181, 15, 87, 0.751), var(--headerColor));
 }
 
 .hover-link {
@@ -187,6 +192,7 @@ main {
     text-transform: uppercase;
     font-size: 16px;
     color: white;
+    font-weight: bold;
 }
 
 .hover-link:hover {
@@ -224,6 +230,7 @@ main {
     z-index: 999;
 
 }
+
 /* Affichage des articles */
 
 .articleList {
@@ -295,7 +302,8 @@ a.info {
 
 
 /**
- Page de détail d'un article */
+ * Page de détail d'un article 
+ */
 
 .mainArticle .footer {
     display: flex;
@@ -323,14 +331,14 @@ a.info {
 .comment-item {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Aligne le contenu à gauche et le bouton à droite */
+    justify-content: space-between; 
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 5px;
-    background-color: #f5f5f5; /* Couleur de fond */
+    background-color: #f5f5f5; 
     transition: background 0.3s;
 }
-/* Ajoute un effet au survol */
+
 .comment-item:hover {
     background-color: rgb(210, 205, 205);
 }
@@ -368,6 +376,7 @@ a.info {
 }
 
 /* Bouton de suppression (caché par défaut) */
+
 .delete-form {
     width: auto;
     margin-top: 0;
@@ -389,7 +398,6 @@ a.info {
 .delete-comment:hover {
     font-size: 2em;
 }
-
 
 /* On redéfinit certaines parties du "info" pour l'affichage dans les commentaires */
 .detailComment .info {
@@ -438,6 +446,11 @@ a.info {
     font-weight: bold;
 }
 
+.btn-add:hover {
+    background-color: var(--headerPaleColor);
+    color: var(--dateColor);
+}
+
 /* Conteneur du tableau */
 .article-table {
     width: 100%;
@@ -461,7 +474,6 @@ a.info {
     text-align: left;
     border-bottom: 2px solid var(--backgroundColor);
 }
-
 
 /* Lignes du tableau */
 .article-table tbody tr {
@@ -550,10 +562,6 @@ a.info {
     background-color: #461f23;
 }
 
-/**
- ********************** Espace Admin **********************
- */ 
-
 /* Conteneur global */
 .admin-article-list {
     display: flex;
@@ -596,37 +604,6 @@ a.info {
     font-size: 12px;
 }
 
-/* Boutons */
-.btn {
-    padding: 5px 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 0.9em;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.btn-edit {
-    background-color: #28a745;
-    color: white;
-}
-
-.btn-edit:hover {
-    background-color: #218838;
-}
-
-.btn-delete {
-    background-color: #dc3545;
-    color: white;
-}
-
-.btn-delete:hover {
-    background-color: #c82333;
-}
-
-
-
 /* Effet sur les tooltips */
 .tooltip {
     position: relative;
@@ -655,8 +632,108 @@ a.info {
     visibility: visible;
 }
 
+/**
+ ********************** Partie Utilisateur **************** 
+ */ 
 
+ /* Conteneur du profil */
+.profile-container {
+    width: 50%;
+    margin: 50px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
 
+.profile-info {
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.profile-info p {
+    margin-bottom: 10px;
+}
+
+.profile-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Style des boutons */
+.btn {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: 0.3s;
+    display: inline-block;
+}
+
+.btn-edit {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #217dbb;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
+}
+
+/* Conteneur du formulaire */
+.edit-profile-container {
+    width: 40%;
+    margin: 50px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Style des inputs */
+.form-style label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-style input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Boutons formulaire */
+.btn-save {
+    background-color: #2ecc71;
+    color: white;
+}
+
+.btn-save:hover {
+    background-color: #27ae60;
+}
+
+.btn-cancel {
+    background-color: #95a5a6;
+    color: white;
+}
+
+.btn-cancel:hover {
+    background-color: #7f8c8d;
+}
 
 /**
  ********************** Alertes Flash **********************
@@ -723,48 +800,8 @@ a.info {
 }
 
 /**
- ********************** Erreur Système **********************
- */ 
-
-.error-container {
-    max-width: 600px;
-    margin: 10% auto;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-  }
-  
-.error-code {
-    font-size: 80px;
-    font-weight: bold;
-    color: #e74c3c;
-    margin: 0;
-}
-
-.error-message {
-    font-size: 18px;
-    margin: 20px 0;
-    color: #7f8c8d;
-}
-
-.error-description {
-    font-size: 14px;
-    color: #7f8c8d;
-    margin: 10px 0 20px 0;
-}
-
-.error-link {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-}
-
+ * ********************* Details d'un article *********************
+ */
 .container-over-links {
     display: flex;
     justify-content: space-between; 
@@ -780,8 +817,9 @@ a.info {
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
-    display: inline-block;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     font-size: 14px; 
     border: none;
 }
@@ -805,14 +843,8 @@ a.info {
 /* Style spécifique pour le bouton Supprimer */
 .link-delete {
     background-color: #d9534f;
+    cursor: pointer;
 }
-
-
-/**
-* Formulaire modification article
-*/
-
-
 
 /** 
  **************** Footer global de la page. ****************
