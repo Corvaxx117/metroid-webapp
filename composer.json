@@ -1,0 +1,45 @@
+{
+    "name": "julien/preset-webapp",
+    "description": "Une application PHP MVC prête à l'emploi",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amiel Julien",
+            "email": "julien.amiel117@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "ext-pdo": "*",
+        "ext-mbstring": "*"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.0",
+        "phpunit/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-create-project-cmd": [
+            "php bin/installer.php"
+        ],
+        "setup-env": "cp .env.example .env",
+        "setup-database": "php bin/setup-database.php"
+    },
+    "suggest": {
+    "symfony/dotenv": "Permet la gestion des fichiers .env"
+},
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist"
+    }
+}
