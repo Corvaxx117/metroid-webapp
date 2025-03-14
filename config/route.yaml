@@ -8,51 +8,56 @@ routes:
     method: GET
     callable: App\Controller\HomeController
 
+  # Route Authentication
+  # Affichage formulaire d'inscription
+  "/auth/registrationForm":
+    method: GET
+    callable: App\Controller\AuthController::displayRegistrationForm
+  # Inscription
+  "/auth/registration":
+    method: POST
+    callable: App\Controller\AuthController::register
+  # Formulaire de connexion
+  "/auth/connectionForm":
+    method: GET
+    callable: App\Controller\AuthController::displayConnectionForm
+  # Connexion
+  "/auth/connection":
+    method: POST
+    callable: App\Controller\AuthController::connect
+  # Deconnexion
+  "/auth/disconnect":
+    method: GET
+    callable: App\Controller\AuthController::disconnect
+
   # Route pour la gestion des utilisateurs
-  "/users":
+  # Espace utilisateur
+  "/users/profile":
     method: GET
-    callable: App\Controller\UserController::listAllArticles
-  "/users/show/:id":
+    callable: App\Controller\UserController::profile
+  # Formulaire de modification de profil
+  "/users/editProfile":
     method: GET
-    callable: App\Controller\UserController::showDetails
-  "/users/addUser":
-    method: GET
-    callable: App\Controller\UserController::displayAddUserForm
-  "/users/add":
+    callable: App\Controller\UserController::editProfile
+  # Modification de profil
+  "/users/updateProfile":
     method: POST
-    callable: App\Controller\UserController::add
-  "/users/delete/:id":
+    callable: App\Controller\UserController::updateProfile
+  # Suppression de compte
+  "/users/deleteAccount":
     method: POST
-    callable: App\Controller\UserController::delete
-  "/users/edit/:id":
-    method: GET
-    callable: App\Controller\UserController::editUser
-  "/users/update":
-    method: POST
-    callable: App\Controller\UserController::updateUser
+    callable: App\Controller\UserController::deleteAccount
 
   # Routes Administration
   # Tableau de gestion des articles
   "/admin":
     method: GET
     callable: App\Controller\AdminController::showAdmin
-  # Route vers le formulaire de connexion
-  "/admin/connectionForm":
-    method: GET
-    callable: App\Controller\AdminController::displayConnectionForm
-  # Route vers la connexion
-  "/admin/connection":
-    method: POST
-    callable: App\Controller\AdminController::connect
-  # Route vers la deconnexion
-  "/admin/disconnect":
-    method: GET
-    callable: App\Controller\AdminController::disconnect
-  # Route vers le formulaire d'ajout d'un article
+  # Formulaire d'ajout d'un article
   "/admin/formArticle":
     method: GET
     callable: App\Controller\AdminController::displayArticleForm
-  # Route vers le formulaire de modification d'un article
+  # Formulaire de modification d'un article
   "/admin/formArticle/:id":
     method: GET
     callable: App\Controller\AdminController::displayArticleForm
@@ -79,15 +84,17 @@ routes:
     method: GET
     callable: App\Controller\ArticleController::showArticleDetails
 
-  # Route A propos
+  # A propos
   "/aPropos":
     method: GET
     callable: App\Controller\ArticleController::showApropos
 
   # Route pour la gestion des commentaires (admin)
+  # Formulaire d'ajout de commentaire
   "/addComment":
     method: POST
     callable: App\Controller\CommentController::addComment
+  # Suppression de commentaire
   "/comment/delete/:id":
     method: POST
     callable: App\Controller\CommentController::delete
