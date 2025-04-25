@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Mini;
 
 use Mini\Handler\ErrorHandler;
 use Mini\Router\Router;
