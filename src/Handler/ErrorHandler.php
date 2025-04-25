@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Handler;
+namespace Mini\Handler;
 
 use Throwable;
-use App\View\ViewRenderer;
-use App\Exceptions\HttpExceptionInterface;
+use Mini\View\ViewRenderer;
+use Mini\Exceptions\HttpExceptionInterface;
 
 class ErrorHandler
 {

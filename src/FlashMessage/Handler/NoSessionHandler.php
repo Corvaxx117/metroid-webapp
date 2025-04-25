@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FlashMessage\Handler;
+namespace Mini\FlashMessage\Handler;
 
 class NoSessionHandler
 {

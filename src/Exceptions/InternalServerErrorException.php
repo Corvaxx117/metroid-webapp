@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace Mini\Exceptions;
 
 class InternalServerErrorException implements HttpExceptionAbstract
 {

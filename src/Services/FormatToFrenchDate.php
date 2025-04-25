@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Mini\Services;
 
 use DateTime;
 use IntlDateFormatter;

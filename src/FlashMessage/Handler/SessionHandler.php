@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FlashMessage\Handler;
+namespace Mini\FlashMessage\Handler;
 
 class SessionHandler
 {
@@ -10,7 +10,7 @@ class SessionHandler
 
     /**
      * Démarre la session si elle n'est pas déjà active.
-     * @static 
+     * @static
      * @return void
      */
     private function initSession(): void

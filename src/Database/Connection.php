@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Database;
+namespace Mini\Database;
 
 use PDO;
 use PDOException;
@@ -25,7 +25,7 @@ class Connection
     {
         if (self::$instance === null) {
             try {
-                // Charger les variables depuis .env 
+                // Charger les variables depuis .env
                 $dsn = $_ENV['DB_DSN'];         // "mysql:host=localhost;dbname=mydb;charset=utf8"
                 $username = $_ENV['DB_USER'];
                 $password = $_ENV['DB_PASS'];

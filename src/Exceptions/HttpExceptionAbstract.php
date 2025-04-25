@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace Mini\Exceptions;
 
 abstract class HttpExceptionAbstract extends \Exception implements HttpExceptionInterface
 {

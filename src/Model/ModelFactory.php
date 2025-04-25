@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace Mini\Model;
 
-use App\Database\Connection;
+use Mini\Database\Connection;
 
 class ModelFactory
 {

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Core;
+namespace App;
 
-use App\Router\Router;
-use App\Handler\ErrorHandler;
+use Mini\Handler\ErrorHandler;
+use Mini\Router\Router;
 use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * Classe Launcher
  * Classe responsable de lancement de l'application
- * @package App\Core
+ * @package Mini\Core
  */
 class Launcher
 {
@@ -46,12 +46,12 @@ class Launcher
         // try {
         $method = $_SERVER['REQUEST_METHOD'];
 
-        // Astuce php qui permet de traiter la partie de l'url qui nous interresse 
+        // Astuce php qui permet de traiter la partie de l'url qui nous interresse
         // On detecte le fichier index.php et on en extrait le chemin
         // Si l'URL est http://localhost/public/index.php/news, $basePath devient /public/
         $basePath = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
         // dans $basePath on va avoir le chemin vers le fichier index.php
-        // On utilise ce basePath pour le retirer 
+        // On utilise ce basePath pour le retirer
         // Il ne restera que ce qui suit le public/ Exemple : /news.
         $requestUri = '/' . trim(substr($_SERVER['REQUEST_URI'], strlen($basePath)), '/');
         // Extrait le chemin sans les paramètres Exemple : /news si l'URL est /news?id=123

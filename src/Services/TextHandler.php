@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Mini\Services;
 
 class TextHandler
 {

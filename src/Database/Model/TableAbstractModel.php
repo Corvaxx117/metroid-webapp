@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Database\Model;
+namespace Mini\Database\Model;
 
-use App\Database\Connection;
+use Mini\Database\Connection;
 
 abstract class TableAbstractModel
 {
@@ -90,7 +90,7 @@ abstract class TableAbstractModel
 
     /**
      * Fonction utilitaire pour construire les conditions SQL.
-     * 
+     *
      * @param array $criteria Tableau associatif clé => valeur
      * @return string Clause WHERE SQL générée (ex: email = :email AND lastname = :lastname)
      */
@@ -103,7 +103,7 @@ abstract class TableAbstractModel
 
     /**
      * Fonction utilitaire pour construire la clause SET pour une requête UPDATE.
-     * 
+     *
      * @param array $data Tableau associatif clé => valeur
      * @return string Clause SET SQL générée (ex: "column1 = :column1, column2 = :column2")
      */

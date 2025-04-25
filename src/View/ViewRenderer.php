@@ -1,18 +1,18 @@
 <?php
 
-namespace App\View;
+namespace Mini\View;
 
-use App\Services\UrlGenerator;
-use App\Services\TextHandler;
-use App\Services\FormatToFrenchDate;
-use App\FlashMessage\FlashMessage;
-use App\Services\AuthService;
+use Mini\Services\UrlGenerator;
+use Mini\Services\TextHandler;
+use Mini\Services\FormatToFrenchDate;
+use Mini\FlashMessage\FlashMessage;
+use Mini\Services\AuthService;
 
 /**
  * Class ViewRenderer
  * Gestionnaire de vue
  * Charge la plupart des services et permet de passer des données à la vue
- * @package App\Services
+ * @package Mini\Services
  */
 class ViewRenderer
 {

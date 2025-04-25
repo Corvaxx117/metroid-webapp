@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Model;
+namespace Mini\Model;
 
-use App\Model\BaseModel;
+use Mini\Model\BaseModel;
 
 /**
  * Classe qui gère les utilisateurs.

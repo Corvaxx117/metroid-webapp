@@ -6,12 +6,12 @@
 // Utilise des expressions régulières pour gérer les routes dynamiques (ex. : /news/:id).
 // Retourne le contrôleur et les paramètres associés à une route.
 
-namespace App\Router;
+namespace Mini\Router;
 
-use App\View\ViewRenderer;
+use Mini\View\ViewRenderer;
 use Symfony\Component\Yaml\Yaml;
-use App\Exceptions\NotFoundException;
-use App\Exceptions\InternalServerErrorException;
+use Mini\Exceptions\NotFoundException;
+use Mini\Exceptions\InternalServerErrorException;
 
 class Router
 {
@@ -40,8 +40,8 @@ class Router
             // le preg_match permet de tester si l'url de la requête correspond bien à une route
             // il alimente $matches avec toutes les valeurs variable de la route par rapport à l'url
             if (preg_match('/^' . $pattern . '$/', $uri, $matches) && $method === $config['method']) {
-                // $matches[0] contiendra toujours ce que l'expression reguliere valide dans sa totalité, 
-                // la ou les index suivant contiendront seulement ce qui est capturé 
+                // $matches[0] contiendra toujours ce que l'expression reguliere valide dans sa totalité,
+                // la ou les index suivant contiendront seulement ce qui est capturé
                 // (par capture j'entends les parenthèse de la regexp)
                 array_shift($matches); // Retire le 1er élément
                 // Instancier le contrôleur et appeler l'action

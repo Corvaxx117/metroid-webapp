@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace Mini\Controller;
 
-use App\FlashMessage\FlashMessage;
-use App\View\ViewRenderer;
+use Mini\FlashMessage\FlashMessage;
+use Mini\View\ViewRenderer;
 
 abstract class AbstractController
 {

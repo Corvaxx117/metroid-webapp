@@ -21,12 +21,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "Mini\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "Mini\\Tests\\": "tests/"
         }
     },
     "scripts": {

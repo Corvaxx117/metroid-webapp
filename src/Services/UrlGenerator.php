@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace Mini\Services;
 
 class UrlGenerator
 {
     /**
      * Génère une URL complète en remplaçant les paramètres dynamiques et en ajoutant des paramètres GET.
-     * 
+     *
      * @param string $path Chemin avec placeholders (ex: "/users/:id")
      * @param array $params Tableau des paramètres à injecter (ex: ['id' => 5, 'filter' => 'active'])
      * @return string URL générée

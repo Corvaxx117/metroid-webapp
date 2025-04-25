@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace Mini\Services;
 
 /**
  * Utilitaire pour la gestion de l'authentification.

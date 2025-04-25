@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Exceptions;
+namespace Mini\Exceptions;
 
 /**
  * Interface HttpExceptionInterface
- * 
- * @package App\Exceptions
+ *
+ * @package Mini\Exceptions
  * @method int getStatusCode()
  */
 interface HttpExceptionInterface

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\FlashMessage;
+namespace Mini\FlashMessage;
 
 class FlashMessage
 {
@@ -13,7 +13,7 @@ class FlashMessage
 
     /**
      * Démarre la session si elle n'est pas déjà active.
-     * @static 
+     * @static
      * @return void
      */
     private function initSession(): void
