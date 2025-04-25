@@ -4,7 +4,7 @@
 
 # Ignorer les dépendances de Composer
 /vendor/
-/composer.lock
+composer.lock
 
 # Ignorer les caches PHP
 /var/
