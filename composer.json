@@ -1,7 +1,7 @@
 {
     "name": "corvaxx/starter-webapp",
     "description": "Un mini-framework PHP MVC inspiré de Symfony, conçu pour être une base légère et modulaire.",
-    "type": "library",
+    "type": "project",
     "license": "MIT",
     "authors": [
         {
