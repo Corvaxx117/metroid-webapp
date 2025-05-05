@@ -15,9 +15,12 @@ class Launcher
 {
     private Router $router;
     private ErrorHandler $errorHandler;
+    private string $basePath;
 
-    public function __construct(string $routesFile)
+    public function __construct(string $basePath, string $routesFile)
     {
+        $this->basePath = rtrim($basePath, '/') . '/';
+
         $this->initializeEnvironment();
         $this->errorHandler = new ErrorHandler();
         $this->router = new Router($routesFile);
@@ -32,9 +35,15 @@ class Launcher
     private function initializeEnvironment(): void
     {
         $dotenv = new Dotenv();
-        $dotenv->load(__DIR__ . '/../../.env');
-        if (file_exists(__DIR__ . '/../../.envlocal')) {
-            $dotenv->load(__DIR__ . '/../../.envlocal');
+        $envFile = $this->basePath . '.env';
+
+        if (file_exists($envFile)) {
+            $dotenv->load($envFile);
+        }
+
+        $envLocal = $this->basePath . '.envlocal';
+        if (file_exists($envLocal)) {
+            $dotenv->load($envLocal);
         }
     }
 

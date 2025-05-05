@@ -23,11 +23,11 @@ class ViewRenderer
         private FlashMessage $flashMessage,
         private AuthService $auth
     ) {
-        // $this->url = new UrlGenerator();
-        // $this->textHandler = new TextHandler();
-        // $this->formatDate = new FormatToFrenchDate();
-        // $this->flashMessage = new FlashMessage();
-        // $this->auth = new AuthService();
+        $this->url = new UrlGenerator();
+        $this->textHandler = new TextHandler();
+        $this->formatDate = new FormatToFrenchDate();
+        $this->flashMessage = new FlashMessage();
+        $this->auth = new AuthService();
     }
 
     // methode appelée automatiquement dès lors qu'on appelle une méthode inexistante dans l'objet ou  dans l'instance de la classe
