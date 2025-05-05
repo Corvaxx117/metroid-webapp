@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Handler;
+namespace Mini\ErrorHandler;
 
 use Throwable;
 use Mini\View\ViewRenderer;

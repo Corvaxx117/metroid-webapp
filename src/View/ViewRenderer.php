@@ -16,13 +16,13 @@ use Mini\Services\AuthService;
  */
 class ViewRenderer
 {
-    public function __construct(
-        private UrlGenerator $url,
-        private TextHandler $textHandler,
-        private FormatToFrenchDate $formatDate,
-        private FlashMessage $flashMessage,
-        private AuthService $auth
-    ) {
+    private UrlGenerator $url;
+    private TextHandler $textHandler;
+    private FormatToFrenchDate $formatDate;
+    private FlashMessage $flashMessage;
+    private AuthService $auth;
+    public function __construct()
+    {
         $this->url = new UrlGenerator();
         $this->textHandler = new TextHandler();
         $this->formatDate = new FormatToFrenchDate();

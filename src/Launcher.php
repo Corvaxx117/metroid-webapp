@@ -2,7 +2,7 @@
 
 namespace Mini;
 
-use Mini\Handler\ErrorHandler;
+use Mini\ErrorHandler\ErrorHandler;
 use Mini\Router\Router;
 use Symfony\Component\Dotenv\Dotenv;
 
