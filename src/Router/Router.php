@@ -13,14 +13,20 @@ use Mini\ErrorHandler\ErrorHandler;
 use Symfony\Component\Yaml\Yaml;
 use Mini\Exceptions\NotFoundException;
 use Mini\Exceptions\InternalServerErrorException;
+use Mini\FlashMessage\FlashMessage;
 
 class Router
 {
     private array $routes;
     private ErrorHandler $errorHandler;
+    private ViewRenderer $viewRenderer;
+    private FlashMessage $flashMessage;
 
     public function __construct(string $routesFile)
     {
+        // Injection des dépendances nécessaires au contrôleur
+        $this->viewRenderer = new ViewRenderer();
+        $this->flashMessage = new FlashMessage();
         $this->routes = Yaml::parseFile($routesFile)['routes'];
         $this->errorHandler = new ErrorHandler();
         // Configurer un gestionnaire global pour les exceptions non capturées
@@ -30,36 +36,40 @@ class Router
     public function match(string $uri, string $method)
     {
         foreach ($this->routes as $route => $config) {
-            // '/:\w+/' : Une regex qui trouve les paramètres dynamiques (comme :id).
-            // '(\w+)' : La chaîne de remplacement. Ici, on utilise une parenthèse capturante
-            // $route : La chaîne sur laquelle effectuer le remplacement.
-            // '/' est un délimiteur en regexp, on échappe donc '/' par '\/' grace a str_replace
+            // Convertir les paramètres dynamiques (ex : :id) en regexp capturante
             $pattern = preg_replace('/:\w+/', '(\w+)', str_replace('/', '\/', $route));
 
-            // $matches contient tous les paramètres extrait de l'URI
-            // arguments de pregmatch optionnel passé par référence (alimenté directement par cette fonction )
-            // le preg_match permet de tester si l'url de la requête correspond bien à une route
-            // il alimente $matches avec toutes les valeurs variable de la route par rapport à l'url
             if (preg_match('/^' . $pattern . '$/', $uri, $matches) && $method === $config['method']) {
-                // $matches[0] contiendra toujours ce que l'expression reguliere valide dans sa totalité,
-                // la ou les index suivant contiendront seulement ce qui est capturé
-                // (par capture j'entends les parenthèse de la regexp)
-                array_shift($matches); // Retire le 1er élément
-                // Instancier le contrôleur et appeler l'action
+                array_shift($matches); // Supprimer la correspondance complète
+
+                // Récupération du callable (ex: App\Controller\HomeController::index)
                 $classDefinition = explode('::', $config['callable']);
-                if (count($classDefinition) === 2) {
-                    $callable = [new $classDefinition[0](new ViewRenderer()), $classDefinition[1]];
-                } else if (count($classDefinition) === 1) {
-                    $callable = new $classDefinition[0](new ViewRenderer());
-                } else {
-                    throw new InternalServerErrorException("Le controller {$route['callable']} n'existe pas");
+
+                if (count($classDefinition) !== 2) {
+                    throw new InternalServerErrorException("Le callable '{$config['callable']}' est invalide.");
                 }
-                // dd($route, $uri, $config, $pattern, $matches);
-                // si une route est matchée on retourne donc un array structuré qui va nous être utile pour appeler le bon controller avec les bons arguments
-                return ['callable' => $callable, 'params' => $matches];
+                // Récupération du nom de la classe et de la fonction
+                $controllerClass = $classDefinition[0];
+                $methodName = $classDefinition[1];
+
+                // Valider que la classe et la fonction existent
+                if (!class_exists($controllerClass)) {
+                    throw new InternalServerErrorException("Classe contrôleur '$controllerClass' introuvable.");
+                }
+
+                if (!method_exists($controllerClass, $methodName)) {
+                    throw new InternalServerErrorException("Méthode '$methodName' introuvable dans '$controllerClass'.");
+                }
+                // Instanciation du contrôleur
+                $controller = new $controllerClass($this->viewRenderer, $this->flashMessage);
+
+                return [
+                    'callable' => [$controller, $methodName],
+                    'params' => $matches
+                ];
             }
         }
-        // Lancer une exception si aucune route ne correspond
-        throw new NotFoundException("Aucune route correspondante pour l'URI: $uri");
+        // Aucune route correspondante
+        throw new NotFoundException("Aucune route correspondante pour l'URI : $uri");
     }
 }

@@ -54,12 +54,12 @@ class ViewRenderer
         http_response_code($statusCode);
 
         // Vérifie si le fichier de vue existe
-        $viewPath = __DIR__ . "/../../views/{$view}";
+        $viewPath = VIEW_PATH . $view;
         if (!file_exists($viewPath)) {
             throw new \RuntimeException("Le fichier '{$view}' est introuvable.");
         }
         // Chemin du fichier de mise en page (layout)
-        $layoutPath = __DIR__ . "/../../views/layout.phtml";
+        $layoutPath = VIEW_PATH . 'layout.phtml';
         if (!file_exists($layoutPath)) {
             throw new \RuntimeException("Le fichier de mise en page est introuvable.");
         }
