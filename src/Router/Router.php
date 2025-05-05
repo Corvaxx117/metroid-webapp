@@ -9,6 +9,7 @@
 namespace Mini\Router;
 
 use Mini\View\ViewRenderer;
+use Mini\ErrorHandler\ErrorHandler;
 use Symfony\Component\Yaml\Yaml;
 use Mini\Exceptions\NotFoundException;
 use Mini\Exceptions\InternalServerErrorException;
@@ -16,14 +17,14 @@ use Mini\Exceptions\InternalServerErrorException;
 class Router
 {
     private array $routes;
-    // private ErrorHandler $errorHandler;
+    private ErrorHandler $errorHandler;
 
     public function __construct(string $routesFile)
     {
         $this->routes = Yaml::parseFile($routesFile)['routes'];
-        // $this->errorHandler = new ErrorHandler();
-        // // Configurer un gestionnaire global pour les exceptions non capturées
-        // set_exception_handler([$this->errorHandler, 'handle']);
+        $this->errorHandler = new ErrorHandler();
+        // Configurer un gestionnaire global pour les exceptions non capturées
+        set_exception_handler([$this->errorHandler, 'handle']);
     }
 
     public function match(string $uri, string $method)

@@ -43,6 +43,6 @@ class ErrorHandler
 
         // Rendre les variables disponibles dans la vue
         $description = "Une erreur critique est survenue.";
-        include __DIR__ . "/../../views/system-errors.phtml";
+        include __DIR__ . "/system-errors.phtml";
     }
 }
