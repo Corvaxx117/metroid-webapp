@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Mini\\": "src/"
+            "Metroid\\": "src/"
         }
     },
     "require-dev": {
