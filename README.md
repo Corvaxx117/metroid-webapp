@@ -20,35 +20,44 @@ Idéal pour démarrer rapidement un projet web structuré sans toute la complexi
 
 ## 📦 Installation
 
+- Commande d'installation du projet
+- Le projet est scindé en deux repository `metroid-webapp` (dossier vendor) et `metroid-webapp-skeleton` pour l'architecture de base.
+
 ```bash
 composer create-project corvaxx/metroid-webapp-skeleton nom-de-mon-projet \
   --repository='{"type":"vcs","url":"https://github.com/Corvaxx117/metroid-webapp-skeleton"}' \
   --stability=dev --prefer-dist
 ```
 
+## 🔧 Configuration de base
+
+- Le fichier `.env` est généré automatiquement depuis `.env.example`
+- Configure votre base de données et options d’environnement dans ce fichier
+- Les routes sont définies dans `config/route.yaml` avec la syntaxe :
+
+````yaml
+routes:
+  /home:
+    method: GET
+    callable: App\Controller\HomeController::index
+
+---
+
+```md
+## 📁 Où développer ?
+
+- Les **contrôleurs** vont dans `src/Controller/`
+- Les **modèles** dans `src/Model/`
+- Les **vues** dans `templates/`
+- Tu peux ajouter tes **services** dans `src/Services/`
+
 ---
 
 ## 🗂️ Structure générée
 
-mon-projet/
-├── bin/
-│ └── post-install.php
-├── config/
-│ ├── config.php
-│ └── route.yaml
-├── public/
-│ └── index.php
-├── src/
-│ └── Controller/
-│ └── HomeController.php  
-├── templates/
-│ ├── home.phtml
-│ ├── about.phtml
-│ └── layout.phtml
-├── .env
-├── composer.json
-├── vendor/
-└── └── framework metroid
+<pre> ```text mon-projet/ ├── bin/ │ └── post-install.php ├── config/ │ ├── config.php │ └── route.yaml ├── public/ │ └── index.php ├── src/ │ └── Controller/ │ └── HomeController.php ├── templates/ │ ├── home.phtml │ ├── about.phtml │ └── layout.phtml ├── .env ├── composer.json ├── vendor/ │ └── corvaxx/ │ └── metroid-webapp/ ``` </pre>
+
+````
 
 ```
 
