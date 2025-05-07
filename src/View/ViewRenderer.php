@@ -48,7 +48,7 @@ class ViewRenderer
         }
         return ($this->$name)(...$arguments);
     }
-    public function render(string $view, array $data = [], int $statusCode = 200): void
+    public function render(string $view, array $data = [], int $statusCode = 200, bool $capture = false): ?string
     {
         // Défini le code HTTP
         http_response_code($statusCode);
@@ -70,6 +70,13 @@ class ViewRenderer
         $template = $viewPath;
 
         // Inclure le fichier layout
+        if ($capture) {
+            ob_start();
+            require $layoutPath;
+            return ob_get_clean();
+        }
+
         require $layoutPath;
+        return null;
     }
 }

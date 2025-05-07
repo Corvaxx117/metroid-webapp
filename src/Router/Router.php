@@ -8,27 +8,20 @@
 
 namespace Mini\Router;
 
-use Mini\View\ViewRenderer;
-use Mini\ErrorHandler\ErrorHandler;
 use Symfony\Component\Yaml\Yaml;
+use Mini\ErrorHandler\ErrorHandler;
 use Mini\Exceptions\NotFoundException;
 use Mini\Exceptions\InternalServerErrorException;
-use Mini\FlashMessage\FlashMessage;
 
 class Router
 {
     private array $routes;
     private ErrorHandler $errorHandler;
-    private ViewRenderer $viewRenderer;
-    private FlashMessage $flashMessage;
 
     public function __construct(string $routesFile)
     {
         // Injection des dépendances nécessaires au contrôleur
-        $this->viewRenderer = new ViewRenderer();
-        $this->flashMessage = new FlashMessage();
         $this->routes = Yaml::parseFile($routesFile)['routes'];
-        $this->errorHandler = new ErrorHandler();
         // Configurer un gestionnaire global pour les exceptions non capturées
         set_exception_handler([$this->errorHandler, 'handle']);
     }
@@ -48,23 +41,10 @@ class Router
                 if (count($classDefinition) !== 2) {
                     throw new InternalServerErrorException("Le callable '{$config['callable']}' est invalide.");
                 }
-                // Récupération du nom de la classe et de la fonction
-                $controllerClass = $classDefinition[0];
-                $methodName = $classDefinition[1];
-
-                // Valider que la classe et la fonction existent
-                if (!class_exists($controllerClass)) {
-                    throw new InternalServerErrorException("Classe contrôleur '$controllerClass' introuvable.");
-                }
-
-                if (!method_exists($controllerClass, $methodName)) {
-                    throw new InternalServerErrorException("Méthode '$methodName' introuvable dans '$controllerClass'.");
-                }
-                // Instanciation du contrôleur
-                $controller = new $controllerClass($this->viewRenderer, $this->flashMessage);
 
                 return [
-                    'callable' => [$controller, $methodName],
+                    'controllerClass' => $classDefinition[0],
+                    'methodName' => $classDefinition[1],
                     'params' => $matches
                 ];
             }

@@ -3,7 +3,11 @@
 namespace Mini;
 
 use Mini\ErrorHandler\ErrorHandler;
+use Mini\View\ViewRenderer;
+use Mini\FlashMessage\FlashMessage;
 use Mini\Router\Router;
+use Mini\Http\Request;
+use Mini\Http\Response;
 use Symfony\Component\Dotenv\Dotenv;
 
 /**
@@ -52,26 +56,43 @@ class Launcher
      */
     public function run(): void
     {
-        // try {
-        $method = $_SERVER['REQUEST_METHOD'];
+        try {
+            $method = $_SERVER['REQUEST_METHOD'];
 
-        // Astuce php qui permet de traiter la partie de l'url qui nous interresse
-        // On detecte le fichier index.php et on en extrait le chemin
-        // Si l'URL est http://localhost/public/index.php/news, $basePath devient /public/
-        $basePath = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
-        // dans $basePath on va avoir le chemin vers le fichier index.php
-        // On utilise ce basePath pour le retirer
-        // Il ne restera que ce qui suit le public/ Exemple : /news.
-        $requestUri = '/' . trim(substr($_SERVER['REQUEST_URI'], strlen($basePath)), '/');
-        // Extrait le chemin sans les paramètres Exemple : /news si l'URL est /news?id=123
-        $uri = parse_url($requestUri, PHP_URL_PATH);
+            // Astuce php qui permet de traiter la partie de l'url qui nous interresse
+            // On detecte le fichier index.php et on en extrait le chemin
+            // Si l'URL est http://localhost/public/index.php/news, $basePath devient /public/
+            $basePath = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
+            // dans $basePath on va avoir le chemin vers le fichier index.php
+            // On utilise ce basePath pour le retirer
+            // Il ne restera que ce qui suit le public/ Exemple : /news.
+            $requestUri = '/' . trim(substr($_SERVER['REQUEST_URI'], strlen($basePath)), '/');
+            // Extrait le chemin sans les paramètres Exemple : /news si l'URL est /news?id=123
+            $uri = parse_url($requestUri, PHP_URL_PATH);
 
-        // Résoudre la route
-        $route = $this->router->match($uri, $method);
+            // Création de l'objet Request
+            $request = new Request();
 
-        call_user_func_array($route['callable'], $route['params']);
-        // } catch (\Throwable $e) {
-        //     $this->errorHandler->handle($e);
-        // }
+            // Résoudre la route
+            $route = $this->router->match($uri, $method);
+
+            // Injection automatique de Request comme 1er argument
+            $controllerClass = $route['controllerClass'];
+            $method = $route['methodName'];
+            $params = [$request, ...$route['params']];
+            $controller = new $controllerClass(new ViewRenderer(), new FlashMessage());
+            $response = call_user_func_array([$controller, $method], $params);
+
+            // Gérer la réponse
+            if ($response instanceof Response) {
+                $response->send();
+            } elseif (is_string($response)) {
+                echo $response;
+            } else {
+                throw new \RuntimeException("Le contrôleur n'a pas retourné de réponse valide.");
+            }
+        } catch (\Throwable $e) {
+            $this->errorHandler->handle($e);
+        }
     }
 }
