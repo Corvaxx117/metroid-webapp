@@ -1,20 +1,6 @@
 <?php
 
-function output(string $text, string $colorCode = ''): void
-{
-    echo $colorCode . $text . "\033[0m\n";
-    flush(); // Pour forcer l'affichage dans certains contextes
-}
-
-// Titre stylisé
-output("  __  __ _       _        ", "\033[1;36m");
-output(" |  \\/  (_) __ _| | _____ ", "\033[1;36m");
-output(" | |\\/| | |/ _` | |/ / _ \\", "\033[1;36m");
-output(" | |  | | | (_| |   <  __/", "\033[1;36m");
-output(" |_|  |_|_|\\__,_|_|\\_\\___|", "\033[1;36m");
-output("           M   I   N   I  ", "\033[1;35m");
-
-output("🎉 Bienvenue dans le Starter Mini Framework ! 🎉", "\033[1;32m");
+echo "🎉 Installation de votre projet basé sur Corvaxx Starter WebApp 🎉\n";
 
 $baseDir = dirname(__DIR__);
 $distDir = __DIR__ . '/dist';
@@ -32,19 +18,20 @@ foreach ($iterator as $item) {
     if ($item->isDir()) {
         if (!is_dir($targetPath)) {
             mkdir($targetPath, 0755, true);
-            output("📁 Dossier créé : $subPath", "\033[1;34m");
+            echo "📁 Dossier créé : " . $subPath . "\n";
         }
     } else {
         if (!file_exists($targetPath)) {
             copy($item, $targetPath);
-            output("✅ Fichier copié : $subPath", "\033[1;32m");
+            echo "✅ Fichier copié : " . $subPath . "\n";
         } else {
-            output("ℹ️  Fichier déjà existant : $subPath", "\033[0;33m");
+            echo "ℹ️  Fichier déjà existant : " . $subPath . "\n";
         }
     }
 }
 
-// Composer JSON du projet utilisateur
+
+// Générer le composer.json du projet utilisateur
 $projectComposerJson = [
     "name" => "app/my-project",
     "description" => "Projet basé sur corvaxx/metroid-webapp",
@@ -66,11 +53,12 @@ $projectComposerJson = [
 ];
 
 file_put_contents($baseDir . '/composer.json', json_encode($projectComposerJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-output("✅ Fichier composer.json généré", "\033[1;32m");
+echo "✅ Fichier composer.json généré\n";
 
-output("🔄 Installation des dépendances avec Composer...\n", "\033[1;36m");
+// Lancer composer update pour installer le framework dans /vendor
+echo "🔄 Installation des dépendances avec Composer...\n";
 chdir($baseDir);
 exec('composer update');
 
-output("✅ Projet initialisé !", "\033[1;32m");
-output("🚀 Lancez votre serveur avec : php -S localhost:8000 -t public", "\033[1;33m");
+echo "✅ Projet Metroid initialisé ! 🎉\n";
+echo "🚀 Lancer le serveur avec : php -S localhost:8000 -t public\n";
