@@ -1,5 +1,5 @@
 {
-    "name": "corvaxx/starter-webapp",
+    "name": "corvaxx/metroid-webapp",
     "description": "Un mini-framework PHP MVC inspiré de Symfony.",
     "type": "library",
     "license": "MIT",
