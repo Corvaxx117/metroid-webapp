@@ -1,8 +1,8 @@
 <?php
 
-namespace Mini\Database\Model;
+namespace Metroid\Database\Model;
 
-use Mini\Database\Connection;
+use Metroid\Database\Connection;
 
 abstract class TableAbstractModel
 {

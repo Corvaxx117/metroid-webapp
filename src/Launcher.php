@@ -1,19 +1,19 @@
 <?php
 
-namespace Mini;
+namespace Metroid;
 
-use Mini\ErrorHandler\ErrorHandler;
-use Mini\View\ViewRenderer;
-use Mini\FlashMessage\FlashMessage;
-use Mini\Router\Router;
-use Mini\Http\Request;
-use Mini\Http\Response;
+use Metroid\ErrorHandler\ErrorHandler;
+use Metroid\View\ViewRenderer;
+use Metroid\FlashMessage\FlashMessage;
+use Metroid\Router\Router;
+use Metroid\Http\Request;
+use Metroid\Http\Response;
 use Symfony\Component\Dotenv\Dotenv;
 
 /**
  * Classe Launcher
  * Classe responsable de lancement de l'application
- * @package Mini\Core
+ * @package Metroid\Core
  */
 class Launcher
 {

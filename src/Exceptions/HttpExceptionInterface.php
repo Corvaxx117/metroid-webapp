@@ -1,11 +1,11 @@
 <?php
 
-namespace Mini\Exceptions;
+namespace Metroid\Exceptions;
 
 /**
  * Interface HttpExceptionInterface
  *
- * @package Mini\Exceptions
+ * @package Metroid\Exceptions
  * @method int getStatusCode()
  */
 interface HttpExceptionInterface

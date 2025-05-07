@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Services;
+namespace Metroid\Services;
 
 class UrlGenerator
 {

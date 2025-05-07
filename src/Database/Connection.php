@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Database;
+namespace Metroid\Database;
 
 use PDO;
 use PDOException;

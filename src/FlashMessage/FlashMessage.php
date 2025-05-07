@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\FlashMessage;
+namespace Metroid\FlashMessage;
 
 class FlashMessage
 {

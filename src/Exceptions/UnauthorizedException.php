@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Exceptions;
+namespace Metroid\Exceptions;
 
 class UnauthorizedException extends HttpExceptionAbstract
 {

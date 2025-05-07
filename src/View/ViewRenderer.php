@@ -1,18 +1,18 @@
 <?php
 
-namespace Mini\View;
+namespace Metroid\View;
 
-use Mini\Services\UrlGenerator;
-use Mini\Services\TextHandler;
-use Mini\Services\FormatToFrenchDate;
-use Mini\FlashMessage\FlashMessage;
-use Mini\Services\AuthService;
+use Metroid\Services\UrlGenerator;
+use Metroid\Services\TextHandler;
+use Metroid\Services\FormatToFrenchDate;
+use Metroid\FlashMessage\FlashMessage;
+use Metroid\Services\AuthService;
 
 /**
  * Class ViewRenderer
  * Gestionnaire de vue
  * Charge la plupart des services et permet de passer des données à la vue
- * @package Mini\Services
+ * @package Metroid\Services
  */
 class ViewRenderer
 {

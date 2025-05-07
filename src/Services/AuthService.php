@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Services;
+namespace Metroid\Services;
 
 /**
  * Utilitaire pour la gestion de l'authentification.

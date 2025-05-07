@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Exceptions;
+namespace Metroid\Exceptions;
 
 abstract class HttpExceptionAbstract extends \Exception implements HttpExceptionInterface
 {

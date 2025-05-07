@@ -1,9 +1,9 @@
 <?php
 
-namespace Mini\Controller;
+namespace Metroid\Controller;
 
-use Mini\FlashMessage\FlashMessage;
-use Mini\View\ViewRenderer;
+use Metroid\FlashMessage\FlashMessage;
+use Metroid\View\ViewRenderer;
 
 abstract class AbstractController
 {

@@ -6,11 +6,11 @@
 // Utilise des expressions régulières pour gérer les routes dynamiques (ex. : /news/:id).
 // Retourne le contrôleur et les paramètres associés à une route.
 
-namespace Mini\Router;
+namespace Metroid\Router;
 
 use Symfony\Component\Yaml\Yaml;
-use Mini\Exceptions\NotFoundException;
-use Mini\Exceptions\InternalServerErrorException;
+use Metroid\Exceptions\NotFoundException;
+use Metroid\Exceptions\InternalServerErrorException;
 
 class Router
 {

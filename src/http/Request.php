@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\Http;
+namespace Metroid\Http;
 
 class Request
 {

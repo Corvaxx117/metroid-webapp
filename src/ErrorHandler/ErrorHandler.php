@@ -1,10 +1,10 @@
 <?php
 
-namespace Mini\ErrorHandler;
+namespace Metroid\ErrorHandler;
 
 use Throwable;
-use Mini\View\ViewRenderer;
-use Mini\Exceptions\HttpExceptionInterface;
+use Metroid\View\ViewRenderer;
+use Metroid\Exceptions\HttpExceptionInterface;
 
 class ErrorHandler
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mini\FlashMessage\Handler;
+namespace Metroid\FlashMessage\Handler;
 
 class SessionHandler
 {

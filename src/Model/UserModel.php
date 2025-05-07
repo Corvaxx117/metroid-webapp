@@ -1,13 +1,13 @@
 <?php
 
-namespace Mini\Model;
+namespace Metroid\Model;
 
-use Mini\Model\BaseModel;
+use Metroid\Database\Model\TableAbstractModel;
 
 /**
  * Classe qui gère les utilisateurs.
  */
-class UserModel extends BaseModel
+class UserModel extends TableAbstractModel
 {
     protected string $table = 'users';
 

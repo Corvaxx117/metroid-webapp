@@ -60,5 +60,5 @@ echo "🔄 Installation des dépendances avec Composer...\n";
 chdir($baseDir);
 exec('composer update');
 
-echo "✅ Projet initialisé ! 🎉\n";
+echo "✅ Projet Metroid initialisé ! 🎉\n";
 echo "🚀 Lancer le serveur avec : php -S localhost:8000 -t public\n";

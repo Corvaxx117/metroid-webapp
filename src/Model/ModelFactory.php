@@ -1,8 +1,8 @@
 <?php
 
-namespace Mini\Model;
+namespace Metroid\Model;
 
-use Mini\Database\Connection;
+use Metroid\Database\Connection;
 
 class ModelFactory
 {
