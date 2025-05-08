@@ -44,6 +44,14 @@ class ErrorHandler
         // Rendre les variables disponibles dans la vue
         $description = "Une erreur critique est survenue.";
         $trace = [];
-        include __DIR__ . "/system-errors.phtml";
+        $fallbackPath = VIEW_PATH . 'system-errors.phtml';
+
+        if (file_exists($fallbackPath)) {
+            include $fallbackPath;
+        } else {
+            echo "<h1>Erreur {$statusCode}</h1>";
+            echo "<p>{$message}</p>";
+            echo "<p>{$description}</p>";
+        }
     }
 }

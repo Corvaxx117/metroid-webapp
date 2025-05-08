@@ -4,12 +4,7 @@ namespace Metroid\FlashMessage\Handler;
 
 class NoSessionHandler
 {
-    const ERROR = 'error';
-    const SUCCESS = 'success';
-    const WARNING = 'warning';
-
-    public static array $message = [];
-    self::$message[$type][] = $message;
+    private array $messages = [];
 
     /**
      * Ajoute un message flash à la session.
@@ -17,9 +12,9 @@ class NoSessionHandler
      * @param string $message Le message à ajouter.
      * @return void
      */
-    static function addFlash(string $type, string $message): void
+    public function add(string $type, string $message): void
     {
-        self::$message[$type][] = $message;
+        $this->messages[$type][] = $message;
     }
 
     /**
@@ -27,11 +22,11 @@ class NoSessionHandler
      * @param string $type Le type de message (error, success, warning).
      * @return array Les messages flash.
      */
-    static function getFlash(string $type): array
+    public function get(string $type): array
     {
-        $messages = self::$message[$type] ?? [];
-        unset(self::$message[$type]);
-        return $messages;
+        $msgs = $this->messages[$type] ?? [];
+        unset($this->messages[$type]);
+        return $msgs;
     }
 
     /**
@@ -39,16 +34,16 @@ class NoSessionHandler
      * @param string $type Le type de message (error, success, warning).
      * @return bool true si des messages existent, false sinon.
      */
-    static function hasFlash(string $type): bool
+    public function has(string $type): bool
     {
-        return !empty(self::$message[$type]);
+        return !empty($this->messages[$type]);
     }
 
     /**
      * Supprime tous les messages flash.
      * @return void
      */
-    static function clearFlash(): void
+    static function clear(): void
     {
         self::$message = [];
     }
@@ -57,18 +52,13 @@ class NoSessionHandler
      * Affiche les messages flash avec un système dynamique.
      * @return void
      */
-    static function renderFlash(): void
+    public function renderFlash(): void
     {
-        $flashTypes = [
-            self::ERROR => 'danger',
-            self::SUCCESS => 'success',
-            self::WARNING => 'warning'
-        ];
-
-        foreach ($flashTypes as $type => $cssClass) {
-            if (self::hasFlash($type)) {
-                include __DIR__ . "/../../views/flashMessages/flashMessage.phtml";
+        foreach ($this->messages as $type => $messages) {
+            foreach ($messages as $message) {
+                echo "<div class='flash flash-{$type}'>{$message}</div>";
             }
         }
+        $this->messages = [];
     }
 }

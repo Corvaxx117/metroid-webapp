@@ -4,19 +4,14 @@ namespace Metroid\FlashMessage\Handler;
 
 class SessionHandler
 {
-    const ERROR = 'error';
-    const SUCCESS = 'success';
-    const WARNING = 'warning';
-
-    /**
-     * Démarre la session si elle n'est pas déjà active.
-     * @static
-     * @return void
-     */
-    private function initSession(): void
+    public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
+        }
+
+        if (!isset($_SESSION['flash'])) {
+            $_SESSION['flash'] = [];
         }
     }
 
@@ -26,10 +21,9 @@ class SessionHandler
      * @param string $message Le message à ajouter.
      * @return void
      */
-    public function addFlash(string $type, string $message): void
+    public function add(string $type, string $message): void
     {
-        self::initSession();
-        $_SESSION['flash_messages'][$type][] = $message;
+        $_SESSION['flash'][$type][] = $message;
     }
 
     /**
@@ -37,11 +31,10 @@ class SessionHandler
      * @param string $type Le type de message (error, success, warning).
      * @return array Les messages flash.
      */
-    public function getFlash(string $type): array
+    public function get(string $type): array
     {
-        self::initSession();
-        $messages = $_SESSION['flash_messages'][$type] ?? [];
-        unset($_SESSION['flash_messages'][$type]);
+        $messages = $_SESSION['flash'][$type] ?? [];
+        unset($_SESSION['flash'][$type]);
         return $messages;
     }
 
@@ -50,10 +43,9 @@ class SessionHandler
      * @param string $type Le type de message (error, success, warning).
      * @return bool true si des messages existent, false sinon.
      */
-    public function hasFlash(string $type): bool
+    public function has(string $type): bool
     {
-        self::initSession();
-        return !empty($_SESSION['flash_messages'][$type]);
+        return !empty($_SESSION['flash'][$type]);
     }
 
     /**
@@ -62,7 +54,6 @@ class SessionHandler
      */
     public function clearFlash(): void
     {
-        self::initSession();
         unset($_SESSION['flash_messages']);
     }
 
@@ -72,16 +63,22 @@ class SessionHandler
      */
     public function renderFlash(): void
     {
-        self::initSession();
-        $flashTypes = [
-            self::ERROR => 'danger',
-            self::SUCCESS => 'success',
-            self::WARNING => 'warning'
-        ];
+        foreach (['success', 'error', 'warning'] as $type) {
+            if (!empty($_SESSION['flash'][$type])) {
+                $messages = $_SESSION['flash'][$type];
+                unset($_SESSION['flash'][$type]);
 
-        foreach ($flashTypes as $type => $cssClass) {
-            if (self::hasFlash($type)) {
-                include __DIR__ . "/../../views/flashMessages/flashMessage.phtml";
+                $cssClass = match ($type) {
+                    'success' => 'success',
+                    'error'   => 'danger',
+                    'warning' => 'warning',
+                    default   => ''
+                };
+
+                foreach ($messages as $message) {
+                    // Inclure un template flash pour chaque message
+                    include VIEW_PATH . 'flashMessage.phtml';
+                }
             }
         }
     }
