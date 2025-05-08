@@ -57,4 +57,4 @@ md
 
 ## 🗂️ Structure générée
 
-<pre> ```text mon-projet/ ├── bin/ │ └── post-install.php ├── config/ │ ├── config.php │ └── route.yaml ├── public/ │ └── index.php ├── src/ │ └── Controller/ │ └── HomeController.php ├── templates/ │ ├── home.phtml │ ├── about.phtml │ └── layout.phtml ├── .env ├── composer.json ├── vendor/ │ └── corvaxx/ │ └── metroid-webapp/ ``` </pre>
+`text mon-projet/ ├── bin/ │ └── post-install.php ├── config/ │ ├── config.php │ └── route.yaml ├── public/ │ └── index.php ├── src/ │ └── Controller/ │ └── HomeController.php ├── templates/ │ ├── home.phtml │ ├── about.phtml │ └── layout.phtml ├── .env ├── composer.json ├── vendor/ │ └── corvaxx/ │ └── metroid-webapp/`
