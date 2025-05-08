@@ -91,16 +91,20 @@ corvaxx/
         ├── Controller/
         │   └── AbstractController.php
         ├── Database/
+        │   ├── Model/
+        │   |    └── TableAbstractModel.php
         │   └── Connection.php
         ├── ErrorHandler/
-        │   ├── ErrorHandler.php
-        │   └── system-errors.phtml
+        │   └── ErrorHandler.php
         ├── Exceptions/
         │   ├── BadRequestException.php
         │   ├── InternalServerErrorException.php
         │   ├── NotFoundException.php
         │   └── ...
         ├── FlashMessage/
+        │   ├── Handler/
+        │   |    ├── NoSessionHandler.php
+        │   |    └── SessionHandler.php
         │   └── FlashMessage.php
         ├── http/
         │   ├── Request.php
