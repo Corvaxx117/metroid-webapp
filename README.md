@@ -20,12 +20,18 @@ Idéal pour démarrer rapidement un projet web structuré sans toute la complexi
 
 ## 📦 Installation
 
-- Commande d'installation du projet
-- Le projet est scindé en deux repository `metroid-webapp` (dossier vendor) et `metroid-webapp-skeleton` pour l'architecture de base.
+La structure est divisée en **2 dépôts distincts** :
+
+1. [`starter-webapp`](https://github.com/Corvaxx117/starter-webapp) → Le cœur du framework (installé via Composer dans `/vendor`)
+2. [`starter-webapp-skeleton`](https://github.com/Corvaxx117/starter-webapp-skeleton) → Le squelette de projet à la racine
+
+### Commande d'installation
+
+Une seule commande permet d'installer les deux dépôts
 
 ```bash
-composer create-project corvaxx/metroid-webapp-skeleton nom-de-mon-projet \
-  --repository='{"type":"vcs","url":"https://github.com/Corvaxx117/metroid-webapp-skeleton"}' \
+composer create-project corvaxx/starter-webapp-skeleton mon-projet \
+  --repository='{"type":"vcs","url":"https://github.com/Corvaxx117/starter-webapp-skeleton"}' \
   --stability=dev --prefer-dist
 ```
 
@@ -49,7 +55,7 @@ routes:
 - Les **contrôleurs** vont dans `src/Controller/`
 - Les **modèles** dans `src/Model/`
 - Les **vues** dans `templates/`
-- Tu peux ajouter tes **services** dans `src/Services/`
+- Ajouter vos **services** dans `src/Services/`
 
 ---
 
