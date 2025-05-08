@@ -25,7 +25,7 @@ La structure est divisée en **2 dépôts distincts** :
 1. [`metroid-webapp`](https://github.com/Corvaxx117/metroid-webapp) → Le cœur du framework (installé via Composer dans `/vendor`)
 2. [`metroid-webapp-skeleton`](https://github.com/Corvaxx117/metroid-webapp-skeleton) → Le squelette de projet à la racine
 
-### Commande d'installation
+## 🧮 Commande d'installation
 
 Une seule commande permet d'installer les deux dépôts
 
