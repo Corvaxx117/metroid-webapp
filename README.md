@@ -35,15 +35,16 @@ composer create-project corvaxx/metroid-webapp-skeleton nom-de-mon-projet \
 - Configure votre base de données et options d’environnement dans ce fichier
 - Les routes sont définies dans `config/route.yaml` avec la syntaxe :
 
-````yaml
+```yaml
 routes:
   /home:
     method: GET
     callable: App\Controller\HomeController::index
+```
 
 ---
 
-```md
+````md
 ## 📁 Où développer ?
 
 - Les **contrôleurs** vont dans `src/Controller/`
@@ -56,7 +57,6 @@ routes:
 ## 🗂️ Structure générée
 
 <pre> ```text mon-projet/ ├── bin/ │ └── post-install.php ├── config/ │ ├── config.php │ └── route.yaml ├── public/ │ └── index.php ├── src/ │ └── Controller/ │ └── HomeController.php ├── templates/ │ ├── home.phtml │ ├── about.phtml │ └── layout.phtml ├── .env ├── composer.json ├── vendor/ │ └── corvaxx/ │ └── metroid-webapp/ ``` </pre>
-
 ````
 
 ```
