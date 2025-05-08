@@ -44,8 +44,6 @@ routes:
 
 ---
 
-md
-
 ## 📁 Où développer ?
 
 - Les **contrôleurs** vont dans `src/Controller/`
@@ -55,7 +53,7 @@ md
 
 ---
 
-## 🗂️ Structure générée
+## 🗂️ Structure du squelette générée
 
 ```text
 mon-projet/
@@ -78,4 +76,27 @@ mon-projet/
 ├── vendor/
 │   └── corvaxx/
 │       └── metroid-webapp/
+```
+
+---
+
+## 🗂️ Structure du framework Metroid générée (dossier vendor)
+
+```text
+corvaxx/
+  └── metroid-webapp/
+    ├── bin/
+    │   └── installer.php
+    ├── src/
+    │   ├── Controller/
+    │   ├── Database/
+    │   ├── ErrorHandler/
+    │   ├── Exceptions/
+    │   ├── FlashMessage/
+    │   ├── http/
+    │   ├── Model/
+    │   ├── Router/
+    │   ├── Services/
+    │   ├── View/
+    │   └── Launcher.php
 ```
