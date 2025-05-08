@@ -1,4 +1,4 @@
-# 🚀 Metroid – Starter WebApp (corvaxx/metroid-webapp)
+# 🚀 Metroid – Starter WebApp
 
 Un mini-framework PHP MVC moderne, léger et typé, inspiré de Symfony.  
 Idéal pour démarrer rapidement un projet web structuré sans toute la complexité d’un gros framework.
