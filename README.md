@@ -87,16 +87,34 @@ corvaxx/
   └── metroid-webapp/
     ├── bin/
     │   └── installer.php
-    ├── src/
-    │   ├── Controller/
-    │   ├── Database/
-    │   ├── ErrorHandler/
-    │   ├── Exceptions/
-    │   ├── FlashMessage/
-    │   ├── http/
-    │   ├── Model/
-    │   ├── Router/
-    │   ├── Services/
-    │   ├── View/
-    │   └── Launcher.php
+    └── src/
+        ├── Controller/
+        │   └── AbstractController.php
+        ├── Database/
+        │   └── Connection.php
+        ├── ErrorHandler/
+        │   ├── ErrorHandler.php
+        │   └── system-errors.phtml
+        ├── Exceptions/
+        │   ├── BadRequestException.php
+        │   ├── InternalServerErrorException.php
+        │   ├── NotFoundException.php
+        │   └── ...
+        ├── FlashMessage/
+        │   └── FlashMessage.php
+        ├── http/
+        │   ├── Request.php
+        │   └── Response.php
+        ├── Model/
+        │   └── ModelFactory.php
+        ├── Router/
+        │   └── Router.php
+        ├── Services/
+        │   ├── AuthService.php
+        │   ├── FormatToFrenchDate.php
+        │   ├── TextHandler.php
+        │   └── UrlGenerator.php
+        ├── View/
+        │   └── ViewRenderer.php
+        └── Launcher.php
 ```
