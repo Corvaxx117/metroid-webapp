@@ -14,9 +14,15 @@ class Response
         return $this;
     }
 
-    public function setHeader(string $name, string $value): self
+    public function setHeaders(array|string $key, ?string $value = null): self
     {
-        $this->headers[$name] = $value;
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
+                $this->headers[$k] = $v;
+            }
+        } else {
+            $this->headers[$key] = $value;
+        }
         return $this;
     }
 

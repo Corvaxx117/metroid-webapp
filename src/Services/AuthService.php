@@ -25,7 +25,7 @@ class AuthService
         self::initSession();
         $_SESSION['user'] = [
             'id' => $user['id'],
-            'nickname' => $user['nickname'],
+            'name' => $user['name'],
             'email' => $user['email'],
             'is_admin' => $user['is_admin']
         ];

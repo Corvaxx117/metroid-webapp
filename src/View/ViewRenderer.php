@@ -7,6 +7,7 @@ use Metroid\Services\TextHandler;
 use Metroid\Services\FormatToFrenchDate;
 use Metroid\FlashMessage\FlashMessage;
 use Metroid\Services\AuthService;
+use Metroid\Http\Response;
 
 class ViewRenderer
 {
@@ -18,7 +19,7 @@ class ViewRenderer
         private AuthService $auth
     ) {}
 
-    public function render(string $view, array $data = [], int $statusCode = 200, bool $capture = false): ?string
+    public function render(string $view, array $data = [], int $statusCode = 200, array $headers = []): Response
     {
         http_response_code($statusCode);
 
@@ -34,18 +35,16 @@ class ViewRenderer
         }
 
         extract($data);
-
-        // Rendu à capturer (return string) ou direct (echo)
         $template = $viewPath;
 
-        if ($capture) {
-            ob_start();
-            require $layoutPath;
-            return ob_get_clean();
-        }
-
+        ob_start();
         require $layoutPath;
-        return null;
+        $html = ob_get_clean();
+
+        return (new Response())
+            ->setContent($html)
+            ->setStatusCode($statusCode)
+            ->setHeaders($headers);
     }
 
     // Méthodes exposées explicitement aux vues
