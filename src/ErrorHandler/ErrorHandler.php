@@ -8,23 +8,18 @@ use Metroid\Exceptions\HttpExceptionInterface;
 
 class ErrorHandler
 {
-    private ViewRenderer $viewRenderer;
 
-    public function __construct()
-    {
-        $this->viewRenderer = new ViewRenderer();
-    }
+    public function __construct(private ViewRenderer $viewRenderer) {}
 
     /**
      * @param HttpExceptionInterface|Throwable $exception
      */
     public function handle(Throwable $exception): void
     {
-        if ($exception instanceof HttpExceptionInterface) {
-            $statusCode = $exception->getStatusCode();
-        } else {
-            $statusCode = 500;
-        }
+        $statusCode = $exception instanceof HttpExceptionInterface
+            ? $exception->getStatusCode()
+            : 500;
+
         $message = $exception->getMessage() ?: "Une erreur inattendue est survenue.";
         try {
             $this->viewRenderer->render('system-errors.phtml', [

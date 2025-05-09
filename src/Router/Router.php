@@ -30,7 +30,8 @@ class Router
             // Convertir les paramètres dynamiques (ex : :id) en regexp capturante
             $pattern = preg_replace('/:\w+/', '(\w+)', str_replace('/', '\/', $route));
 
-            if (preg_match('/^' . $pattern . '$/', $uri, $matches) && $method === $config['method']) {
+            $allowedMethods = explode('|', $config['method']);
+            if (preg_match('/^' . $pattern . '$/', $uri, $matches) && in_array($method, $allowedMethods)) {
                 array_shift($matches); // Supprimer la correspondance complète
 
                 // Récupération du callable (ex: App\Controller\HomeController::index)

@@ -63,6 +63,13 @@ routes:
 
 ```text
 mon-projet/
+├── assets/
+│   ├── CSS/
+│   │   ├── flashMessage.css
+│   │   ├── style.css
+│   │   └── system-errors.css
+│   └── JS/
+│       └── main.js
 ├── bin/
 │   └── post-install.php
 ├── config/
@@ -72,8 +79,12 @@ mon-projet/
 │   └── index.php
 ├── src/
 │   └── Controller/
-│       └── HomeController.php
+│   │   ├── HomeController.php
+│   │   └── AboutController.php
+│   └── Model/
 ├── templates/
+│   ├── about.phtml
+│   ├── flashMessage.phtml
 │   ├── layout.phtml
 │   ├── home.phtml
 │   └── about.phtml

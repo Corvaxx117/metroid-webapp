@@ -11,6 +11,15 @@ abstract class TableAbstractModel
     public function __construct(protected Connection $connection) {}
 
     /**
+     * Return the PDO instance of the connection.
+     * @return \PDO instance of PDO class.
+     */
+    protected function getPdo(): \PDO
+    {
+        return $this->connection::getInstance();
+    }
+
+    /**
      * Récupérer tous les enregistrements.
      * Exemple : SELECT * FROM table
      * @return array
@@ -29,7 +38,7 @@ abstract class TableAbstractModel
     public function  findOneBy(array $criteria): ?array
     {
         $conditions = $this->buildConditions($criteria);
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$conditions} LIMIT 1");
+        $stmt = $this->getPdo()->prepare("SELECT * FROM {$this->table} WHERE {$conditions} LIMIT 1");
         $stmt->execute($criteria);
         $result = $stmt->fetch();
 
@@ -44,7 +53,7 @@ abstract class TableAbstractModel
     public function findBy(array $criteria): array
     {
         $conditions = $this->buildConditions($criteria);
-        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table} WHERE {$conditions}");
+        $stmt = $this->getPdo()->prepare("SELECT * FROM {$this->table} WHERE {$conditions}");
         $stmt->execute($criteria);
         return $stmt->fetchAll();
     }
@@ -58,7 +67,7 @@ abstract class TableAbstractModel
         $columns = implode(", ", array_keys($data));
         $placeholders = implode(", ", array_map(fn($key) => ":$key", array_keys($data)));
         $sql = "INSERT INTO {$this->table} ({$columns}) VALUES ({$placeholders})";
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->getPdo()->prepare($sql);
         return $stmt->execute($data);
     }
 
@@ -72,7 +81,7 @@ abstract class TableAbstractModel
         $criteria['id'] = $id;
         $setClause = $this->buildSetClause($criteria);
         $sql = "UPDATE {$this->table} SET {$setClause} WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->getPdo()->prepare($sql);
         return $stmt->execute($criteria);
     }
 
@@ -84,7 +93,7 @@ abstract class TableAbstractModel
     {
         $conditions = $this->buildConditions($criteria);
         $sql = "DELETE FROM {$this->table} WHERE {$conditions}";
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->getPdo()->prepare($sql);
         return $stmt->execute($criteria);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Metroid;
 
+use Metroid\Container\ServiceContainer;
 use Metroid\ErrorHandler\ErrorHandler;
 use Metroid\View\ViewRenderer;
 use Metroid\FlashMessage\FlashMessage;
@@ -17,16 +18,25 @@ use Symfony\Component\Dotenv\Dotenv;
  */
 class Launcher
 {
+    private ServiceContainer $container;
     private Router $router;
     private ErrorHandler $errorHandler;
     private string $basePath;
 
     public function __construct(string $basePath, string $routesFile)
     {
+        // Initialise le chemin de base
         $this->basePath = rtrim($basePath, '/') . '/';
-
         $this->initializeEnvironment();
-        $this->errorHandler = new ErrorHandler();
+        // Création du conteneur
+        $this->container = new ServiceContainer();
+        // Enregistre ErrorHandler dans le conteneur
+        $this->container->set(ErrorHandler::class, fn($c) => new ErrorHandler(
+            $c->get(ViewRenderer::class)
+        ));
+
+        $this->errorHandler = $this->container->get(ErrorHandler::class);
+
         $this->router = new Router($routesFile);
 
         // Configurer un gestionnaire global pour les exceptions non capturées
@@ -71,16 +81,18 @@ class Launcher
             $uri = parse_url($requestUri, PHP_URL_PATH);
 
             // Création de l'objet Request
-            $request = new Request();
+            $request = $this->container->get(Request::class);
 
             // Résoudre la route
             $route = $this->router->match($uri, $method);
-
-            // Injection automatique de Request comme 1er argument
             $controllerClass = $route['controllerClass'];
             $method = $route['methodName'];
             $params = [$request, ...$route['params']];
-            $controller = new $controllerClass(new ViewRenderer(), new FlashMessage());
+            $controller = new $controllerClass(
+                $this->container->get(ViewRenderer::class),
+                $this->container->get(FlashMessage::class)
+            );
+            // Exécuter le contrôleur
             $response = call_user_func_array([$controller, $method], $params);
 
             // Gérer la réponse
