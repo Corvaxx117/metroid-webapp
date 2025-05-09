@@ -43,9 +43,9 @@ composer create-project corvaxx/metroid-webapp-skeleton mon-projet \
 
 ```yaml
 routes:
-  /home:
-    method: GET
-    callable: App\Controller\HomeController::index
+  /registration:
+    method: GET|POST
+    callable: App\Controller\AuthController::register
 ```
 
 ---
@@ -105,6 +105,8 @@ corvaxx/
     ├── bin/
     │   └── installer.php
     └── src/
+        ├── Container/
+        │   └── ServiceContainer.php
         ├── Controller/
         │   └── AbstractController.php
         ├── Database/

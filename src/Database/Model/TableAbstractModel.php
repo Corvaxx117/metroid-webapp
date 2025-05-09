@@ -7,8 +7,12 @@ use Metroid\Database\Connection;
 abstract class TableAbstractModel
 {
     protected string $table;
+    protected \PDO $connection;
 
-    public function __construct(protected Connection $connection) {}
+    public function __construct()
+    {
+        $this->connection = Connection::getInstance();
+    }
 
     /**
      * Return the PDO instance of the connection.
@@ -16,7 +20,7 @@ abstract class TableAbstractModel
      */
     protected function getPdo(): \PDO
     {
-        return $this->connection::getInstance();
+        return $this->connection;
     }
 
     /**
@@ -26,7 +30,7 @@ abstract class TableAbstractModel
      */
     public function findAll(): array
     {
-        $stmt = $this->connection->getInstance()->query("SELECT * FROM {$this->getTableName()}");
+        $stmt = $this->connection->query("SELECT * FROM {$this->getTableName()}");
         return $stmt->fetchAll();
     }
 
