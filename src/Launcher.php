@@ -66,6 +66,8 @@ class Launcher
      */
     public function run(): void
     {
+        session_start();
+
         try {
             $method = $_SERVER['REQUEST_METHOD'];
 
