@@ -10,7 +10,7 @@ class AuthService
     /**
      * Initialise la session si elle n'est pas démarrée.
      */
-    public static function initSession(): void
+    public function __construct()
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -22,7 +22,6 @@ class AuthService
      */
     public static function login(array $user): void
     {
-        self::initSession();
         $_SESSION['user'] = [
             'id' => $user['id'],
             'name' => $user['name'],
@@ -36,7 +35,6 @@ class AuthService
      */
     public static function logout(): void
     {
-        self::initSession();
         unset($_SESSION['user']);
         session_destroy();
     }
@@ -46,7 +44,6 @@ class AuthService
      */
     public static function isAuthenticated(): bool
     {
-        self::initSession();
         return isset($_SESSION['user']);
     }
 
@@ -55,7 +52,6 @@ class AuthService
      */
     public static function isAdmin(): bool
     {
-        self::initSession();
         return isset($_SESSION['user']['is_admin']) && $_SESSION['user']['is_admin'] == true;
     }
 
@@ -64,7 +60,6 @@ class AuthService
      */
     public static function getUser(): ?array
     {
-        self::initSession();
         return $_SESSION['user'] ?? null;
     }
 }
