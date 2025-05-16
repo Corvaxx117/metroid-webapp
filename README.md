@@ -41,6 +41,15 @@ composer create-project corvaxx/metroid-webapp-skeleton mon-projet \
 - Configure votre base de données et options d’environnement dans ce fichier
 - Les routes sont définies dans `config/route.yaml` avec la syntaxe :
 
+## 🔧 Ajustements une fois le projet installé
+
+Une fois le projet installé
+
+- Dans le fichier config.php, remplacer l'adresse APP_BASE_URL
+- Renseigner le fichier .env
+- Ajouter un fichier .htaccess dans le dossier public du squelette
+- Supprimer le dossier bin/ à la racine du squelette
+
 ```yaml
 routes:
   /registration:
