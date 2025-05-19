@@ -7,15 +7,6 @@ namespace Metroid\Services;
  */
 class AuthService
 {
-    /**
-     * Initialise la session si elle n'est pas démarrée.
-     */
-    public function __construct()
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    }
 
     /**
      * Stocke les informations de l'utilisateur en session.

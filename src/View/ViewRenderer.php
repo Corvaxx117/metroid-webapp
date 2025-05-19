@@ -48,10 +48,6 @@ class ViewRenderer
     }
 
     // Méthodes exposées explicitement aux vues
-    public function initSession(): void
-    {
-        $this->auth->initSession();
-    }
     public function url(string $path = ''): string
     {
         return $this->url->getUrlFromPath($path);
