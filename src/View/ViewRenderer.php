@@ -132,4 +132,28 @@ class ViewRenderer
     {
         return $this->sort->toggleSort($field);
     }
+
+    /**
+     * Retourne le symbole ascendant ou descendant en fonction de l'ordre de tri
+     * actuel et du champ demandé.
+     *
+     * @param string $field Le champ sur lequel on veut afficher l'indicateur de tri.
+     * @return string Le symbole ascendant (▲) ou descendant (▼).
+     */
+    public function sortIcon(string $field): string
+    {
+        return $this->sort->sortIcon($field);
+    }
+
+    /**
+     * Tronque le texte après un certain nombre de mots.
+     *
+     * @param string $content Le contenu à tronquer.
+     * @param int $wordLimit Le nombre de mots maximum.
+     * @return string Le contenu tronqué.
+     */
+    public function truncate(string $content, int $wordLimit = 30): string
+    {
+        return $this->textHandler->truncate($content, $wordLimit);
+    }
 }
