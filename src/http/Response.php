@@ -4,9 +4,12 @@ namespace Metroid\Http;
 
 class Response
 {
-    private int $statusCode = 200;
-    private array $headers = [];
-    private string $content = '';
+    public function __construct(
+        private int $statusCode = 200,
+        private array $headers = [],
+        private string $content = ''
+    ) {}
+
 
     public function setStatusCode(int $code): self
     {
