@@ -6,6 +6,7 @@ use Metroid\View\ViewRenderer;
 use Metroid\Services\UrlGenerator;
 use Metroid\Services\TextHandler;
 use Metroid\Services\FormatToFrenchDate;
+use Metroid\Services\SortHelper;
 use Metroid\FlashMessage\FlashMessage;
 use Metroid\Services\AuthService;
 use Metroid\Http\Request;
@@ -33,13 +34,15 @@ class ServiceContainer
         $this->set(FormatToFrenchDate::class, fn() => new FormatToFrenchDate());
         $this->set(AuthService::class, fn() => new AuthService());
         $this->set(FlashMessage::class, fn() => new FlashMessage());
+        $this->set(SortHelper::class, fn() => new SortHelper());
 
         $this->set(ViewRenderer::class, fn(ServiceContainer $c) => new ViewRenderer(
             $c->get(UrlGenerator::class),
             $c->get(TextHandler::class),
             $c->get(FormatToFrenchDate::class),
             $c->get(FlashMessage::class),
-            $c->get(AuthService::class)
+            $c->get(AuthService::class),
+            $c->get(SortHelper::class)
         ));
     }
 

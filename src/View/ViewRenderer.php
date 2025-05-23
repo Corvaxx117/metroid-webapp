@@ -5,6 +5,7 @@ namespace Metroid\View;
 use Metroid\Services\UrlGenerator;
 use Metroid\Services\TextHandler;
 use Metroid\Services\FormatToFrenchDate;
+use Metroid\Services\SortHelper;
 use Metroid\FlashMessage\FlashMessage;
 use Metroid\Services\AuthService;
 use Metroid\Http\Response;
@@ -16,7 +17,8 @@ class ViewRenderer
         private TextHandler $textHandler,
         private FormatToFrenchDate $formatDate,
         private FlashMessage $flashMessage,
-        private AuthService $auth
+        private AuthService $auth,
+        private SortHelper $sort
     ) {}
 
     public function render(string $view, array $data = [], int $statusCode = 200, array $headers = []): Response
@@ -48,33 +50,86 @@ class ViewRenderer
     }
 
     // Méthodes exposées explicitement aux vues
-    public function url(string $path = ''): string
+
+    /**
+     * Génère une URL complète à partir d'un chemin donné.
+     * 
+     * @param string $path Chemin relatif pour lequel générer l'URL.
+     * @param array $params Tableau de paramètres à injecter dans l'URL.
+     * 
+     * @return string URL complète générée.
+     */
+    public function url(string $path = '', array $params = []): string
     {
-        return $this->url->getUrlFromPath($path);
+        return $this->url->getUrlFromPath($path, $params);
     }
 
+    /**
+     * Protège une chaine contre les attaques XSS et formate les retours à la ligne.
+     *
+     * @param string|null $value La chaine à protéger.
+     * @param bool $wrapInParagraphs Si true, chaque ligne est entourée de <p>...</p>.
+     *
+     * @return string La chaine protégée et formatée.
+     */
     public function clean(string $value = null, bool $wrapInParagraphs = true): string
     {
         return $this->textHandler->clean($value, $wrapInParagraphs);
     }
 
+    /**
+     * Formate une date pour qu'elle soit lisible en français.
+     *
+     * @param string $datetime La date à formater.
+     *
+     * @return string La date formatée.
+     */
     public function formatDate(string $datetime): string
     {
         return $this->formatDate->formatDate($datetime);
     }
 
+    /**
+     * Affiche les messages flash. Les messages flash sont des messages temporaires
+     * qui s'affichent après une action. Ils sont stockés en session.
+     *
+     * @return void
+     */
     public function renderFlash(): void
     {
         $this->flashMessage->renderFlash();
     }
+
+    /**
+     * Vérifie si l'utilisateur est authentifié.
+     *
+     * @return bool Retourne true si l'utilisateur est authentifié, false sinon.
+     */
 
     public function isAuthenticated(): bool
     {
         return $this->auth->isAuthenticated();
     }
 
+    /**
+     * Retourne true si l'utilisateur est administrateur, false sinon.
+     *
+     * @return bool L'utilisateur est-il administrateur ?
+     */
     public function isAdmin(): bool
     {
         return $this->auth->isAdmin();
+    }
+
+    /**
+     * Change le sens de tri pour un champ donné.
+     *
+     * @param string $field Champ sur lequel on veut trier
+     * @return string Nouvel ordre de tri ('ASC' ou 'DESC')
+     */
+
+    public function toggleSort(string $field): string
+    {
+        return $this->sort->toggleSort($field);
     }
 }
