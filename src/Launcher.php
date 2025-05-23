@@ -55,7 +55,7 @@ class Launcher
             $dotenv->load($envFile);
         }
 
-        $envLocal = $this->basePath . '.envlocal';
+        $envLocal = $this->basePath . '.env.local';
         if (file_exists($envLocal)) {
             $dotenv->load($envLocal);
         }
