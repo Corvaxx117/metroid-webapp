@@ -63,6 +63,45 @@ abstract class TableAbstractModel
     }
 
     /**
+     * Requête avancée avec jointures, tri, pagination — tous optionnels.
+     *
+     * @param array $criteria Conditions WHERE (ex: ['is_available' => 1])
+     * @param string $joinClause Clause JOIN (ex: 'JOIN users ON books.user_id = users.id')
+     * @param string $select Colonnes à sélectionner (ex: 'books.*, users.username AS owner_username')
+     * @param string|null $orderBy Tri (ex: 'books.id DESC' ou 'title ASC')
+     * @param int|null $limit Limite de résultats
+     * @param int|null $offset Décalage (pour la pagination)
+     * @return array Résultats SQL
+     */
+    public function findByWithJoin(
+        array $criteria,
+        string $joinClause = '',
+        string $select = '*',
+        ?string $orderBy = null,
+        ?int $limit = null,
+        ?int $offset = null
+    ): array {
+        $conditions = $this->buildConditions($criteria);
+        $sql = "SELECT $select FROM {$this->table} $joinClause WHERE $conditions";
+
+        if ($orderBy) {
+            $sql .= " ORDER BY $orderBy";
+        }
+
+        if ($limit !== null) {
+            $sql .= " LIMIT $limit";
+            if ($offset !== null) {
+                $sql .= " OFFSET $offset";
+            }
+        }
+
+        $stmt = $this->getPdo()->prepare($sql);
+        $stmt->execute($criteria);
+        return $stmt->fetchAll();
+    }
+
+
+    /**
      * Crée une nouvelle entrée dans la table.
      * Exemple : INSERT INTO table (column1, column2) VALUES (:column1, :column2)
      */
