@@ -24,22 +24,11 @@ abstract class TableAbstractModel
     }
 
     /**
-     * Récupérer tous les enregistrements.
-     * Exemple : SELECT * FROM table
-     * @return array
-     */
-    public function findAll(): array
-    {
-        $stmt = $this->connection->query("SELECT * FROM {$this->getTableName()}");
-        return $stmt->fetchAll();
-    }
-
-    /**
      * Trouver un enregistrement unique selon des critères.
      * Exemple : SELECT * FROM table WHERE column = value LIMIT 1
      * @return array|null
      */
-    public function  findOneBy(array $criteria): ?array
+    public function findOneBy(array $criteria): ?array
     {
         $conditions = $this->buildConditions($criteria);
         $stmt = $this->getPdo()->prepare("SELECT * FROM {$this->table} WHERE {$conditions} LIMIT 1");
@@ -50,39 +39,26 @@ abstract class TableAbstractModel
     }
 
     /**
-     * Trouver plusieurs enregistrements selon des critères.
-     * Exemple : SELECT * FROM table WHERE column = value
-     * @return array
-     */
-    public function findBy(array $criteria): array
-    {
-        $conditions = $this->buildConditions($criteria);
-        $stmt = $this->getPdo()->prepare("SELECT * FROM {$this->table} WHERE {$conditions}");
-        $stmt->execute($criteria);
-        return $stmt->fetchAll();
-    }
-
-    /**
-     * Requête avancée avec jointures, tri, pagination — tous optionnels.
+     * Requête flexible : critères, jointures, colonnes, tri, pagination (tous optionnels).
      *
      * @param array $criteria Conditions WHERE (ex: ['is_available' => 1])
-     * @param string $joinClause Clause JOIN (ex: 'JOIN users ON books.user_id = users.id')
-     * @param string $select Colonnes à sélectionner (ex: 'books.*, users.username AS owner_username')
-     * @param string|null $orderBy Tri (ex: 'books.id DESC' ou 'title ASC')
-     * @param int|null $limit Limite de résultats
-     * @param int|null $offset Décalage (pour la pagination)
-     * @return array Résultats SQL
+     * @param string $joinClause JOIN SQL (ex: 'JOIN users ON books.user_id = users.id')
+     * @param string $select Colonnes à sélectionner (par défaut : '*')
+     * @param string|null $orderBy Tri (ex: 'books.id DESC')
+     * @param int|null $limit Limite des résultats
+     * @param int|null $offset Décalage (pour pagination)
+     * @return array Résultats
      */
-    public function findByWithJoin(
-        array $criteria,
+    public function findBy(
+        array $criteria = [],
         string $joinClause = '',
         string $select = '*',
         ?string $orderBy = null,
         ?int $limit = null,
         ?int $offset = null
     ): array {
-        $conditions = $this->buildConditions($criteria);
-        $sql = "SELECT $select FROM {$this->table} $joinClause WHERE $conditions";
+        $conditions = !empty($criteria) ? 'WHERE ' . $this->buildConditions($criteria) : '';
+        $sql = "SELECT $select FROM {$this->table} $joinClause $conditions";
 
         if ($orderBy) {
             $sql .= " ORDER BY $orderBy";
