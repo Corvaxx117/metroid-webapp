@@ -38,17 +38,19 @@ abstract class TableAbstractModel
         return $result ?: null;
     }
 
+
     /**
-     * Requête flexible : critères, jointures, colonnes, tri, pagination (tous optionnels).
-     *
-     * @param array $criteria Conditions WHERE (ex: ['is_available' => 1])
-     * @param string $joinClause JOIN SQL (ex: 'JOIN users ON books.user_id = users.id')
-     * @param string $select Colonnes à sélectionner (par défaut : '*')
-     * @param string|null $orderBy Tri (ex: 'books.id DESC')
-     * @param int|null $limit Limite des résultats
-     * @param int|null $offset Décalage (pour pagination)
-     * @return array Résultats
+     * Récupère plusieurs enregistrements selon des critères.
+     * 
+     * @param array $criteria Tableau associatif clé => valeur des critères de recherche (ex: ['books.id' => 1, 'books.title' => 'Foo'])
+     * @param string $joinClause Clause JOIN SQL (ex: "JOIN books ON books.id = authors.id")
+     * @param string $select Clause SELECT SQL (ex: "books.*")
+     * @param string|null $orderBy Colonne de tri (par défaut: null)
+     * @param int|null $limit Nombre d'enregistrements maximum (par défaut: null)
+     * @param int|null $offset Décalage du premier enregistrement (par défaut: null)
+     * @return array Résultats de la requête
      */
+
     public function findBy(
         array $criteria = [],
         string $joinClause = '',
@@ -57,7 +59,22 @@ abstract class TableAbstractModel
         ?int $limit = null,
         ?int $offset = null
     ): array {
-        $conditions = !empty($criteria) ? 'WHERE ' . $this->buildConditions($criteria) : '';
+        $conditions = '';
+        $params = [];
+
+        if (!empty($criteria)) {
+            $parts = [];
+
+            foreach ($criteria as $column => $value) {
+                // Convertit books.id => books_id (clé PDO valide)
+                $paramName = str_replace('.', '_', $column);
+                $parts[] = "$column = :$paramName";
+                $params[$paramName] = $value;
+            }
+
+            $conditions = 'WHERE ' . implode(' AND ', $parts);
+        }
+
         $sql = "SELECT $select FROM {$this->table} $joinClause $conditions";
 
         if ($orderBy) {
@@ -72,7 +89,8 @@ abstract class TableAbstractModel
         }
 
         $stmt = $this->getPdo()->prepare($sql);
-        $stmt->execute($criteria);
+        $stmt->execute($params);
+
         return $stmt->fetchAll();
     }
 
@@ -122,11 +140,16 @@ abstract class TableAbstractModel
      * @param array $criteria Tableau associatif clé => valeur
      * @return string Clause WHERE SQL générée (ex: email = :email AND lastname = :lastname)
      */
-    private function buildConditions(array $criteria): string
+    protected function buildConditions(array $criteria): string
     {
-        // array_map applique une fonction à chaque élément du tableau
-        return implode(' AND ', array_map(fn($key) => "$key = :$key", array_keys($criteria)));
-        // resultat : email = :email AND lastname = :lastname
+        $conditions = [];
+
+        foreach ($criteria as $column => $value) {
+            $param = str_replace('.', '_', $column); // books.id => books_id
+            $conditions[] = "$column = :$param";
+        }
+
+        return implode(' AND ', $conditions);
     }
 
     /**
