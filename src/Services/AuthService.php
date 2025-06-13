@@ -2,6 +2,8 @@
 
 namespace Metroid\Services;
 
+use App\Security\User;
+
 /**
  * Utilitaire pour la gestion de l'authentification.
  */
@@ -11,14 +13,9 @@ class AuthService
     /**
      * Stocke les informations de l'utilisateur en session.
      */
-    public static function login(array $user): void
+    public static function login(object $user): void
     {
-        $_SESSION['user'] = [
-            'id' => $user['id'],
-            'name' => $user['name'],
-            'email' => $user['email'],
-            'is_admin' => $user['is_admin']
-        ];
+        $_SESSION['user'] = $user;
     }
 
     /**
@@ -49,7 +46,7 @@ class AuthService
     /**
      * Récupère les informations de l'utilisateur connecté.
      */
-    public static function getUser(): ?array
+    public static function getUser(): ?User
     {
         return $_SESSION['user'] ?? null;
     }
