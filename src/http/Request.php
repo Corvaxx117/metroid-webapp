@@ -28,48 +28,63 @@ class Request
     }
 
     /**
-     * Retrieve a value from the GET or POST arrays using a given key.
+     * Retourne la valeur de la clé $_GET ou $_POST associée  la clé $key.
+     * Si la clé n'existe pas, renvoie la valeur par défaut $default.
      *
-     * @param string $key The key to search for in the GET and POST arrays.
-     * @param mixed $default The default value to return if the key is not found.
-     * @return mixed The value associated with the key, or the default value if the key is not present.
+     * @param string $key La clé de la valeur à chercher.
+     * @param mixed $default La valeur par défaut.
+     * @return mixed La valeur trouvée ou la valeur par défaut.
      */
-
     public function get(string $key, mixed $default = null): mixed
     {
         return $this->get[$key] ?? $this->post[$key] ?? $default;
     }
 
+
     /**
-     * Checks if the request was made using the POST method.
+     * Vérifie si la méthode de la requête HTTP est POST.
      *
-     * @return bool True if the request was made using the POST method, false otherwise.
+     * @return bool Retourne true si la méthode est POST, sinon false.
      */
+
     public function isPost(): bool
     {
         return $this->method === 'POST';
     }
 
     /**
-     * Retrieve a value from the POST array using a given key.
+     * Retourne la valeur de la clé $_POST associée  la clé $key.
+     * Si la clé n'existe pas, renvoie la valeur par défaut $default.
      *
-     * @param string $key The key to search for in the POST array.
-     * @param mixed $default The default value to return if the key is not found.
-     * @return mixed The value associated with the key, or the default value if the key is not present.
+     * @param string $key La clé de la valeur à chercher.
+     * @param mixed $default La valeur par défaut.
+     * @return mixed La valeur trouvée ou la valeur par défaut.
      */
     public function getPost(string $key, mixed $default = null): mixed
     {
         return $this->post[$key] ?? $default;
     }
 
-    /**
-     * Retrieve all values from the POST array.
-     *
-     * @return array An associative array containing all POST data.
-     */
 
+    /**
+     * Renvoie un tableau associatif contenant les données de la requête HTTP envoyée via la méthode POST.
+     *
+     * @return array Un tableau associatif contenant les données envoyées via la méthode POST.
+     */
     public function getAllPost(): array
     {
         return $this->post;
+    }
+
+    /**
+     * Vérifie si la requête HTTP a échoué en raison de la taille du fichier envoyé en POST.
+     * Si la méthode est POST, si $_POST est vide et que la taille de la requête est supérieure
+     * à zéro, on considère que la requête a échoué en raison de la taille du fichier.
+     *
+     * @return bool true si la requête a échoué en raison de la taille du fichier, false sinon.
+     */
+    public function hasPostFailedDueToUploadLimit(): bool
+    {
+        return $this->isPost() && empty($_POST) && ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0;
     }
 }
