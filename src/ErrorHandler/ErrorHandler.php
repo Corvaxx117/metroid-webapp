@@ -16,6 +16,16 @@ class ErrorHandler
      */
     public function handle(Throwable $exception): void
     {
+        // Enregistrer l'exception dans le journal
+        error_log(sprintf(
+            "[%s] %s in %s:%d\nStack trace:\n%s",
+            get_class($exception),
+            $exception->getMessage(),
+            $exception->getFile(),
+            $exception->getLine(),
+            $exception->getTraceAsString()
+        ));
+
         $statusCode = $exception instanceof HttpExceptionInterface
             ? $exception->getStatusCode()
             : 500;
