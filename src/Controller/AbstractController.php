@@ -42,21 +42,4 @@ abstract class AbstractController
         $resolvedUrl = $this->viewRenderer->url($url);
         return new RedirectResponse($resolvedUrl, $statusCode);
     }
-
-    /**
-     * Vérifie si l'envoi de formulaire a échoué à cause d'un fichier trop volumineux.
-     * Si c'est le cas, stocke un message d'erreur dans les messages flash et redirige vers $redirectPath.
-     *
-     * @param Request $request La requête HTTP du formulaire.
-     * @param string $redirectPath L'URL de redirection en cas d'échec.
-     * @return Response|null La réponse de redirection si l'envoi a échoué, null sinon.
-     */
-    protected function checkUploadTooLarge(Request $request, string $redirectPath): ?Response
-    {
-        if ($request->hasPostFailedDueToUploadLimit()) {
-            $this->flashMessage->add('error', 'Le fichier est trop volumineux. Taille maximale autorisée : 12 Mo.');
-            return $this->redirect($redirectPath);
-        }
-        return null;
-    }
 }

@@ -75,16 +75,4 @@ class Request
     {
         return $this->post;
     }
-
-    /**
-     * Vérifie si la requête HTTP a échoué en raison de la taille du fichier envoyé en POST.
-     * Si la méthode est POST, si $_POST est vide et que la taille de la requête est supérieure
-     * à zéro, on considère que la requête a échoué en raison de la taille du fichier.
-     *
-     * @return bool true si la requête a échoué en raison de la taille du fichier, false sinon.
-     */
-    public function hasPostFailedDueToUploadLimit(): bool
-    {
-        return $this->isPost() && empty($_POST) && ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0;
-    }
 }
