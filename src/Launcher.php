@@ -5,7 +5,6 @@ namespace Metroid;
 use Metroid\Container\ServiceContainer;
 use Metroid\ErrorHandler\ErrorHandler;
 use Metroid\View\ViewRenderer;
-use Metroid\FlashMessage\FlashMessage;
 use Metroid\Router\Router;
 use Metroid\Http\Request;
 use Metroid\Http\Response;
@@ -23,6 +22,12 @@ class Launcher
     private ErrorHandler $errorHandler;
     private string $basePath;
 
+    /**
+     * Constructeur
+     *
+     * @param string $basePath Chemin de base de l'application
+     * @param string $routesFile Chemin du fichier de routes
+     */
     public function __construct(string $basePath, string $routesFile)
     {
         // Initialise le chemin de base
@@ -61,52 +66,86 @@ class Launcher
         }
     }
 
+
     /**
-     * Démarre l'application en fonction de la route et de la requête
+     * Lancement de l'application
+     * 
+     * 1. Récupère la requête actuelle
+     * 2. Tente de trouver une route correspondante
+     * 3. Instancie le contrôleur via le container
+     * 4. Prépare les arguments à injecter dans la méthode du contrôleur
+     * 5. Exécute l'action du contrôleur
+     * 6. Envoie la réponse
+     * 
+     * Si une erreur se produit, elle est capturée et gérée par le gestionnaire d'erreur
      */
     public function run(): void
     {
-        session_start();
+        // On récupère l'instance de la requête depuis le conteneur de services
+        // Cela permet d'accéder à l'URI, la méthode HTTP, les données GET/POST, etc.
+        $request = $this->container->get(Request::class);
 
         try {
-            $method = $_SERVER['REQUEST_METHOD'];
+            // 1. On demande au Router de trouver la route correspondant à l'URI et à la méthode HTTP
+            // Cela retourne un tableau avec : le nom du contrôleur, la méthode à appeler, et les paramètres d'URL
+            $match = $this->router->match($request->uri, $request->method);
 
-            // Astuce php qui permet de traiter la partie de l'url qui nous interresse
-            // On detecte le fichier index.php et on en extrait le chemin
-            // Si l'URL est http://localhost/public/index.php/news, $basePath devient /public/
-            $basePath = str_replace('index.php', '', $_SERVER['SCRIPT_NAME']);
-            // dans $basePath on va avoir le chemin vers le fichier index.php
-            // On utilise ce basePath pour le retirer
-            // Il ne restera que ce qui suit le public/ Exemple : /news.
-            $requestUri = '/' . trim(substr($_SERVER['REQUEST_URI'], strlen($basePath)), '/');
-            // Extrait le chemin sans les paramètres Exemple : /news si l'URL est /news?id=123
-            $uri = parse_url($requestUri, PHP_URL_PATH);
+            $controllerClass = $match['controllerClass'];   // Exemple : App\Controller\BookController
+            $method = $match['controllerMethod'];           // Exemple : show
+            $routeParams = $match['params'];                // Exemple : ['id' => 42]
 
-            // Création de l'objet Request
-            $request = $this->container->get(Request::class);
+            // 2. On demande au conteneur de construire le contrôleur avec ses dépendances
+            // Grâce à l’autowiring, même s’il n’est pas enregistré, il sera instancié automatiquement
+            $controller = $this->container->get($controllerClass);
 
-            // Résoudre la route
-            $route = $this->router->match($uri, $method);
-            $controllerClass = $route['controllerClass'];
-            $method = $route['methodName'];
-            $params = [$request, ...$route['params']];
-            $controller = new $controllerClass(
-                $this->container->get(ViewRenderer::class),
-                $this->container->get(FlashMessage::class)
-            );
-            // Exécuter le contrôleur
-            $response = call_user_func_array([$controller, $method], $params);
+            // 3. On prépare à appeler la méthode cible du contrôleur (ex : BookController::show)
+            $reflection = new \ReflectionMethod($controllerClass, $method);
+            $args = []; // Ce tableau contiendra les arguments à passer à la méthode du contrôleur
 
-            // Gérer la réponse
-            if ($response instanceof Response) {
-                $response->send();
-            } elseif (is_string($response)) {
-                echo $response;
-            } else {
-                throw new \RuntimeException("Le contrôleur n'a pas retourné de réponse valide.");
+            // 4. On parcourt tous les paramètres de la méthode pour injecter dynamiquement les bonnes valeurs
+            foreach ($reflection->getParameters() as $param) {
+                $type = $param->getType();   // Exemple : int, string, Request, etc.
+                $name = $param->getName();   // Exemple : 'id', 'request', etc.
+
+                // Cas 1 : injection automatique d’un objet (ex: Request, AuthService, etc.)
+                if ($type && !$type->isBuiltin()) {
+                    $args[] = $this->container->get($type->getName());
+                }
+
+                // Cas 2 : injection d’un paramètre de route (ex: $id)
+                elseif ($type && $type->isBuiltin()) {
+                    if (array_key_exists($name, $routeParams)) {
+                        // On force la valeur capturée dans l'URL à être du bon type (int, string, etc.)
+                        settype($routeParams[$name], $type->getName());
+                        $args[] = $routeParams[$name];
+                    } else {
+                        // Erreur si un paramètre attendu n’est pas présent dans l’URL
+                        throw new \RuntimeException("Paramètre '$name' manquant pour l'action '$controllerClass::$method'");
+                    }
+                }
+
+                // Cas non prévu (ex: pas de type, ou type invalide)
+                else {
+                    throw new \RuntimeException("Type inconnu ou absent pour le paramètre '$name' de '$controllerClass::$method'");
+                }
             }
-        } catch (\Throwable $e) {
-            $this->errorHandler->handle($e);
+
+            // 5. On appelle la méthode du contrôleur avec les bons arguments
+            // Exemple : $controller->show(42, $request)
+            $response = call_user_func_array([$controller, $method], $args);
+
+            // 6. On vérifie que le contrôleur a bien retourné un objet Response (Http\Response)
+            if (!$response instanceof Response) {
+                throw new \RuntimeException("Le contrôleur doit retourner une instance de Response.");
+            }
+
+            // 7. On envoie la réponse HTTP au navigateur (en-têtes, contenu, etc.)
+            $response->send();
+        }
+
+        // 8. Si une exception est levée à n’importe quelle étape, on utilise le ErrorHandler du conteneur
+        catch (\Throwable $e) {
+            $this->container->get(ErrorHandler::class)->handle($e);
         }
     }
 }
