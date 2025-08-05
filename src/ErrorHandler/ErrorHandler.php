@@ -11,8 +11,14 @@ class ErrorHandler
 
     public function __construct(private ViewRenderer $viewRenderer) {}
 
+
     /**
-     * @param HttpExceptionInterface|Throwable $exception
+     * Enregistre l'exception dans le journal d'erreurs et la rend visible
+     * dans une page d'erreur.
+     *
+     * @param Throwable $exception L'exception levée
+     *
+     * @return void
      */
     public function handle(Throwable $exception): void
     {
@@ -42,6 +48,13 @@ class ErrorHandler
         }
     }
 
+    /**
+     * Gère une erreur critique en rendant une page d'erreur simplifiée,
+     * même si le système de vues est défectueux.
+     *
+     * @param int    $statusCode Code d'état HTTP
+     * @param string $message    Message de l'exception
+     */
     private function renderFallbackError(int $statusCode, string $message): void
     {
         http_response_code($statusCode);
