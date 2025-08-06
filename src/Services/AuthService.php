@@ -23,8 +23,15 @@ class AuthService
      */
     public static function logout(): void
     {
-        unset($_SESSION['user']);
-        session_destroy();
+        // Supprimer la variable d'utilisateur si elle existe
+        if (isset($_SESSION['user'])) {
+            unset($_SESSION['user']);
+        }
+
+        // Vérifie si une session est active avant de la détruire
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_destroy();
+        }
     }
 
     /**

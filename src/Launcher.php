@@ -81,6 +81,10 @@ class Launcher
      */
     public function run(): void
     {
+        // Démarrage de la session si pas déjà démarrée
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         // On récupère l'instance de la requête depuis le conteneur de services
         // Cela permet d'accéder à l'URI, la méthode HTTP, les données GET/POST, etc.
         $request = $this->container->get(Request::class);
