@@ -2,18 +2,18 @@
 
 namespace Metroid\Controller;
 
-use Metroid\Http\Request;
 use Metroid\Http\Response;
 use Metroid\View\ViewRenderer;
 use Metroid\Http\RedirectResponse;
 use Metroid\FlashMessage\FlashMessage;
+use Metroid\Services\AuthService;
 
 
 abstract class AbstractController
 {
     public function __construct(
         readonly protected ViewRenderer $viewRenderer,
-        readonly protected FlashMessage $flashMessage,
+        readonly protected FlashMessage $flashMessage
     ) {
 
         $this->init();
@@ -41,5 +41,21 @@ abstract class AbstractController
     {
         $resolvedUrl = $this->viewRenderer->url($url);
         return new RedirectResponse($resolvedUrl, $statusCode);
+    }
+
+    /**
+     * Redirige vers une page de connexion si l'utilisateur n'est pas connecté.
+     *
+     * @param string $redirectUrl L'URL de redirection. Si relative, elle sera résolue par rapport à l'URL actuelle.
+     * @return ?Response La réponse de redirection si l'utilisateur n'est pas connecté, null sinon.
+     */
+    protected function requireAuthentication(string $redirectUrl = '/auth/login'): ?Response
+    {
+        if (!AuthService::isAuthenticated()) {
+            $this->flashMessage->add('error', 'Vous devez être connecté.');
+            return $this->redirect($redirectUrl);
+        }
+
+        return null;
     }
 }
