@@ -21,8 +21,16 @@ abstract class AbstractController
 
     protected function init(): void {}
 
+
     /**
-     * Raccourci pour rendre une vue avec Response directement.
+     * Rend une vue en générant une réponse HTTP.
+     *
+     * @param string $view Le nom de la vue à rendre.
+     * @param array $data Les données à injecter dans la vue.
+     * @param int $statusCode Le code d'état HTTP de la réponse (par défaut 200).
+     * @param array $headers Les en-têtes HTTP à inclure dans la réponse.
+     *
+     * @return Response La réponse HTTP générée.
      */
     protected function render(string $view, array $data = [], int $statusCode = 200, array $headers = []): Response
     {

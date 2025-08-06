@@ -53,6 +53,35 @@ class Request
     }
 
     /**
+     * Vérifie si la méthode de la requête HTTP est DELETE.
+     *
+     * @return bool Retourne true si la méthode est DELETE, sinon false.
+     */
+    public function isDelete(): bool
+    {
+        return $this->method === 'DELETE';
+    }
+
+    /**
+     * Vérifie si la méthode de la requête HTTP est GET.
+     *
+     * @return bool Retourne true si la méthode est GET, sinon false.
+     */
+    public function isGet(): bool
+    {
+        return $this->method === 'GET';
+    }
+
+    /**
+     * Vérifie si la méthode de la requête HTTP est PUT.
+     *
+     * @return bool Retourne true si la méthode est PUT, sinon false.
+     */
+    public function isPut(): bool
+    {
+        return $this->method === 'PUT';
+    }
+    /**
      * Retourne la valeur de la clé $_POST associée  la clé $key.
      * Si la clé n'existe pas, renvoie la valeur par défaut $default.
      *

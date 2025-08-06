@@ -96,8 +96,10 @@ abstract class TableAbstractModel
 
 
     /**
-     * Crée une nouvelle entrée dans la table.
+     * Ajoute un enregistrement dans la table.
      * Exemple : INSERT INTO table (column1, column2) VALUES (:column1, :column2)
+     * @param array $data Tableau associatif clé => valeur des données à enregistrer
+     * @return bool Résultat de l'exécution de la requête
      */
     public function create(array $data): bool
     {
@@ -109,9 +111,13 @@ abstract class TableAbstractModel
     }
 
     /**
-     * Met à jour un enregistrement en fonction de son ID.
-     * Exemple : UPDATE table SET column1 = value1, column2 = value2 WHERE id = :id
+     * Met à jour un enregistrement dans la table en fonction de l'ID et des critères fournis.
+     *
+     * @param int $id L'ID de l'enregistrement à mettre à jour.
+     * @param array $criteria Tableau associatif clé => valeur des nouvelles données à mettre à jour.
+     * @return bool Vrai si la requête a été exécutée avec succès, faux sinon.
      */
+
     public function update(int $id, array $criteria): bool
     {
         // Ajout de l'ID aux paramètres
@@ -122,9 +128,13 @@ abstract class TableAbstractModel
         return $stmt->execute($criteria);
     }
 
+
     /**
-     * Supprime des entrées selon des critères donnés.
+     * Supprime un enregistrement de la table selon les critères fournis.
      * Exemple : DELETE FROM table WHERE column = value
+     *
+     * @param array $criteria Tableau associatif clé => valeur des conditions de suppression.
+     * @return bool Vrai si la requête a été exécutée avec succès, faux sinon.
      */
     public function delete(array $criteria): bool
     {
