@@ -44,9 +44,10 @@ composer create-project corvaxx/metroid-webapp-skeleton mon-projet \
 
 ```yaml
 routes:
-  /registration:
+  # Affichage des messages d’un thread ou envoi d’un nouveau message
+  /thread/:threadId/messages:
     method: GET|POST
-    callable: App\Controller\AuthController::register
+    callable: App\Controller\MessageController::threadMessages
 ```
 
 ## 🔧 Ajustements une fois le projet installé
