@@ -13,6 +13,7 @@ Idéal pour démarrer rapidement un projet web structuré sans toute la complexi
 - 🪶 Objets `Request` et `Response` pour centraliser les flux HTTP
 - 🧱 Système de vues avec layout partagé
 - 🧩 Injection simple des services (`ViewRenderer`, `FlashMessage`, etc.)
+- 💡 (`ServiceContainer`) instancie automatiquement les dépendances des contrôleurs grâce à la **réflexion PHP**.
 - 🧪 Structure prête pour les tests
 - ✅ Gestion d'erreurs avec vue personnalisée
 
@@ -38,8 +39,15 @@ composer create-project corvaxx/metroid-webapp-skeleton mon-projet \
 ## 🔧 Configuration de base
 
 - Le fichier `.env` est généré automatiquement depuis `.env.example`
-- Configure votre base de données et options d’environnement dans ce fichier
+- Configurer votre base de données et options d’environnement dans ce fichier
 - Les routes sont définies dans `config/route.yaml` avec la syntaxe :
+
+```yaml
+routes:
+  /registration:
+    method: GET|POST
+    callable: App\Controller\AuthController::register
+```
 
 ## 🔧 Ajustements une fois le projet installé
 
@@ -49,13 +57,6 @@ Une fois le projet installé
 - Renseigner le fichier .env
 - Ajouter un fichier .htaccess dans le dossier public du squelette
 - Supprimer le dossier bin/ à la racine du squelette
-
-```yaml
-routes:
-  /registration:
-    method: GET|POST
-    callable: App\Controller\AuthController::register
-```
 
 ---
 
