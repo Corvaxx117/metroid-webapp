@@ -18,34 +18,6 @@ class ServiceContainer
 {
     private array $services = [];
 
-    public function __construct()
-    {
-        $this->registerCoreServices();
-    }
-
-    /**
-     * Enregistre les services de base.
-     */
-    private function registerCoreServices(): void
-    {
-        $this->set(Request::class, fn() => new Request());
-        $this->set(UrlGenerator::class, fn() => new UrlGenerator());
-        $this->set(TextHandler::class, fn() => new TextHandler());
-        $this->set(FormatToFrenchDate::class, fn() => new FormatToFrenchDate());
-        $this->set(AuthService::class, fn() => new AuthService());
-        $this->set(FlashMessage::class, fn() => new FlashMessage());
-        $this->set(SortHelper::class, fn() => new SortHelper());
-
-        $this->set(ViewRenderer::class, fn(ServiceContainer $c) => new ViewRenderer(
-            $c->get(UrlGenerator::class),
-            $c->get(TextHandler::class),
-            $c->get(FormatToFrenchDate::class),
-            $c->get(FlashMessage::class),
-            $c->get(AuthService::class),
-            $c->get(SortHelper::class)
-        ));
-    }
-
     /**
      * Enregistre un service.
      *
@@ -104,18 +76,22 @@ class ServiceContainer
             } else {
                 // Sinon, il faut résoudre chaque dépendance attendue par le constructeur
                 $params = [];
-
+                /** @var \ReflectionParameter $param */
                 foreach ($constructor->getParameters() as $param) {
                     $type = $param->getType();
 
                     // Si on ne connaît pas le type ou si c'est un type primitif (int, string, etc.), on ne peut pas l'injecter
-                    if (!$type || $type->isBuiltin()) {
+                    if (!$type || $type->isBuiltin() && !$param->isDefaultValueAvailable()) {
                         throw new \RuntimeException("Impossible de résoudre la dépendance : " . $param->getName());
                     }
-
-                    // Récursion : on demande au container de créer l'objet attendu
-                    // Exemple : si le constructeur demande un ViewRenderer, on appelle $this->get(ViewRenderer::class)
-                    $params[] = $this->get($type->getName());
+                    // Si le type est builtin, on récupère la valeur par defaut du parametre du constructeur
+                    if ($type->isBuiltin()) {
+                        $params[] = $param->getDefaultValue();
+                    } else {
+                        // Récursion : on demande au container de créer l'objet attendu
+                        // Exemple : si le constructeur demande un ViewRenderer, on appelle $this->get(ViewRenderer::class)
+                        $params[] = $this->get($type->getName());
+                    }
                 }
 
                 // Une fois tous les paramètres récupérés, on crée l’instance de la classe avec newInstanceArgs
