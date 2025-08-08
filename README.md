@@ -137,6 +137,8 @@ corvaxx/
         │   |    └── SessionHandler.php
         │   └── FlashMessage.php
         ├── http/
+        │   ├── JsonResponse.php
+        │   ├── RedirectResponse.php
         │   ├── Request.php
         │   └── Response.php
         ├── Model/
@@ -146,6 +148,7 @@ corvaxx/
         ├── Services/
         │   ├── AuthService.php
         │   ├── FormatToFrenchDate.php
+        │   ├── SortHelper.php
         │   ├── TextHandler.php
         │   └── UrlGenerator.php
         ├── View/
