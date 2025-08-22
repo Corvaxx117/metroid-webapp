@@ -2,15 +2,6 @@
 
 namespace Metroid\Container;
 
-use Metroid\View\ViewRenderer;
-use Metroid\Services\UrlGenerator;
-use Metroid\Services\TextHandler;
-use Metroid\Services\FormatToFrenchDate;
-use Metroid\Services\SortHelper;
-use Metroid\FlashMessage\FlashMessage;
-use Metroid\Services\AuthService;
-use Metroid\Http\Request;
-
 /**
  * Classe responsable de la gestion des services
  */
